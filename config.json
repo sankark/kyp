@@ -1,0 +1,11 @@
+{
+	"Profile" : "dev",
+    "Envs" : {
+    		"dev" : {
+    			"secrets" : "../store/lowmango.json"
+    		},
+    		"prod" : {
+    			"env" : "prod"
+    		}
+    	}
+}
