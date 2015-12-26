@@ -2,10 +2,14 @@
 	"Profile" : "dev",
     "Envs" : {
     		"dev" : {
-    			"secrets" : "../store/lowmango.json"
+    			"secrets" : "../store/secret.json",
+    			"ds_endpoint" : "http://localhost:9000/datastore/v1beta2/datasets/",
+    			"project":"test"
     		},
     		"prod" : {
-    			"env" : "prod"
+    			"secrets" : "../store/secret.json",
+    			"ds_endpoint" : "https://www.googleapis.com/datastore/v1beta2/datasets/",
+    			"project":"test"
     		}
     	}
 }

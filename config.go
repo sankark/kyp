@@ -26,3 +26,7 @@ func init() {
 func GetProp(key string) string {
 	return CONFIG.Envs[CONFIG.Profile][key]
 }
+
+func GetProfile(key string) string {
+	return CONFIG.Profile
+}

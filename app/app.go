@@ -2,9 +2,12 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/kyp/models"
 	"github.com/kyp/service"
 	"net/http"
 )
+
+var STORE *service.Connection
 
 func init() {
 	// Starts a new Gin instance with no middle-ware
@@ -28,9 +31,31 @@ func init() {
 			}
 		})*/
 
-	r.POST("/user", service.AddUser)
+	r.POST("/user", AddUser)
 
-	r.GET("/user", service.ListUser)
+	r.GET("/user", ListUser)
 
 	http.Handle("/", r)
+}
+
+func getStore(c *gin.Context) *service.Connection {
+	if STORE == nil {
+		STORE = service.New(c.Request)
+	}
+	return STORE
+}
+
+func AddUser(c *gin.Context) {
+	rec := &models.Record{}
+	c.BindJSON(rec)
+	DAO := getStore(c)
+	resp := DAO.Add(rec)
+	c.JSON(http.StatusOK, resp)
+}
+
+func ListUser(c *gin.Context) {
+	rec := &[]models.Record{}
+	DAO := getStore(c)
+	resp := DAO.List(rec)
+	c.JSON(http.StatusOK, resp)
 }
