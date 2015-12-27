@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/mjibson/goon"
+	"golang.org/x/net/context"
 	"google.golang.org/appengine/datastore"
 	"log"
 	"net/http"
@@ -32,6 +33,9 @@ func Kind(e interface{}) string {
 func New(r *http.Request) *Connection {
 	return &Connection{Goon: goon.NewGoon(r)}
 }
+func FromContext(c context.Context) *Connection {
+	return &Connection{Goon: goon.FromContext(c)}
+}
 
 func (ds *Connection) Add(record interface{}) Response {
 	resp := Response{St_Msg: STATUS_SUCCESS, St_Code: 200}
@@ -59,14 +63,26 @@ func (ds *Connection) List(record interface{}) Response {
 	return resp
 }
 
-func (ds *Connection) ListKeys(record interface{}) Response {
+func (ds *Connection) Get(record interface{}) Response {
 	resp := Response{St_Msg: STATUS_SUCCESS, St_Code: 200}
-	kind := Kind(record)
-	keys, err := ds.Goon.GetAll(datastore.NewQuery(kind), record)
+	err := ds.Goon.Get(record)
 	if err != nil {
 		resp.Err_msg = err.(error).Error()
 		resp.St_Code = 500
 		resp.St_Msg = STATUS_ERROR
+	}
+	resp.Data = record
+	return resp
+}
+
+func (ds *Connection) ListKeys(record interface{}) Response {
+	resp := Response{St_Msg: STATUS_SUCCESS, St_Code: 200}
+	kind := Kind(record)
+	keys, err := ds.Goon.GetAll(datastore.NewQuery(kind).KeysOnly(), nil)
+	if err != nil {
+		resp.Err_msg = err.(error).Error()
+		resp.St_Code = 500
+		resp.St_Msg = STATUS_ERROR + kind
 	}
 	resp.Data = keys
 	return resp

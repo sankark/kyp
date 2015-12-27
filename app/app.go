@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/kyp/geo"
 	"github.com/kyp/models"
 	"github.com/kyp/service"
 	"net/http"
@@ -35,6 +36,9 @@ func init() {
 
 	r.GET("/user", ListUser)
 
+	r.GET("/load", LoadConst)
+	r.GET("/point", Point)
+
 	http.Handle("/", r)
 }
 
@@ -58,4 +62,12 @@ func ListUser(c *gin.Context) {
 	DAO := getStore(c)
 	resp := DAO.List(rec)
 	c.JSON(http.StatusOK, resp)
+}
+
+func LoadConst(c *gin.Context) {
+	geo.LoadPolygonFromFile(getStore(c))
+}
+
+func Point(c *gin.Context) {
+	geo.PointInPolygon(getStore(c), 13.477, 80.18)
 }
