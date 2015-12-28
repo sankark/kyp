@@ -4,7 +4,6 @@ import (
 	"github.com/mjibson/goon"
 	"golang.org/x/net/context"
 	"google.golang.org/appengine/datastore"
-	"log"
 	"net/http"
 	"reflect"
 	"strings"
@@ -39,7 +38,6 @@ func FromContext(c context.Context) *Connection {
 
 func (ds *Connection) Add(record interface{}) Response {
 	resp := Response{St_Msg: STATUS_SUCCESS, St_Code: 200}
-	log.Print(record)
 	k, err := ds.Goon.Put(record)
 	if err != nil {
 		resp.Err_msg = err.(error).Error()

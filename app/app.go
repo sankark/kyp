@@ -8,16 +8,18 @@ import (
 	"net/http"
 )
 
-var STORE *service.Connection
+var (
+	STORE *service.Connection
+)
 
 func init() {
 	// Starts a new Gin instance with no middle-ware
 	r := gin.New()
 
 	// Define your handlers
-	r.GET("/", func(c *gin.Context) {
+	/*	r.GET("/", func(c *gin.Context) {
 		c.String(200, "Hello World!")
-	})
+	})*/
 	/*	r.GET("/ping", func(c *gin.Context) {
 			c.String(200, "pong")
 		})
@@ -32,6 +34,9 @@ func init() {
 			}
 		})*/
 
+	r.LoadHTMLGlob("../templates/*")
+	r.Static("/assets", "../assets")
+
 	r.POST("/user", AddUser)
 
 	r.GET("/user", ListUser)
@@ -39,9 +44,14 @@ func init() {
 	r.GET("/load", LoadConst)
 	r.GET("/point", Point)
 
+	r.GET("/", Home)
+
 	http.Handle("/", r)
 }
 
+func Home(c *gin.Context) {
+	c.HTML(http.StatusOK, "home.html", gin.H{})
+}
 func getStore(c *gin.Context) *service.Connection {
 	if STORE == nil {
 		STORE = service.New(c.Request)
@@ -69,5 +79,6 @@ func LoadConst(c *gin.Context) {
 }
 
 func Point(c *gin.Context) {
-	geo.PointInPolygon(getStore(c), 13.477, 80.18)
+	resp := geo.PointInPolygon(getStore(c), 13.477, 80.18)
+	c.JSON(http.StatusOK, resp)
 }

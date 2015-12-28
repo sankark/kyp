@@ -2,12 +2,10 @@ package geo
 
 import (
 	"encoding/json"
-	"fmt"
 	geo "github.com/kellydunn/golang-geo"
 	"github.com/kpawlik/geojson"
 	"github.com/kyp/service"
 	"google.golang.org/appengine/datastore"
-	"log"
 	"os"
 	"sync"
 )
@@ -36,8 +34,7 @@ func LoadPolygonFromFile(conn *service.Connection) {
 
 	filename := "C:/Users/priya_000/Downloads/tnassemble.zip.geojson"
 	f_coll := new(geojson.FeatureCollection)
-	file, err := os.Open(filename)
-	fmt.Print(err)
+	file, _ := os.Open(filename)
 	jsonParser := json.NewDecoder(file)
 	jsonParser.Decode(&f_coll)
 	for _, feature := range f_coll.Features {
@@ -92,8 +89,6 @@ func merge(cs []<-chan int64) <-chan int64 {
 func Process(id int64, search *geo.Point) <-chan int64 {
 	out := make(chan int64)
 	go func() {
-		log.Print(Cache[id])
-		log.Print(search)
 		if Cache[id].Contains(search) {
 			out <- id
 		} else {
@@ -108,10 +103,8 @@ func PointInPolygon(conn *service.Connection, lat float64, lon float64) service.
 	chans := make([]<-chan int64, 0)
 	search := geo.NewPoint(lat, lon)
 	resp := conn.ListKeys(Constituency{})
-	//log.Print(resp)
 	keys := resp.Data.([]*datastore.Key)
 	for _, k := range keys {
-		log.Print(k.IntID())
 		if Cache[k.IntID()] == nil {
 			con := &Constituency{Id: k.IntID()}
 			resp = conn.Get(con)
@@ -120,13 +113,17 @@ func PointInPolygon(conn *service.Connection, lat float64, lon float64) service.
 		chans = append(chans, Process(k.IntID(), search))
 	}
 	for n := range merge(chans) {
-		log.Print(n)
+		if n != 0 {
+			con := &Constituency{Id: n}
+			resp = conn.Get(con)
+			con.Points = nil
+			resp.Data = con
+		}
 	}
 	return resp
 }
 
 func BuildPolygon(con *Constituency) (polygon *geo.Polygon) {
-	log.Print(con)
 	polygon = &geo.Polygon{}
 	for _, p := range con.Points {
 		gp := geo.NewPoint(p.Lat, p.Lng)
