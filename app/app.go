@@ -6,7 +6,7 @@ import (
 	"github.com/kyp/models"
 	"github.com/kyp/service"
 	"net/http"
-//	"log"
+	"github.com/kyp/log"
 //        "google.golang.org/appengine"
 )
 
@@ -14,42 +14,17 @@ func init() {
 	// Starts a new Gin instance with no middle-ware
 	r := gin.Default()
 
-        r.GET("/", func(c *gin.Context) {
-                c.String(200, "Hello World!")
-        })
-
-	// Define your handlers
-	/*	r.GET("/", func(c *gin.Context) {
-		c.String(200, "Hello World!")
-	})*/
-	/*	r.GET("/ping", func(c *gin.Context) {
-			c.String(200, "pong")
-		})
-
-		r.POST("/postRecord", func(c *gin.Context) {
-			json := kyp.Record{}
-			if c.BindJSON(&json) == nil {
-				ctx := appengine.NewContext(c.Request)
-				key := datastore.NewIncompleteKey(ctx, "Record", nil)
-				datastore.Put(ctx, key, &json)
-				c.JSON(http.StatusOK, gin.H{"user": json.Name})
-			}
-		})*/
-
 	r.LoadHTMLGlob("templates/*")
 	r.Static("/assets", "./assets")
 
 	r.POST("/user", AddUser)
-
 	r.GET("/user", ListUser)
-
 	r.GET("/load", LoadConst)
 	r.POST("/point", Point)
-
-	r.GET("/home", Home)
+	r.GET("/", Home)
+	
         http.Handle("/", r)
         //appengine.Main()
-	//log.Fatal(r.Run(":8080"))
 }
 
 func Home(c *gin.Context) {
