@@ -8,7 +8,7 @@ import (
 	"google.golang.org/appengine/datastore"
 	"os"
 	"sync"
-        "log"
+        "github.com/kyp/log"
 )
 
 type Point struct {
