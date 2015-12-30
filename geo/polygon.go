@@ -8,6 +8,7 @@ import (
 	"google.golang.org/appengine/datastore"
 	"os"
 	"sync"
+        "log"
 )
 
 type Point struct {
@@ -32,9 +33,10 @@ type Constituency struct {
 
 func LoadPolygonFromFile(conn *service.Connection) {
 
-	filename := "C:/Users/priya_000/Downloads/tnassemble.zip.geojson"
+	filename := "./tnassemble.geojson"
 	f_coll := new(geojson.FeatureCollection)
-	file, _ := os.Open(filename)
+	file, err := os.Open(filename)
+        log.Print(err)
 	jsonParser := json.NewDecoder(file)
 	jsonParser.Decode(&f_coll)
 	for _, feature := range f_coll.Features {

@@ -1,4 +1,4 @@
-package main
+package kyp  
 
 import (
 	"github.com/gin-gonic/gin"
@@ -6,15 +6,17 @@ import (
 	"github.com/kyp/models"
 	"github.com/kyp/service"
 	"net/http"
-)
-
-var (
-	STORE *service.Connection
+//	"log"
+//        "google.golang.org/appengine"
 )
 
 func init() {
 	// Starts a new Gin instance with no middle-ware
-	r := gin.New()
+	r := gin.Default()
+
+        r.GET("/", func(c *gin.Context) {
+                c.String(200, "Hello World!")
+        })
 
 	// Define your handlers
 	/*	r.GET("/", func(c *gin.Context) {
@@ -34,29 +36,27 @@ func init() {
 			}
 		})*/
 
-	r.LoadHTMLGlob("../templates/*")
-	r.Static("/assets", "../assets")
+	r.LoadHTMLGlob("templates/*")
+	r.Static("/assets", "./assets")
 
 	r.POST("/user", AddUser)
 
 	r.GET("/user", ListUser)
 
 	r.GET("/load", LoadConst)
-	r.GET("/point", Point)
+	r.POST("/point", Point)
 
-	r.GET("/", Home)
-
-	http.Handle("/", r)
+	r.GET("/home", Home)
+        http.Handle("/", r)
+        //appengine.Main()
+	//log.Fatal(r.Run(":8080"))
 }
 
 func Home(c *gin.Context) {
 	c.HTML(http.StatusOK, "home.html", gin.H{})
 }
 func getStore(c *gin.Context) *service.Connection {
-	if STORE == nil {
-		STORE = service.New(c.Request)
-	}
-	return STORE
+	return service.New(c.Request)
 }
 
 func AddUser(c *gin.Context) {
@@ -79,6 +79,8 @@ func LoadConst(c *gin.Context) {
 }
 
 func Point(c *gin.Context) {
-	resp := geo.PointInPolygon(getStore(c), 13.477, 80.18)
+        rec := &geo.Point{}
+        c.BindJSON(rec)
+	resp := geo.PointInPolygon(getStore(c), rec.Lat, rec.Lng)
 	c.JSON(http.StatusOK, resp)
 }

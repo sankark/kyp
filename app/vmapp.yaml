@@ -1,0 +1,16 @@
+#application: cloud-certification-l300
+runtime: go
+#version: 11 
+api_version: go1
+vm : true
+manual_scaling:
+  instances: 1
+resources:
+  cpu: 1 
+  disk_size_gb: 10
+handlers:
+- url: /favicon.ico
+  static_files: favicon.ico
+  upload: favicon.ico
+- url: /.*
+  script: _go_app
