@@ -13,7 +13,9 @@ import (
 func init() {
 	// Starts a new Gin instance with no middle-ware
 	r := gin.Default()
-
+        r.Use(log.Logger())
+        r.Use(gin.Recovery())
+        
 	r.LoadHTMLGlob("templates/*")
 	r.Static("/assets", "./assets")
 
