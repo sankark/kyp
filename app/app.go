@@ -7,7 +7,8 @@ import (
 	"github.com/kyp/service"
 	"net/http"
 	"github.com/kyp/log"
-//        "google.golang.org/appengine"
+//      "google.golang.org/appengine"
+//      "github.com/dpapathanasiou/go-recaptcha"
 )
 
 func init() {
