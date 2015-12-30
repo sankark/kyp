@@ -6,7 +6,7 @@ import (
 	"time"
 )
 
-func Debug(ctx context.Context, format string, args ...interface{}) {
+func Debugf(ctx context.Context, format string, args ...interface{}) {
 	log.Logf(ctx, 0, format, args...)
 }
 
