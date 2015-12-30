@@ -114,6 +114,7 @@ func PointInPolygon(conn *service.Connection, lat float64, lon float64) service.
 		}
 		chans = append(chans, Process(k.IntID(), search))
 	}
+	resp.Data = new(map[string]string)
 	for n := range merge(chans) {
 		if n != 0 {
 			con := &Constituency{Id: n}
