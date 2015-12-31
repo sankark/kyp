@@ -1,10 +1,11 @@
 package service
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/mjibson/goon"
 	"golang.org/x/net/context"
+	"google.golang.org/appengine"
 	"google.golang.org/appengine/datastore"
-	"net/http"
 	"reflect"
 	"strings"
 )
@@ -20,7 +21,8 @@ type Response struct {
 }
 
 type Connection struct {
-	Goon *goon.Goon
+	Goon    *goon.Goon
+	Context context.Context
 }
 
 func Kind(e interface{}) string {
@@ -29,8 +31,10 @@ func Kind(e interface{}) string {
 	return ps[len(ps)-1]
 }
 
-func New(r *http.Request) *Connection {
-	return &Connection{Goon: goon.NewGoon(r)}
+func New(c context.Context) *Connection {
+	r := c.(*gin.Context).Request
+	return &Connection{Goon: goon.NewGoon(r),
+		Context: appengine.NewContext(r)}
 }
 func FromContext(c context.Context) *Connection {
 	return &Connection{Goon: goon.FromContext(c)}

@@ -1,38 +1,41 @@
 package log
 
 import (
+	"github.com/gin-gonic/gin"
 	"golang.org/x/net/context"
+	"google.golang.org/appengine"
 	"google.golang.org/appengine/log"
 	"time"
 )
 
 func Debugf(ctx context.Context, format string, args ...interface{}) {
-	log.Logf(ctx, 0, format, args...)
+	log.Debugf(ctx, format, args...)
 }
 
 // Infof is like Debugf, but at Info level.
 func Infof(ctx context.Context, format string, args ...interface{}) {
-	internal.Logf(ctx, 1, format, args...)
+	log.Infof(ctx, format, args...)
 }
 
 // Warningf is like Debugf, but at Warning level.
 func Warningf(ctx context.Context, format string, args ...interface{}) {
-	internal.Logf(ctx, 2, format, args...)
+	log.Warningf(ctx, format, args...)
 }
 
 // Errorf is like Debugf, but at Error level.
 func Errorf(ctx context.Context, format string, args ...interface{}) {
-	internal.Logf(ctx, 3, format, args...)
+	log.Errorf(ctx, format, args...)
 }
 
 // Criticalf is like Debugf, but at Critical level.
 func Criticalf(ctx context.Context, format string, args ...interface{}) {
-	internal.Logf(ctx, 4, format, args...)
+	log.Criticalf(ctx, format, args...)
 }
 
 func Logger() gin.HandlerFunc {
-	return func(c *Context) {
+	return func(c *gin.Context) {
 		// Start timer
+		gaecontext := appengine.NewContext(c.Request)
 		start := time.Now()
 		path := c.Request.URL.Path
 
@@ -48,9 +51,8 @@ func Logger() gin.HandlerFunc {
 		statusCode := c.Writer.Status()
 		statusColor := colorForStatus(statusCode)
 		methodColor := colorForMethod(method)
-		comment := c.Errors.ByType(ErrorTypePrivate).String()
-
-		Infof(c, "[GIN] %v |%s %3d %s| %13v | %s |%s  %s %-7s %s\n%s",
+		comment := c.Errors.ByType(gin.ErrorTypePrivate).String()
+		Infof(gaecontext, "[GIN] %v |%s %3d %s| %13v | %s |%s  %s %-7s %s\n%s",
 			end.Format("2006/01/02 - 15:04:05"),
 			statusColor, statusCode, reset,
 			latency,

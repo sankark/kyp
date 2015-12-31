@@ -2,13 +2,14 @@ package geo
 
 import (
 	"encoding/json"
+	"github.com/gin-gonic/gin"
 	geo "github.com/kellydunn/golang-geo"
 	"github.com/kpawlik/geojson"
+	"github.com/kyp/log"
 	"github.com/kyp/service"
 	"google.golang.org/appengine/datastore"
 	"os"
 	"sync"
-        "github.com/kyp/log"
 )
 
 type Point struct {
@@ -31,12 +32,12 @@ type Constituency struct {
 	Points       []Point
 }
 
-func LoadPolygonFromFile(conn *service.Connection) {
+func LoadPolygonFromFile(ctx *gin.Context, conn *service.Connection) {
 
 	filename := "./tnassemble.geojson"
 	f_coll := new(geojson.FeatureCollection)
 	file, err := os.Open(filename)
-        log.Print(err)
+	log.Errorf(conn.Context, err.Error())
 	jsonParser := json.NewDecoder(file)
 	jsonParser.Decode(&f_coll)
 	for _, feature := range f_coll.Features {
@@ -100,7 +101,7 @@ func Process(id int64, search *geo.Point) <-chan int64 {
 	}()
 	return out
 }
-func PointInPolygon(conn *service.Connection, lat float64, lon float64) service.Response {
+func PointInPolygon(ctx *gin.Context, conn *service.Connection, lat float64, lon float64) service.Response {
 
 	chans := make([]<-chan int64, 0)
 	search := geo.NewPoint(lat, lon)
