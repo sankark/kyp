@@ -13,7 +13,7 @@ import (
 
 func init() {
 	// Starts a new Gin instance with no middle-ware
-	r := gin.New()
+	r := gin.Default()
 	r.Use(log.Logger())
 	r.Use(gin.Recovery())
 
@@ -24,10 +24,30 @@ func init() {
 	r.GET("/user", ListUser)
 	r.GET("/load", LoadConst)
 	r.POST("/point", Point)
+
+	r.GET("/profile/:id", GetProfile)
+	r.POST("/profile", PutProfile)
+	r.DELETE("/profile", DeleteProfile)
+
 	r.GET("/", Home)
 
 	http.Handle("/", r)
 	//appengine.Main()
+}
+
+func GetProfile(c *gin.Context) {
+	profile := &service.Profile{}
+	profile.GetProfile(c)
+}
+
+func PutProfile(c *gin.Context) {
+	profile := &service.Profile{}
+	profile.PutProfile(c)
+}
+
+func DeleteProfile(c *gin.Context) {
+	profile := &service.Profile{}
+	profile.DeleteProfile(c)
 }
 
 func Home(c *gin.Context) {
