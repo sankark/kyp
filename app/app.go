@@ -28,6 +28,7 @@ func init() {
 	r.GET("/profile/:id", GetProfile)
 	r.POST("/profile", PutProfile)
 	r.DELETE("/profile", DeleteProfile)
+	r.GET("/profile", ListProfile)
 
 	r.GET("/", Home)
 
@@ -38,6 +39,11 @@ func init() {
 func GetProfile(c *gin.Context) {
 	profile := &service.Profile{}
 	profile.GetProfile(c)
+}
+
+func ListProfile(c *gin.Context) {
+	profile := &service.Profile{}
+	profile.ListProfile(c)
 }
 
 func PutProfile(c *gin.Context) {

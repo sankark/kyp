@@ -73,10 +73,35 @@ func (ds *Connection) PropListPut(record interface{}, key *datastore.Key) Respon
 	return resp
 }
 
+func (ds *Connection) PropListGet(key *datastore.Key) Response {
+	resp := Response{St_Msg: STATUS_SUCCESS, St_Code: 200}
+	item := new(datastore.PropertyList)
+	err := datastore.Get(ds.Context, key, item)
+	if err != nil {
+		resp.Err_msg = err.(error).Error()
+		resp.St_Code = 500
+		resp.St_Msg = STATUS_ERROR
+	}
+	resp.Data = item
+	return resp
+}
+
 func (ds *Connection) List(record interface{}) Response {
 	resp := Response{St_Msg: STATUS_SUCCESS, St_Code: 200}
 	kind := Kind(record)
 	_, err := ds.Goon.GetAll(datastore.NewQuery(kind), record)
+	if err != nil {
+		resp.Err_msg = err.(error).Error()
+		resp.St_Code = 500
+		resp.St_Msg = STATUS_ERROR
+	}
+	resp.Data = record
+	return resp
+}
+
+func (ds *Connection) GetMulti(record []interface{}) Response {
+	resp := Response{St_Msg: STATUS_SUCCESS, St_Code: 200}
+	err := ds.Goon.GetMulti(record)
 	if err != nil {
 		resp.Err_msg = err.(error).Error()
 		resp.St_Code = 500

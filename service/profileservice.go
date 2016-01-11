@@ -26,7 +26,7 @@ type Comment struct {
 }
 
 type Profile struct {
-	Id       int64          `json:"id" binding:"required" datastore:"-" goon:"id"`
+	Id       int64          `datastore:"-" goon:"id" json:"id" binding:"required"`
 	Parent   *datastore.Key `datastore:"-" goon:"parent"`
 	Comments []Comment      `json:"comments"`
 }
@@ -59,18 +59,18 @@ func (profile *Profile) GetProfile(c *gin.Context) {
 
 func (profile *Profile) PutProfile(c *gin.Context) {
 	conn := New(c)
-	p := &ProfileOut{}
-	c.BindJSON(p)
+	p_out := new(ProfileOut)
 	key := conn.DatastoreKeyWithKind("ProfileDetails", 0)
-	prop_list := MapToPropertyList(p.Details)
-	log.Debugf(conn.Context, fmt.Sprintf("ret %#v", prop_list))
-	r := conn.PropListPut(prop_list, key)
-	log.Debugf(conn.Context, fmt.Sprintf("%#v", r))
-	profile.Id = p.Id
-	profile.Parent = r.Data.(*datastore.Key)
-	profile.Comments = p.Comments
-	log.Debugf(conn.Context, fmt.Sprintf("%#v", profile))
-	resp := conn.Add(profile)
+	c.BindJSON(p_out)
+	prop_list := MapToPropertyList(p_out.Details)
+	resp := conn.PropListPut(prop_list, key)
+	prof := &Profile{Id: p_out.Id}
+	conn.Get(prof)
+	log.Debugf(conn.Context, fmt.Sprintf("old %#v", prof))
+	prof.Parent = resp.Data.(*datastore.Key)
+	prof.Comments = p_out.Comments
+	resp = conn.Add(prof)
+	log.Debugf(conn.Context, fmt.Sprintf("%#v", prof))
 	c.JSON(http.StatusOK, resp)
 }
 
@@ -89,8 +89,20 @@ func (profile *Profile) AddComment(c *gin.Context) {
 
 func (profile *Profile) ListProfile(c *gin.Context) {
 	conn := New(c)
-	resp := conn.List(profile)
-	c.JSON(http.StatusOK, resp)
+	prof_list := make([]Profile, 0)
+	out_list := make([]ProfileOut, 0)
+	conn.List(&prof_list)
+	var prof Profile
+	for _, prof = range prof_list {
+		var pout_t ProfileOut
+		plist := conn.PropListGet(prof.Parent).Data.(*datastore.PropertyList)
+		pout_t.Details = PropertyListToMap(plist)
+		pout_t.Comments = prof.Comments
+		pout_t.Id = prof.Id
+		out_list = append(out_list, pout_t)
+
+	}
+	c.JSON(http.StatusOK, out_list)
 }
 
 func MapToPropertyList(det_map map[string]string) *datastore.PropertyList {
@@ -104,4 +116,15 @@ func MapToPropertyList(det_map map[string]string) *datastore.PropertyList {
 	pl := &datastore.PropertyList{}
 	pl.Load(ret)
 	return pl
+}
+
+func PropertyListToMap(pl *datastore.PropertyList) map[string]string {
+	var ret = make(map[string]string, 0)
+	var prop datastore.Property
+	li, _ := pl.Save()
+	for _, prop = range li {
+		ret[prop.Name] = prop.Value.(string)
+	}
+
+	return ret
 }
