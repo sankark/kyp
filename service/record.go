@@ -34,8 +34,9 @@ func Kind(e interface{}) string {
 
 func New(c context.Context) *Connection {
 	r := c.(*gin.Context).Request
-	return &Connection{Goon: goon.NewGoon(r),
-		Context: appengine.NewContext(r)}
+	aecontext := appengine.NewContext(r)
+	return &Connection{Goon: goon.FromContext(aecontext),
+		Context: aecontext}
 }
 func FromContext(c context.Context) *Connection {
 	return &Connection{Goon: goon.FromContext(c)}

@@ -26,7 +26,8 @@ type Comment struct {
 }
 
 type Profile struct {
-	Id       int64          `datastore:"-" goon:"id" json:"id" binding:"required"`
+	_kind    string         `goon:"kind,PROFILE"`
+	Id       int64          `datastore:"-" goon:"id"`
 	Parent   *datastore.Key `datastore:"-" goon:"parent"`
 	Comments []Comment      `json:"comments"`
 }
@@ -37,29 +38,17 @@ type ProfileOut struct {
 	Comments []Comment         `json:"comments"`
 }
 
-type ProfileService interface {
-	PutProfile(c *gin.Context)
-	DeleteProfile(c *gin.Context)
-	GetProfile(c *gin.Context)
-	AddComment(c *gin.Context)
-	ListProfile(c *gin.Context)
-}
-
-var _ ProfileService = &Profile{}
-
-func (profile *Profile) GetProfile(c *gin.Context) {
+func GetProfile(c *gin.Context) {
 	conn := New(c)
 	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
-	profile.Id = id
-	c.BindJSON(&profile)
-	fmt.Print(profile)
-	resp := conn.Get(profile)
+	profile := Profile{Id: id, Parent: conn.DatastoreKeyWithKind("ProfileDetails", 4986010354057216)}
+	resp := conn.Get(&profile)
 	c.JSON(http.StatusOK, resp)
 }
 
-func (profile *Profile) PutProfile(c *gin.Context) {
+func PutProfile(c *gin.Context) {
 	conn := New(c)
-	p_out := new(ProfileOut)
+	p_out := &ProfileOut{}
 	key := conn.DatastoreKeyWithKind("ProfileDetails", 0)
 	c.BindJSON(p_out)
 	prop_list := MapToPropertyList(p_out.Details)
@@ -74,20 +63,23 @@ func (profile *Profile) PutProfile(c *gin.Context) {
 	c.JSON(http.StatusOK, resp)
 }
 
-func (profile *Profile) DeleteProfile(c *gin.Context) {
+func DeleteProfile(c *gin.Context) {
 	conn := New(c)
-	c.BindJSON(&profile)
+	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
+	profile := &Profile{Id: id}
 	key := conn.DatastoreKeyWithId(profile, profile.Id)
 	resp := conn.Remove(key)
 	c.JSON(http.StatusOK, resp)
 }
 
-func (profile *Profile) AddComment(c *gin.Context) {
+func AddComment(c *gin.Context) {
+	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
+	profile := &Profile{Id: id}
 	profile.Comments = append(profile.Comments, Comment{})
-	profile.PutProfile(c)
+	PutProfile(c)
 }
 
-func (profile *Profile) ListProfile(c *gin.Context) {
+func ListProfile(c *gin.Context) {
 	conn := New(c)
 	prof_list := make([]Profile, 0)
 	out_list := make([]ProfileOut, 0)

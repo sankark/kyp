@@ -37,23 +37,19 @@ func init() {
 }
 
 func GetProfile(c *gin.Context) {
-	profile := &service.Profile{}
-	profile.GetProfile(c)
+	service.GetProfile(c)
 }
 
 func ListProfile(c *gin.Context) {
-	profile := &service.Profile{}
-	profile.ListProfile(c)
+	service.ListProfile(c)
 }
 
 func PutProfile(c *gin.Context) {
-	profile := &service.Profile{}
-	profile.PutProfile(c)
+	service.PutProfile(c)
 }
 
 func DeleteProfile(c *gin.Context) {
-	profile := &service.Profile{}
-	profile.DeleteProfile(c)
+	service.DeleteProfile(c)
 }
 
 func Home(c *gin.Context) {
