@@ -27,7 +27,7 @@ func init() {
 
 	r.GET("/profile/:id", GetProfile)
 	r.POST("/profile", PutProfile)
-	r.DELETE("/profile", DeleteProfile)
+	r.DELETE("/profile/:prof_id/:det_id", DeleteProfile)
 	r.GET("/profile", ListProfile)
 
 	r.GET("/", Home)

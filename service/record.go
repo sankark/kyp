@@ -62,28 +62,24 @@ func (ds *Connection) Add(record interface{}) Response {
 	return resp
 }
 
-func (ds *Connection) PropListPut(record interface{}, key *datastore.Key) Response {
-	resp := Response{St_Msg: STATUS_SUCCESS, St_Code: 200}
-	k, err := datastore.Put(ds.Context, key, record)
-	if err != nil {
-		resp.Err_msg = err.(error).Error()
-		resp.St_Code = 500
-		resp.St_Msg = STATUS_ERROR
-	}
-	resp.Data = k
-	return resp
+func (ds *Connection) PropListPut(record interface{}, key *datastore.Key) *datastore.Key {
+	k, _ := datastore.Put(ds.Context, key, record)
+	return k
 }
 
-func (ds *Connection) PropListGet(key *datastore.Key) Response {
+func (ds *Connection) PropListDelete(key *datastore.Key) error {
+	return datastore.Delete(ds.Context, key)
+}
+
+func (ds *Connection) PropListGet(record interface{}, key *datastore.Key) Response {
 	resp := Response{St_Msg: STATUS_SUCCESS, St_Code: 200}
-	item := new(datastore.PropertyList)
-	err := datastore.Get(ds.Context, key, item)
+	err := datastore.Get(ds.Context, key, record)
 	if err != nil {
 		resp.Err_msg = err.(error).Error()
 		resp.St_Code = 500
 		resp.St_Msg = STATUS_ERROR
 	}
-	resp.Data = item
+	resp.Data = record
 	return resp
 }
 
@@ -137,14 +133,14 @@ func (ds *Connection) ListKeys(record interface{}) Response {
 	return resp
 }
 
-func (ds *Connection) Remove(record interface{}) Response {
+func (ds *Connection) Remove(key interface{}) Response {
 	resp := Response{St_Msg: STATUS_SUCCESS, St_Code: 200}
-	err := ds.Goon.Delete(record.(*datastore.Key))
+	err := ds.Goon.Delete(key.(*datastore.Key))
 	if err != nil {
 		resp.Err_msg = err.(error).Error()
 		resp.St_Code = 500
 		resp.St_Msg = STATUS_ERROR
 	}
-	resp.Data = record
+	resp.Data = key
 	return resp
 }
