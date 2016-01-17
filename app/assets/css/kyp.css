@@ -1,0 +1,84 @@
+.mdl-badge[data-badge]:after {
+    width: 40px;
+}
+
+.kyp_img {
+    width: 100%;
+    height: 320px;
+}
+
+li {
+    list-style-type: none;
+}
+
+.more {
+    float: right;
+    cursor: pointer;
+}
+
+.profile-comments .comments > form {
+    display: none;
+}
+
+.ta-editor {
+    width: inherit;
+    height: auto;
+}
+
+.ta-scroll-window > .ta-bind {
+    height: auto;
+    min-height: 300px;
+    padding: 6px 12px;
+}
+
+.admin .demo-blog__posts {
+    height: auto;
+    min-height: 320px;
+}
+
+body > .mdl-layout__container {
+    position: inherit;
+    width: 100%;
+    height: 100%;
+}
+
+.admin .basic_info .item {
+    margin-left: 5%;
+}
+
+.ta-resizer-handle-overlay {
+    height: inherit !important;
+}
+
+.ta-resizer-handle-info {
+    display: none !important;
+}
+
+.iem-container {
+    list-style-type: none;
+    display: inline-block;
+    min-width: 28px;
+}
+
+.iem-container li {
+    display: inline-block;
+    padding: 5px 10px;
+}
+
+.iem-container li:nth-child(odd) {
+    background-color: #f0f0f0;
+}
+
+.dummyarea textarea {
+    width: 100%;
+    height: auto;
+    min-height: 10px;
+}
+
+.profile_img{
+        position: absolute;
+    float: right;
+    top: 0;
+    left: 62%;
+    margin:0px !important;
+}

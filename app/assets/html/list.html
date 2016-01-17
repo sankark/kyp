@@ -1,0 +1,55 @@
+<div class="demo-blog__posts mdl-grid ">
+    <div class="basic_info mdl-card  mdl-cell mdl-cell--8-col" style="padding-bottom: 25px;">
+        <div class="mdl-color-text--grey-600 item input">
+            <span><h5>பெயர்</h5></span>
+            <span><input ng-focus="focus='sw_1';" type="text" ng-model="m1.text" ng-enter="select(0,m1)" ng-change="input(m1)"/></span>
+        </div>
+        <ul ng-show="focus=='sw_1'" class="iem-container">
+            <li ng-repeat="word in words" ng-click="select($index,m1)">{{word}}</li>
+        </ul>
+        <div class="mdl-color-text--grey-600 item">
+            <span><h5>தொகுதி</h5></span>
+            <span><input ng-focus="focus='sw_2'" type="text" ng-model="m2.text" ng-enter="select(0,m2)" ng-change="input(m2)"/></span>
+        </div>
+        <ul ng-show="focus=='sw_2'" class="iem-container">
+            <li ng-repeat="word in words" ng-click="select($index,m2)">{{word}}</li>
+        </ul>
+        <div class="mdl-color-text--grey-600 item">
+            <span><h5>கட்சி</h5></span>
+            <span><input ng-focus="focus='sw_3'" type="text" ng-model="m3.text" ng-enter="select(0,m3)" ng-change="input(m3)"/></span>
+        </div>
+        <ul ng-show="focus=='sw_3'" class="iem-container">
+            <li ng-repeat="word in words" ng-click="select($index,m3)">{{word}}</li>
+        </ul>
+        <div class="mdl-color-text--grey-600 item">
+            <span><h5>துறை சார்ந்த அனுபவம்</h5></span>
+            <span><input ng-focus="focus='sw_4'" type="text" ng-model="m4.text" ng-enter="select(0,m4)" ng-change="input(m4)"/></span>
+        </div>
+        <ul ng-show="focus=='sw_4'" class="iem-container">
+            <li ng-repeat="word in words" ng-click="select($index,m4)">{{word}}</li>
+        </ul>
+    </div>
+    <div class=" mdl-card mdl-cell--8-col mdl-cell--4-col-desktop mdl-cell">
+        <div ng-click="loadProfile(p)" class="kyp_img mdl-card__media mdl-color-text--grey-50" style="background-image: url('/assets/images/logo.png')">
+            <h3>{{p.name}}</h3>
+        </div>
+        <input type="file" value="" class="mdl-button mdl-js-ripple-effect mdl-js-button mdl-button--fab mdl-color--accent">
+            <i class="material-icons mdl-color-text--white" role="presentation">add</i>
+            <span class="visuallyhidden">add</span>
+    </div>
+    <div class="mdl-card  mdl-cell mdl-cell--12-col">
+        <br>
+        <div class="container lighter" style="width: inherit;">
+            <div text-angular ng-model="htmlContent" name="demo-editor" ta-text-editor-class="border-around container" ta-html-editor-class="border-around"></div>
+            <div class="mdl-color-text--grey-600 item dummyarea">
+                <span><h5>Dummy</h5></span>
+                <span><textarea ng-focus="focus='sw_5'" type="text" ng-model="m5.text" ng-enter="select(0,m5)" ng-change="input(m5)"/></span>
+                <ul ng-show="focus=='sw_5'" class="iem-container">
+                    <li ng-repeat="word in words" ng-click="select($index,m5)">{{word}}</li>
+                </ul>
+            </div>
+        </div>
+        <br>
+    </div>
+    <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments" ng-include="'/assets/html/edit_comments.html'">
+    </div>

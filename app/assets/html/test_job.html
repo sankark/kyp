@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang=en ng-app="Home" ng-controller="MainController">
+<head><title>Test Site</title>
+    <meta http-equiv=Content-Type content="text/html; charset=utf-8"/>
+    <link rel=icon type=image/ico href="favicon.ico"/>
+      <link href=../css/stylesheets.css rel=stylesheet type=text/css/>
+        <script src="../js/cloud.js"></script>
+  <script src="https://apis.google.com/js/client.js?onload=cloudinit"></script>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.2.10/angular-route.js"></script>
+    <script src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.11.0.js"></script>
+  <script type="text/javascript" src="../js/plugins/angular-resource.min.js"></script>
+  <script type="text/javascript" src="../js/apps/home.js"></script>
+
+
+</head>
+<body class=bg-img-num1>
+<div class=container>
+<div class=row ng-include src="'navbar.html'">
+    
+</div>
+<div class=row>
+<div class=col-md-12>
+   <ng-view>Loading...</ng-view>
+</div>
+</div>
+<div class=row>
+    <div class=page-footer>
+        <div class=page-footer-wrap>
+            <div class="side pull-left"> Copyirght &COPY; YourCompany 2013. All rights reserved.</div>
+        </div>
+    </div>
+</div>
+</div>
+</body>
+</html>

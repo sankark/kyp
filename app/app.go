@@ -31,6 +31,7 @@ func init() {
 	r.GET("/profile", ListProfile)
 
 	r.GET("/", Home)
+	r.GET("/admin", Admin)
 
 	http.Handle("/", r)
 	//appengine.Main()
@@ -53,8 +54,13 @@ func DeleteProfile(c *gin.Context) {
 }
 
 func Home(c *gin.Context) {
-	c.HTML(http.StatusOK, "home.html", gin.H{})
+	c.HTML(http.StatusOK, "index.html", gin.H{})
 }
+
+func Admin(c *gin.Context) {
+	c.HTML(http.StatusOK, "admin.html", gin.H{})
+}
+
 func getStore(c *gin.Context) *service.Connection {
 	return service.New(c)
 }

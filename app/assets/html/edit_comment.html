@@ -1,0 +1,27 @@
+<div class="comment">
+    <header class="comment__header">
+        <img src="/assets/images/co2.jpg" class="comment__avatar">
+        <div class="comment__author">
+            <input type="text" ng-model="ca.name" />
+            <span>2 days ago</span>
+        </div>
+    </header>
+    <div class="comment__text">
+        <textarea ng-model="ca.text"></textarea>
+    </div>
+    <nav class="comment__actions">
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+            <i class="material-icons" role="presentation">thumb_up</i><span class="visuallyhidden">like comment</span>
+        </button>
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+            <i class="material-icons" role="presentation">thumb_down</i><span class="visuallyhidden">dislike comment</span>
+        </button>
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+            <i class="material-icons" role="presentation">share</i><span class="visuallyhidden">share comment</span>
+        </button>
+    </nav>
+</div>
+<ul>
+    <li class="comment__answers" ng-repeat="ca in ca.comment" ng-include="'/assets/html/edit_comment.html'">
+    </li>
+    <ul>
