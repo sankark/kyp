@@ -30,11 +30,17 @@ func init() {
 	r.DELETE("/profile/:prof_id/:det_id", DeleteProfile)
 	r.GET("/profile", ListProfile)
 
+	r.GET("/consti/:id", FilterConstiProfile)
+
 	r.GET("/", Home)
 	r.GET("/admin", Admin)
 
 	http.Handle("/", r)
 	//appengine.Main()
+}
+
+func FilterConstiProfile(c *gin.Context) {
+	service.FilterProfile(c)
 }
 
 func GetProfile(c *gin.Context) {

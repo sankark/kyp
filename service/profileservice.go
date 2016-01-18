@@ -28,12 +28,14 @@ type Comment struct {
 type Profile struct {
 	Id       int64          `datastore:"-" goon:"id"`
 	Parent   *datastore.Key `datastore:"-" goon:"parent"`
+	Consti   string         `json:"consti" datastore:"consti"`
 	Comments []Comment      `json:"comments" datastore:"comments"`
 }
 
 type ProfileOut struct {
 	Id       int64                  `json:"id" binding:"required" datastore:"-" goon:"id"`
 	Details  map[string]interface{} `json:"details" binding:"required"`
+	Consti   string                 `json:"consti" datastore:"consti"`
 	Comments []Comment              `json:"comments"`
 }
 
@@ -96,6 +98,31 @@ func AddComment(c *gin.Context) {
 	profile := &Profile{Id: id}
 	profile.Comments = append(profile.Comments, Comment{})
 	PutProfile(c)
+}
+
+func FilterProfile(c *gin.Context) {
+	conn := New(c)
+	consti := c.Param("id")
+
+	prof_list := make([]Profile, 0)
+	out_list := make([]ProfileOut, 0)
+	conn.List(&prof_list)
+
+	var prof Profile
+	for _, prof = range prof_list {
+		if prof.Consti == consti {
+			var pout_t ProfileOut
+			det_list := &datastore.PropertyList{}
+			conn.PropListGet(det_list, prof.Parent)
+			pout_t.Details = PropertyListToMap(det_list)
+			pout_t.Details["id"] = prof.Parent.IntID()
+			pout_t.Comments = prof.Comments
+			pout_t.Id = prof.Id
+			out_list = append(out_list, pout_t)
+		}
+
+	}
+	c.JSON(http.StatusOK, out_list)
 }
 
 func ListProfile(c *gin.Context) {
