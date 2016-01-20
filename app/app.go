@@ -37,6 +37,15 @@ func init() {
 
 	http.Handle("/", r)
 	//appengine.Main()
+	
+        authorized := r.Group("/write")
+        
+        authorized.Use(Auth())
+        {
+           authorized.POST("/login", loginEndpoint)
+        }
+        
+
 }
 
 func FilterConstiProfile(c *gin.Context) {
