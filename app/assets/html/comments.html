@@ -1,14 +1,14 @@
-<form class="new-comment">
-    <div id="html_element"></div>
-    <br>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
+<form class="new-comment mdl-cell--8-col mdl-cell">
+    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label new-comment">
         <textarea rows=1 class="mdl-textfield__input" id="comment"></textarea>
         <label for="comment" class="mdl-textfield__label">Join the discussion</label>
     </div>
     <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
-        <i ng-click="recaptcha()" class="material-icons" role="presentation">check</i><span class="visuallyhidden">add comment</span>
+        <i ng-click="recaptcha('recap_new_comment')" class="material-icons" role="presentation">check</i><span class="visuallyhidden">add comment</span>
     </button>
+        <br>
 </form>
+<div id="recap_new_comment" class="mdl-cell--8-col mdl-cell--4-col-desktop  mdl-cell"></div>
 <div name="comment" class="comment mdl-color-text--grey-700" ng-repeat="(key, c) in comments">
     <header class="comment__header">
             <gravatar-image data-gravatar-email="'sankareds@gmail.com'" data-gravatar-size="25" data-gravatar-rating="pg" data-gravatar-default="identicon" data-gravatar-secure="true" data-gravatar-css-class="comment__avatar"></gravatar-image>

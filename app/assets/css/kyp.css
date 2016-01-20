@@ -96,3 +96,23 @@ body > .mdl-layout__container {
 .comment__author{
         margin-left: 1%;
 }  
+
+.mdl-spinner{
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    z-index: 999999;
+}
+
+#LoadingDiv{
+    margin:0px 0px 0px 0px;
+    position:fixed;
+    height: 100%;
+    z-index:9999;
+    padding-top:200px;
+    padding-left:50px;
+    width:100%;
+    clear:none;
+    background-color:rgba(102, 102, 102, 0.71);
+    border:1px solid #000000;
+    }

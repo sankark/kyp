@@ -1,4 +1,7 @@
 var app = angular.module('Kyp', ['ngRoute', 'ngResource', 'angularjs-gravatardirective', 'autocomplete','geolocation']);
+app.config(function($interpolateProvider){
+    $interpolateProvider.startSymbol('{%').endSymbol('%}');
+});
 
 function MainController($rootScope, $scope, $location,ConstiService,geolocation) {
 
@@ -39,6 +42,14 @@ function MainController($rootScope, $scope, $location,ConstiService,geolocation)
         $location.path('/profile');
     }
 
+    $scope.listProfile = function(consti){
+
+    }
+
+    $scope.addLike = function(consti){
+        
+    }
+
     $scope.getProfile = function(typed) {
         $rootScope.sel_consti = typed;
         $scope.loadProfile();
@@ -46,11 +57,16 @@ function MainController($rootScope, $scope, $location,ConstiService,geolocation)
     }
 
     $scope.getConst = function() {
+        
         ConstiService.getConst($scope.point).then(function(r) {
             $scope.myconsti = r.Data.Assemb_Const;
+             $scope.active_cls = '';
+             $scope.progress = "none";
         })
     }
     geolocation.getLocation().then(function(data) {
+        $scope.active_cls = 'is-active';
+        $scope.progress = 'block';
         $scope.point = {
             Lat: 13.0336,
             Lng: 80.2687
@@ -84,10 +100,24 @@ function ProfileController($rootScope, $scope, $location) {
     }
     $scope.comments = [comment2, comment3]
 
-    $scope.recaptcha = function() {
-        grecaptcha.render('html_element', {
-            'sitekey': '6LewKhQTAAAAAKwG3N1PE6rg5XRghJkHAl05GJXN'
+    $scope.recaptchaResp = function(resp){
+        $scope.recaptchaDone=true;
+/*        yNode.firstChild) {
+          myNodgrecaptcha.reset();
+        var myNode = document.getElementById($scope.recaptchaId);
+        while (me.removeChild(myNode.firstChild);
+        }
+        $scope.recaptchaId=null;*/
+       //grecaptcha.reset($scope.recap_widget);
+    }
+
+    $scope.recaptcha = function(id, action) {
+        if($scope.recaptchaDone == null){
+        $scope.recap_widget = grecaptcha.render(id, {
+            'sitekey': '6LewKhQTAAAAAKwG3N1PE6rg5XRghJkHAl05GJXN',
+            'callback' : $scope.recaptchaResp
         });
+    }
     }
 
 }
@@ -124,6 +154,24 @@ app.factory('ConstiService', function($rootScope, $resource, $q) {
     }
   }
 })
+
+    app.directive('mdlUpgrade', function($timeout){
+
+        return {
+            restrict: 'A',
+            compile: function(){
+                return {
+                    post: function postLink(scope, element){
+                        $timeout(function(){
+                            componentHandler.upgradeElements(element[0]);
+                        }, 1500);
+                    }
+                }
+            },
+        };
+
+    });
+
 
 /*app.config(function($interpolateProvider){
     $interpolateProvider.startSymbol('{%').endSymbol('%}');

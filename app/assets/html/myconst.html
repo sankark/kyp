@@ -1,15 +1,44 @@
-<div class="demo-blog mdl-layout mdl-js-layout has-drawer is-upgraded">
-    <main class="mdl-layout__content">
-        <div class="demo-blog__posts mdl-grid">
-            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col" style="min-height:0px">
-                <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
-                    <autocomplete ng-model="myconsti" attr-inputclass="mdl-textfield__input" attr-class="mdl-textfield mdl-js-textfield" attr-placeholder="select your constituency" data="consti"></autocomplete>
+<div id="LoadingDiv" style="display:{% progress %};">
+<div mdl-upgrade class="mdl-spinner mdl-js-spinner {% active_cls %}"></div>
+</div>
+<div class="demo-blog mdl-layout mdl-js-layout has-drawer is-upgraded {% progress %}" {% show %}>
+<main class="mdl-layout__content">
+    <div class="demo-blog__posts mdl-grid">
+        <div class="demo-blog mdl-layout mdl-js-layout has-drawer is-upgraded is-active">
+            <main class="mdl-layout__content">
+                <div class="demo-blog__posts mdl-grid">
+                    <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col" style="min-height:0px">
+                        <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
+                            <autocomplete ng-model="myconsti" attr-inputclass="mdl-textfield__input" attr-class="mdl-textfield mdl-js-textfield" attr-placeholder="select your constituency" data="consti"></autocomplete>
+                        </div>
+                        <div class="mdl-color-text--grey-700 mdl-card__supporting-text" style="border-top:rgba(0, 0, 0, 0)">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" ng-click="getProfile(myconsti)">
+                                Candidates
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="mdl-color-text--grey-700 mdl-card__supporting-text" style="border-top:rgba(0, 0, 0, 0)">
-                    <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" ng-click="getProfile(myconsti)">
-                        Candidates
-                    </button>
-                </div>
-            </div>
+            </main>
         </div>
+    </div>
+    <footer class="mdl-mini-footer">
+        <div class="mdl-mini-footer--left-section">
+            <button class="mdl-mini-footer--social-btn social-btn social-btn__twitter">
+                <span class="visuallyhidden">Twitter</span>
+            </button>
+            <button class="mdl-mini-footer--social-btn social-btn social-btn__blogger">
+                <span class="visuallyhidden">Facebook</span>
+            </button>
+            <button class="mdl-mini-footer--social-btn social-btn social-btn__gplus">
+                <span class="visuallyhidden">Google Plus</span>
+            </button>
+        </div>
+        <div class="mdl-mini-footer--right-section">
+            <button class="mdl-mini-footer--social-btn social-btn__share">
+                <i class="material-icons" role="presentation">share</i>
+                <span class="visuallyhidden">share</span>
+            </button>
+        </div>
+    </footer>
+</main>
 </div>
