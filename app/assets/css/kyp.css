@@ -116,7 +116,7 @@ body > .mdl-layout__container {
     background-color:rgba(102, 102, 102, 0.71);
     border:1px solid #000000;
     }
-.autocomplete .highlight .hide{
+.autocomplete .highlight .none{
     display:none;
 }
 }
