@@ -275,7 +275,7 @@ app.filter('highlight', ['$sce', function ($sce) {
           ')',
           exp = new RegExp(words, 'gi');
       if (words.length) {
-        input = input.replace(exp, "<span class=\"highlight {{ display }}\">$1</span>");
+        input = input.replace(exp, "<span class=\"highlight {{ ena_suggest }}\">$1</span>");
       }
     }
     return $sce.trustAsHtml(input);
