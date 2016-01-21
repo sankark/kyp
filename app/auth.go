@@ -1,6 +1,6 @@
 package kyp
 
-func Auth(){
+/*func Auth(){
 	return func(c *gin.Context) {
 	      	if value, exists := c.Get(gin.AuthUserKey); exists {
         		return value
@@ -8,4 +8,4 @@ func Auth(){
         	  // facebook login here
         	}
 	}
-}
+}*/

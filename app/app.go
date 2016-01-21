@@ -6,6 +6,8 @@ import (
 	"github.com/kyp/log"
 	"github.com/kyp/models"
 	"github.com/kyp/service"
+	"github.com/kyp/social"
+
 	//"google.golang.org/appengine"
 	"net/http"
 	//      "github.com/dpapathanasiou/go-recaptcha"
@@ -34,17 +36,18 @@ func init() {
 
 	r.GET("/", Home)
 	r.GET("/admin", Admin)
+	r.GET("/fb", social.Home)
+	r.GET("/FBLogin", social.FBLogin)
 
 	http.Handle("/", r)
 	//appengine.Main()
-	
-        authorized := r.Group("/write")
-        
-        authorized.Use(Auth())
-        {
-           authorized.POST("/login", loginEndpoint)
-        }
-        
+	/*
+	   authorized := r.Group("/write")
+
+	   authorized.Use(Auth())
+	   {
+	      authorized.POST("/login", loginEndpoint)
+	   }*/
 
 }
 
