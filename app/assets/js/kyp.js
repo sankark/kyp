@@ -62,6 +62,7 @@ function MainController($rootScope, $scope, $location,ConstiService,geolocation)
             $scope.myconsti = r.Data.Assemb_Const;
              $scope.active_cls = '';
              $scope.progress = "none";
+             $scope.ena_suggest = 'none';
         })
     }
     geolocation.getLocation().then(function(data) {
