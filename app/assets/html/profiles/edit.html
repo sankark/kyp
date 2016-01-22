@@ -1,0 +1,78 @@
+<div class="mdl-grid" style="">
+    <span class="mdl-cell  mdl-cell--4-col">
+            <button ng-click="editProfile()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+                    <i class="material-icons">add</i>
+            </button>
+            </span>
+    <span class="mdl-cell  mdl-cell--4-col">
+            <button ng-click="editProfile()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+                    <i class="material-icons">add</i>
+            </button>
+            </span>
+</div>
+
+<div class="demo-blog__posts mdl-grid ">
+    <div class="basic_info mdl-card  mdl-cell mdl-cell--8-col" style="padding-bottom: 25px;">
+        <div class="mdl-color-text--grey-600 item input">
+            <span><h5>{% label.name %}</h5></span>
+            <span><input ng-focus="focus='sw_1';" type="text" ng-model="name.text" ng-enter="select(0,name)" ng-change="input(name)"/></span>
+        </div>
+        <ul ng-show="focus=='sw_1'" class="iem-container">
+            <li ng-repeat="word in words" ng-click="select($index,name)">{% word %}</li>
+        </ul>
+        <div class="mdl-color-text--grey-600 item">
+            <span><h5>{% label.consti %}</h5></span>
+            <span><autocomplete ng-model="myconsti" attr-inputclass="mdl-textfield__input" attr-class="mdl-textfield mdl-js-textfield" attr-placeholder="select your constituency" data="consti"></autocomplete>
+        </div>
+        <div class="mdl-color-text--grey-600 item">
+            <span><h5>{% label.party %}</h5></span>
+            <span><input ng-focus="focus='sw_3'" type="text" ng-model="party.text" ng-enter="select(0,party)" ng-change="input(party)"/></span>
+        </div>
+        <ul ng-show="focus=='sw_3'" class="iem-container">
+            <li ng-repeat="word in words" ng-click="select($index,party)">{% word %}</li>
+        </ul>
+        <div class="mdl-color-text--grey-600 item">
+            <span><h5>{% label.experience %}</h5></span>
+            <span><input ng-focus="focus='sw_4'" type="text" ng-model="expert.text" ng-enter="select(0,expert)" ng-change="input(expert)"/></span>
+        </div>
+        <ul ng-show="focus=='sw_4'" class="iem-container">
+            <li ng-repeat="word in words" ng-click="select($index,expert)">{% word %}</li>
+        </ul>
+    </div>
+    <div class=" mdl-card mdl-cell--8-col mdl-cell--4-col-desktop mdl-cell">
+        <div ng-click="loadProfile(p)" class="kyp_img mdl-card__media mdl-color-text--grey-50" style="background-image: url('/assets/images/logo.png')">
+            <h3></h3>
+        </div>
+        <input type="file" value="" class="mdl-button mdl-js-ripple-effect mdl-js-button mdl-button--fab mdl-color--accent">
+        <i class="material-icons mdl-color-text--white" role="presentation">add</i>
+        <span class="visuallyhidden">add</span>
+    </div>
+    <div class="mdl-card  mdl-cell mdl-cell--12-col">
+        <br>
+        <div class="container lighter" style="width: inherit;">
+            <div text-angular ng-model="details" name="demo-editor" ta-text-editor-class="border-around container" ta-html-editor-class="border-around"></div>
+            <div class="mdl-color-text--grey-600 item dummyarea">
+                <span><h5>{% label.trans_area %}</h5></span>
+                <span><textarea ng-focus="focus='sw_5'" type="text" ng-model="dummy.text" ng-enter="select(0,dummy)" ng-change="input(dummy)"/></span>
+                <ul ng-show="focus=='sw_5'" class="iem-container">
+                    <li ng-repeat="word in words" ng-click="select($index,dummy)">{% word %}</li>
+                </ul>
+            </div>
+        </div>
+        <br>
+    </div>
+    <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments" ng-include="'/assets/html/comments/edit_comments.html'">
+    </div>
+
+<div class="mdl-grid" style="">
+    <span class="mdl-cell  mdl-cell--4-col">
+            <button ng-click="editProfile()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+                    <i class="material-icons">add</i>
+            </button>
+            </span>
+    <span class="mdl-cell  mdl-cell--4-col">
+            <button ng-click="editProfile()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+                    <i class="material-icons">add</i>
+            </button>
+            </span>
+</div>

@@ -1,0 +1,25 @@
+<div class="comment">
+    <header class="comment__header">
+    <gravatar-image data-gravatar-email="sankareds@gmail.com" data-gravatar-size="120" data-gravatar-rating="pg" data-gravatar-default="identicon" data-gravatar-secure="true" data-gravatar-css-class="comment__avatar"></gravatar-image>
+        <div class="comment__author">
+            <strong>{{ca.name}}</strong>
+            <span>2 days ago</span>
+        </div>
+    </header>
+    <div class="comment__text">
+        {{ca.text}}
+    </div>
+    <nav class="comment__actions">
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+            <i class="material-icons" role="presentation">thumb_up</i><span class="visuallyhidden">like comment</span>
+        </button>
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+            <i class="material-icons" role="presentation">thumb_down</i><span class="visuallyhidden">dislike comment</span>
+        </button>
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+            <i class="material-icons" role="presentation">share</i><span class="visuallyhidden">share comment</span>
+        </button>
+    </nav>
+</div>
+<div class="comment__answers" ng-repeat="ca in ca.comment" ng-include="'/assets/html/comments/comment.html'">
+</div>

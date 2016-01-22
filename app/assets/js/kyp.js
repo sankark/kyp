@@ -135,7 +135,7 @@ app.config(function($routeProvider, $locationProvider) {
         controller: MainController
     }).
     when('/profile', {
-        templateUrl: '/assets/html/entry.html',
+        templateUrl: '/assets/html/profiles/view.html',
         controller: ProfileController
     }).
     otherwise({

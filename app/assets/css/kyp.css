@@ -119,4 +119,6 @@ body > .mdl-layout__container {
 .autocomplete .highlight .none{
     display:none;
 }
+.ta-hidden-input{
+    display:none;
 }
