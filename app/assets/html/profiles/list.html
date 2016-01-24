@@ -1,4 +1,4 @@
-<div class="demo-blog__posts mdl-grid ">
+<div class="demo-blog__posts mdl-grid " ng-init="listProfile()">
     <div class="mdl-card  mdl-cell mdl-cell--12-col" style="padding-bottom: 25px;">
         <div class="mdl-grid" style="">
             <span class="mdl-cell">
@@ -7,8 +7,9 @@
             </button>
             </span>
         </div>
-        <div class="mdl-grid" style="">
-            <span class="mdl-cell"><a>name</a></span>
+
+        <div class="mdl-grid" ng-repeat="profile in profiles" style="">
+            <span class="mdl-cell"><a ng-click="editProfile(profile.id,profile.details.id)">{% profile.details.name %}</a></span>
         </div>
     </div>
 </div>

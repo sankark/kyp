@@ -1,17 +1,17 @@
 <div class="mdl-grid" style="">
     <span class="mdl-cell  mdl-cell--4-col">
-            <button ng-click="editProfile()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+            <button ng-click="createProfile()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
                     <i class="material-icons">add</i>
             </button>
             </span>
     <span class="mdl-cell  mdl-cell--4-col">
-            <button ng-click="editProfile()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+            <button ng-click="removeProfile()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
                     <i class="material-icons">add</i>
             </button>
             </span>
 </div>
 
-<div class="demo-blog__posts mdl-grid ">
+<div class="demo-blog__posts mdl-grid " ng-init="getProfile()">
     <div class="basic_info mdl-card  mdl-cell mdl-cell--8-col" style="padding-bottom: 25px;">
         <div class="mdl-color-text--grey-600 item input">
             <span><h5>{% label.name %}</h5></span>
@@ -50,7 +50,7 @@
     <div class="mdl-card  mdl-cell mdl-cell--12-col">
         <br>
         <div class="container lighter" style="width: inherit;">
-            <div text-angular ng-model="details" name="demo-editor" ta-text-editor-class="border-around container" ta-html-editor-class="border-around"></div>
+            <div text-angular ng-model="htmlContent" name="demo-editor" ta-text-editor-class="border-around container" ta-html-editor-class="border-around"></div>
             <div class="mdl-color-text--grey-600 item dummyarea">
                 <span><h5>{% label.trans_area %}</h5></span>
                 <span><textarea ng-focus="focus='sw_5'" type="text" ng-model="dummy.text" ng-enter="select(0,dummy)" ng-change="input(dummy)"/></span>

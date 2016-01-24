@@ -41,10 +41,24 @@ type ProfileOut struct {
 
 func GetProfile(c *gin.Context) {
 	conn := New(c)
-	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
-	profile := &Profile{Id: id, Parent: conn.DatastoreKeyWithKind("ProfileDetails", 4986010354057216)}
-	resp := conn.Get(profile)
-	c.JSON(http.StatusOK, resp)
+
+	prof_id, _ := strconv.ParseInt(c.Param("prof_id"), 10, 64)
+	det_id, _ := strconv.ParseInt(c.Param("det_id"), 10, 64)
+	det_key := conn.DatastoreKeyWithKind("ProfileDetails", det_id)
+	prof_in := &Profile{Id: prof_id, Parent: det_key}
+
+	conn.Get(prof_in)
+
+	var pout_t ProfileOut
+	det_list := &datastore.PropertyList{}
+	conn.PropListGet(det_list, prof_in.Parent)
+	pout_t.Details = PropertyListToMap(det_list)
+	pout_t.Details["id"] = prof_in.Parent.IntID()
+	pout_t.Comments = prof_in.Comments
+	pout_t.Consti = prof_in.Consti
+	pout_t.Id = prof_in.Id
+
+	c.JSON(http.StatusOK, pout_t)
 }
 
 func PutProfile(c *gin.Context) {
@@ -64,6 +78,7 @@ func PutProfile(c *gin.Context) {
 	conn.Get(prof_in)
 	prof_in.Parent = det_key
 	prof_in.Comments = prof_out.Comments
+	prof_in.Consti = prof_out.Consti
 	resp := conn.Add(prof_in)
 	log.Debugf(conn.Context, fmt.Sprintf("%#v", prof_in))
 
@@ -117,6 +132,7 @@ func FilterProfile(c *gin.Context) {
 			pout_t.Details = PropertyListToMap(det_list)
 			pout_t.Details["id"] = prof.Parent.IntID()
 			pout_t.Comments = prof.Comments
+			pout_t.Consti = prof.Consti
 			pout_t.Id = prof.Id
 			out_list = append(out_list, pout_t)
 		}
@@ -140,6 +156,7 @@ func ListProfile(c *gin.Context) {
 		pout_t.Details = PropertyListToMap(det_list)
 		pout_t.Details["id"] = prof.Parent.IntID()
 		pout_t.Comments = prof.Comments
+		pout_t.Consti = prof.Consti
 		pout_t.Id = prof.Id
 		out_list = append(out_list, pout_t)
 

@@ -27,7 +27,7 @@ func init() {
 	r.GET("/load", LoadConst)
 	r.POST("/point", Point)
 
-	r.GET("/profile/:id", GetProfile)
+	r.GET("/profile/:prof_id/:det_id", GetProfile)
 	r.POST("/profile", PutProfile)
 	r.DELETE("/profile/:prof_id/:det_id", DeleteProfile)
 	r.GET("/profile", ListProfile)

@@ -1,0 +1,31 @@
+    <div class="demo-blog mdl-layout mdl-js-layout has-drawer is-upgraded {% progress %}" {% show %}>
+        <main class="mdl-layout__content">
+            <div class="demo-blog__posts mdl-grid">
+                <div id="LoadingDiv" style="display:{% progress %};">
+                    <div mdl-upgrade class="mdl-spinner mdl-js-spinner {% active_cls %}"></div>
+                </div>
+                <div ng-view class="demo-blog__posts mdl-grid">
+                </div>
+            </div>
+            <footer class="mdl-mini-footer">
+                <div class="mdl-mini-footer--left-section">
+                    <button class="mdl-mini-footer--social-btn social-btn social-btn__twitter">
+                        <span class="visuallyhidden">Twitter</span>
+                    </button>
+                    <button class="mdl-mini-footer--social-btn social-btn social-btn__blogger">
+                        <span class="visuallyhidden">Facebook</span>
+                    </button>
+                    <button class="mdl-mini-footer--social-btn social-btn social-btn__gplus">
+                        <span class="visuallyhidden">Google Plus</span>
+                    </button>
+                </div>
+                <div class="mdl-mini-footer--right-section">
+                    <button class="mdl-mini-footer--social-btn social-btn__share">
+                        <i class="material-icons" role="presentation">share</i>
+                        <span class="visuallyhidden">share</span>
+                    </button>
+                </div>
+            </footer>
+        </main>
+    </div>
+<div class="mdl-layout__obfuscator"></div>

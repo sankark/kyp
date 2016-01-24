@@ -1,44 +1,60 @@
-<div class="mdl-card  mdl-cell mdl-cell--12-col" ng-repeat="(key, p) in profiles">
-    <div ng-click="loadProfile(p)" class="kyp_img mdl-card__media mdl-color-text--grey-50" style="background-image: url({{p.img}})">
-        <h3>{{p.name}}</h3>
-    </div>
-    <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
-        <span class="material-icons mdl-badge" data-badge="12367">
+<div ng-include="'/assets/html/progress.html'"></div>
+<div class="demo-blog mdl-layout mdl-js-layout has-drawer is-upgraded {% progress %}" {% show %}>
+    <main class="mdl-layout__content">
+        <div class="demo-blog__posts mdl-grid">
+            <div class="demo-blog__posts mdl-grid">
+                <div class="mdl-card  mdl-cell mdl-cell--12-col" ng-repeat="(key, p) in profiles">
+                    <div ng-click="loadProfile(p)" class="kyp_img mdl-card__media mdl-color-text--grey-50" style="background-image: url({{p.img}})">
+                        <h3>{% p.details.name %}</h3>
+                    </div>
+                    <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
+                        <span class="material-icons mdl-badge" data-badge="12367">
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
         <i class="material-icons" role="presentation">thumb_up</i><span class="visuallyhidden">like comment</span>
-        </button>
-        </span>
-        <span class="material-icons mdl-badge" data-badge="12367">
+                        </button>
+                        </span>
+                        <span class="material-icons mdl-badge" data-badge="12367">
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
         <i class="material-icons" role="presentation">thumb_down</i><span class="visuallyhidden">dislike comment</span>
-        </button>
-        </span>
-        <span ng-click="loadProfile(p)" class="material-icons mdl-badge" data-badge="12367">
+                        </button>
+                        </span>
+                        <span ng-click="loadProfile(p)" class="material-icons mdl-badge" data-badge="12367">
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
         <i  class="material-icons" role="presentation">comment</i><span class="visuallyhidden">dislike comment</span>
-        </button>
-        </span>
-    </div>
-    <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
-        <div class="mdl-color-text--grey-600 item">
-            <span><h5>{{p.info}}</h5></span>
-            <span>jhjhhhhhhhjjjkkjk</span>
+                        </button>
+                        </span>
+                    </div>
+                    <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
+                        <div class="mdl-color-text--grey-600 item">
+                            <span><h5>{% p.details.name %}</h5></span>
+                            <span>Name</span>
+                        </div>
+                    </div>
+                    <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
+                        <div class="mdl-color-text--grey-600 item">
+                            <span><h5>{% p.consti %}</h5></span>
+                            <span>Constituency</span>
+                        </div>
+                    </div>
+                     <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
+                        <div class="mdl-color-text--grey-600 item">
+                            <span><h5>{% p.details.party %}</h5></span>
+                            <span>Party</span>
+                        </div>
+                    </div>                   
+                    <div class="demo-blog--blogpost profile-comments">
+                        <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments" ng-include="'/assets/html/comments/list.html'"></div>
+                        <div class="more">
+                            <a ng-click="loadProfile(p,'comment')" class="demo-nav__button">
+                                <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                                    <i class="material-icons">arrow_forward</i>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-    <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
-        <div class="mdl-color-text--grey-600 item">
-            <span><h5>{{p.info}}</h5></span>
-            <span>jhjhhhhhhhjjjkkjk</span>
-        </div>
-    </div>
-    <div class="demo-blog--blogpost profile-comments">
-        <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments" ng-include="'/assets/html/comments.html'"></div>
-        <div class="more">
-            <a ng-click="loadProfile(p,'comment')" class="demo-nav__button">
-                <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
-                    <i class="material-icons">arrow_forward</i>
-                </button>
-            </a>
-        </div>
-    </div>
+        <div ng-include="'/assets/html/footer.html'"></div>
+    </main>
 </div>
