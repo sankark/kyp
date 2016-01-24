@@ -1,6 +1,6 @@
 angular.module('profile', [])
 
-.factory('profile', ['$q', 'Profiles','Consti', function($q, Profiles, Consti) {
+.factory('profile', ['$q', 'Profiles','Consti','Comments', function($q, Profiles, Consti,Comments) {
     return {
         createProfile: function(scope) {
             var deferred = $q.defer();
@@ -54,8 +54,16 @@ angular.module('profile', [])
             });
 
             return deferred.promise;
-        }
+        },
 
+        addComment: function(scope) {
+            var deferred = $q.defer();
+            Comments.save({text:scope.p.new_comment, prof_id:scope.prof_id,det_id:scope.det_id}, function(resp, headers) {
+                deferred.resolve(resp);
+            });
+
+            return deferred.promise;
+        }, 
 
 
     };
@@ -68,4 +76,13 @@ angular.module('profile', [])
 
 .factory('Consti', function($resource) {
     return $resource('/consti/:id'); // Note the full endpoint address
+})
+
+.factory('Comments', function($resource) {
+    return $resource('/comments', {}, {
+        'save': {
+            method: 'POST',
+            isArray: true
+        }
+    }); // Note the full endpoint address
 })

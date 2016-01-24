@@ -60,6 +60,10 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams) {
         });
     }
 
+    $scope.previous = function(){
+        $location.path('/');
+    }
+
     $scope.listConsti();
 
 }
@@ -78,6 +82,8 @@ function ProfileController($rootScope, $scope, $location,profile, $routeParams) 
         $scope.recaptchaId=null;*/
        //grecaptcha.reset($scope.recap_widget);
     }
+
+    //recaptcha('recap_new_comment')
 
     $scope.recaptcha = function(id, action) {
         if($scope.recaptchaDone == null){
@@ -99,7 +105,19 @@ function ProfileController($rootScope, $scope, $location,profile, $routeParams) 
         });
     }
 
-    $scope.previous = 
+    $scope.addComment = function(){
+        startProgress($scope);
+        $scope.prof_id = $routeParams.prof_id;
+        $scope.det_id = $routeParams.det_id;
+        profile.addComment($scope).then(function(resp){
+            $scope.p.comments = resp;
+            endProgress($scope)
+        });
+    }
+
+    $scope.previous = function(){
+        $location.path('/consti/'+$scope.p.consti);
+    }
 
     $scope.getProfile();
 

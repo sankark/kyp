@@ -32,6 +32,8 @@ func init() {
 	r.DELETE("/profile/:prof_id/:det_id", DeleteProfile)
 	r.GET("/profile", ListProfile)
 
+	r.POST("/comments", PutComments)
+
 	r.GET("/consti/:id", FilterConstiProfile)
 
 	r.GET("/", Home)
@@ -51,6 +53,9 @@ func init() {
 
 }
 
+func PutComments(c *gin.Context) {
+	service.AddComment(c)
+}
 func FilterConstiProfile(c *gin.Context) {
 	service.FilterProfile(c)
 }

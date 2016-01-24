@@ -5,6 +5,10 @@ import (
 	"net/http"
 	"strconv"
 
+	"time"
+
+	"github.com/satori/go.uuid"
+
 	"github.com/gin-gonic/gin"
 	"github.com/kyp/log"
 	"github.com/kyp/timestamp"
@@ -19,10 +23,13 @@ type Label struct {
 }
 
 type Comment struct {
-	Text   string `json:"text"`
-	Date   string
-	Like   int64
-	Unlike int64
+	Prof_Id string `json:"prof_id"`
+	Det_Id  string `json:"det_id"`
+	Id      string
+	Text    string `json:"text"`
+	Time    string
+	Like    int64
+	Unlike  int64
 }
 
 type Profile struct {
@@ -70,7 +77,9 @@ func PutProfile(c *gin.Context) {
 	det_id := NumberToInt(prof_out.Details["id"])
 	det_key := conn.DatastoreKeyWithKind("ProfileDetails", det_id)
 	det_list := &datastore.PropertyList{}
+	log.Debugf(conn.Context, fmt.Sprintf("before conv %#v", det_list))
 	det_list = MapToPropertyList(prof_out.Details)
+	log.Debugf(conn.Context, fmt.Sprintf("after conv %#v", det_list))
 	det_key = conn.PropListPut(det_list, det_key)
 	log.Debugf(conn.Context, fmt.Sprintf("details %#v", det_list))
 
@@ -109,10 +118,21 @@ func DeleteProfile(c *gin.Context) {
 }
 
 func AddComment(c *gin.Context) {
-	id, _ := strconv.ParseInt(c.Param("id"), 10, 64)
-	profile := &Profile{Id: id}
-	profile.Comments = append(profile.Comments, Comment{})
-	PutProfile(c)
+	conn := New(c)
+	var comment Comment
+	c.BindJSON(&comment)
+
+	prof_id, _ := strconv.ParseInt(comment.Prof_Id, 10, 64)
+	det_id, _ := strconv.ParseInt(comment.Det_Id, 10, 64)
+	det_key := conn.DatastoreKeyWithKind("ProfileDetails", det_id)
+	prof_in := &Profile{Id: prof_id, Parent: det_key}
+	conn.Get(prof_in)
+
+	comment.Id = uuid.NewV4().String()
+	comment.Time = time.Now().Format("2006-01-02 15-04-05")
+	prof_in.Comments = append(prof_in.Comments, comment)
+	conn.Add(prof_in)
+	c.JSON(http.StatusOK, prof_in.Comments)
 }
 
 func FilterProfile(c *gin.Context) {
@@ -170,9 +190,19 @@ func MapToPropertyList(det_map map[string]interface{}) *datastore.PropertyList {
 		/*		if k == "id" {
 				v = NumberToInt(det_map[k])
 			}*/
+		no_index := false
+		multiple := false
+		if k == "htmlContent" {
+			v = []byte(v.(string))
+			no_index = true
+			multiple = true
+		}
+
 		ret = append(ret, datastore.Property{
-			Name:  k,
-			Value: v,
+			Name:     k,
+			Value:    v,
+			NoIndex:  no_index,
+			Multiple: multiple,
 		})
 	}
 	pl := &datastore.PropertyList{}
@@ -185,6 +215,9 @@ func PropertyListToMap(pl *datastore.PropertyList) map[string]interface{} {
 	var prop datastore.Property
 	li, _ := pl.Save()
 	for _, prop = range li {
+		if prop.Name == "htmlContent" {
+			prop.Value = string(prop.Value.([]byte)[:])
+		}
 		ret[prop.Name] = prop.Value
 	}
 

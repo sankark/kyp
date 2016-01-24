@@ -1,6 +1,13 @@
 <div ng-include="'/assets/html/progress.html'"></div>
 <div class="demo-blog mdl-layout mdl-js-layout has-drawer is-upgraded {% progress %}" {% show %}>
     <main class="mdl-layout__content">
+            <nav class="demo-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+                <a ng-click="previous()"  href="" class="demo-nav__button">
+                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                        <i class="material-icons">arrow_back</i>
+                    </button>
+                </a>
+            </nav>
         <div class="demo-blog__posts mdl-grid">
             <div class="demo-blog__posts mdl-grid">
                 <div class="mdl-card  mdl-cell mdl-cell--12-col" ng-repeat="(key, p) in profiles">
@@ -54,6 +61,14 @@
                     </div>
                 </div>
             </div>
+            <nav class="demo-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+                <a ng-click="previous()"  href="" class="demo-nav__button">
+                    <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+                        <i class="material-icons">arrow_back</i>
+                    </button>
+                    Back
+                </a>
+            </nav>
         </div>
         <div ng-include="'/assets/html/footer.html'"></div>
     </main>

@@ -125,3 +125,7 @@ body > .mdl-layout__container {
 .ta-hidden-input{
     display:none;
 }
+
+.html-content{
+    margin-left: 2%;
+}
