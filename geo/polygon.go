@@ -10,7 +10,7 @@ import (
 	geo "github.com/kellydunn/golang-geo"
 	"github.com/kpawlik/geojson"
 	"github.com/kyp/log"
-	"github.com/kyp/service"
+	"github.com/kyp/store"
 	"google.golang.org/appengine/datastore"
 )
 
@@ -34,7 +34,7 @@ type Constituency struct {
 	Points       []Point
 }
 
-func LoadPolygonFromFile(ctx *gin.Context, conn *service.Connection) {
+func LoadPolygonFromFile(ctx *gin.Context, conn *store.Connection) {
 
 	filename := "./tnassemble.geojson"
 	f_coll := new(geojson.FeatureCollection)
@@ -105,7 +105,7 @@ func Process(id int64, search *geo.Point) <-chan int64 {
 	}()
 	return out
 }
-func PointInPolygon(ctx *gin.Context, conn *service.Connection, lat float64, lon float64) service.Response {
+func PointInPolygon(ctx *gin.Context, conn *store.Connection, lat float64, lon float64) store.Response {
 
 	chans := make([]<-chan int64, 0)
 	search := geo.NewPoint(lat, lon)

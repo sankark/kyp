@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/kyp/auth"
+
 	"google.golang.org/appengine"
 
 	"github.com/gin-gonic/gin"
@@ -33,8 +35,8 @@ func FBConfig() *oauth2.Config {
 		// ClientId: FBAppID(string), ClientSecret : FBSecret(string)
 		// Example - ClientId: "1234567890", ClientSecret: "red2drdff6e2321e51aedcc94e19c76ee"
 
-		ClientID:     "", // change this to yours
-		ClientSecret: "",
+		ClientID:     "1515896578706527", // change this to yours
+		ClientSecret: "c34e40892330c13bb047809a163ff1b2",
 		RedirectURL:  "https://cloud-certification-l300.appspot.com/FBLogin", // change this to your webserver adddress
 		Scopes:       []string{"email", "user_birthday", "user_location", "user_about_me"},
 		Endpoint: oauth2.Endpoint{
@@ -90,5 +92,13 @@ func FBLogin(c *gin.Context) {
 	log.Debugf(aecontext, fmt.Sprintf("fb_response %#v", response))
 	Bind(response, &fb_user)
 	log.Debugf(aecontext, fmt.Sprintf("fb_response %#v", fb_user))
-	c.String(http.StatusOK, "Username %s email %s", fb_user.Username, fb_user.Email)
+	user := &auth.User{
+		Email: fb_user.Email,
+		Name:  fb_user.Username,
+	}
+	log.Debugf(aecontext, fmt.Sprintf("user %#v", user))
+	if !auth.IsAuthenticated(c) {
+		auth.CreateSession(c, user)
+	}
+	auth.Redirect(c)
 }

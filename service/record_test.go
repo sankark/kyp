@@ -1,6 +1,6 @@
 package service
 
-import (
+/*import (
 	/*	"github.com/stretchr/testify/assert"*/
 	"github.com/kyp/service"
 	"google.golang.org/appengine/aetest"
@@ -13,4 +13,4 @@ func TestListObject(t *testing.T) {
 	ds := service.FromContext(c)
 	ds.Add(service.Record{ID: 1, Name: "test"})
 
-}
+}*/

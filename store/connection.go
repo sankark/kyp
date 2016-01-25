@@ -1,6 +1,6 @@
-package service
+package store
 
-/*import (
+import (
 	"reflect"
 	"strings"
 
@@ -144,4 +144,3 @@ func (ds *Connection) Remove(key interface{}) Response {
 	resp.Data = key
 	return resp
 }
-*/

@@ -1,6 +1,6 @@
 package service
 
-import (
+/*import (
 	"github.com/kyp/store"
 	"golang.org/x/net/context"
 	"google.golang.org/cloud/storage"
@@ -31,4 +31,4 @@ func ListObjects(b_name string) {
 	}
 
 	log.Println("paginated through all object items in the bucket you specified.")
-}
+}*/

@@ -2,11 +2,14 @@ package kyp
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/kyp/auth"
 	"github.com/kyp/geo"
 	"github.com/kyp/log"
 	"github.com/kyp/models"
 	"github.com/kyp/service"
+	"github.com/kyp/sessions"
 	"github.com/kyp/social"
+	"github.com/kyp/store"
 
 	//"google.golang.org/appengine"
 	"net/http"
@@ -19,10 +22,13 @@ func init() {
 	r.Use(log.Logger())
 	r.Use(gin.Recovery())
 
+	store := sessions.NewCookieStore([]byte("secret"))
+	r.Use(sessions.Sessions("mysession", store))
+
 	r.LoadHTMLGlob("templates/*")
 	r.Static("/assets", "./assets")
 
-	r.POST("/user", AddUser)
+	r.POST("/user", AddUserOld)
 	r.GET("/user", ListUser)
 	r.GET("/load", LoadConst)
 	r.POST("/point", Point)
@@ -38,7 +44,7 @@ func init() {
 
 	r.GET("/", Home)
 	r.GET("/admin", Admin)
-	r.GET("/fb", social.Home)
+	r.GET("/login", social.Home)
 	r.GET("/FBLogin", social.FBLogin)
 
 	http.Handle("/", r)
@@ -81,14 +87,19 @@ func Home(c *gin.Context) {
 }
 
 func Admin(c *gin.Context) {
-	c.HTML(http.StatusOK, "admin.html", gin.H{})
+	if auth.IsAuthenticated(c) {
+		c.HTML(http.StatusOK, "admin.html", gin.H{})
+	} else {
+		auth.Login(c)
+	}
+
 }
 
-func getStore(c *gin.Context) *service.Connection {
-	return service.New(c)
+func getStore(c *gin.Context) *store.Connection {
+	return store.New(c)
 }
 
-func AddUser(c *gin.Context) {
+func AddUserOld(c *gin.Context) {
 	rec := &models.Record{}
 	c.BindJSON(rec)
 	DAO := getStore(c)
