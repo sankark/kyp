@@ -46,6 +46,7 @@ func init() {
 	r.GET("/admin", Admin)
 	r.GET("/login", social.Home)
 	r.GET("/FBLogin", social.FBLogin)
+	r.GET("/TestLogin", auth.TestLogin)
 
 	http.Handle("/", r)
 	//appengine.Main()

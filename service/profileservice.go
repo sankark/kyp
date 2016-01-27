@@ -75,6 +75,7 @@ func GetProfile(c *gin.Context) {
 func PutProfile(c *gin.Context) {
 
 	conn := store.New(c)
+	status := http.StatusOK
 
 	prof_out := &ProfileOut{}
 	c.BindJSON(prof_out)
@@ -99,25 +100,19 @@ func PutProfile(c *gin.Context) {
 		resp = conn.Add(prof_in)
 		log.Debugf(conn.Context, fmt.Sprintf("%#v", prof_in))
 
-		auth.SessionSave(c)
-		c.JSON(http.StatusOK, resp)
 	} else {
-		c.JSON(http.StatusUnauthorized, nil)
+		status = http.StatusUnauthorized
 	}
 
-}
+	auth.SessionSave(c)
+	c.JSON(status, resp)
 
-func NumberToInt(n interface{}) int64 {
-	if n == nil {
-		return 0
-	}
-	return int64(n.(float64))
 }
 
 func DeleteProfile(c *gin.Context) {
 
 	conn := store.New(c)
-
+	status := http.StatusOK
 	var resp store.Response
 	prof_id, _ := strconv.ParseInt(c.Param("prof_id"), 10, 64)
 	det_id, _ := strconv.ParseInt(c.Param("det_id"), 10, 64)
@@ -131,16 +126,18 @@ func DeleteProfile(c *gin.Context) {
 		resp = conn.Remove(conn.Goon.Key(prof_in))
 		resp = conn.Remove(prof_in.Parent)
 
-		auth.SessionSave(c)
-		c.JSON(http.StatusOK, resp)
 	} else {
-		c.JSON(http.StatusUnauthorized, nil)
+		status = http.StatusUnauthorized
 	}
 
+	auth.SessionSave(c)
+	c.JSON(status, resp)
 }
 
 func AddComment(c *gin.Context) {
 
+	var prof_in *Profile
+	status := http.StatusOK
 	if auth.IsAuthenticated(c) {
 
 		conn := store.New(c)
@@ -150,7 +147,7 @@ func AddComment(c *gin.Context) {
 		prof_id, _ := strconv.ParseInt(comment.Prof_Id, 10, 64)
 		det_id, _ := strconv.ParseInt(comment.Det_Id, 10, 64)
 		det_key := conn.DatastoreKeyWithKind("ProfileDetails", det_id)
-		prof_in := &Profile{Id: prof_id, Parent: det_key}
+		prof_in = &Profile{Id: prof_id, Parent: det_key}
 		conn.Get(prof_in)
 
 		comment.Id = uuid.NewV4().String()
@@ -158,13 +155,14 @@ func AddComment(c *gin.Context) {
 		prof_in.Comments = append(prof_in.Comments, comment)
 		conn.Add(prof_in)
 
-		auth.SessionSave(c)
-		c.JSON(http.StatusOK, prof_in.Comments)
+		status = http.StatusOK
 
 	} else {
 		auth.SessionSave(c)
 		auth.Login(c)
 	}
+
+	c.JSON(status, prof_in.Comments)
 }
 
 func FilterProfile(c *gin.Context) {
@@ -259,4 +257,11 @@ func PropertyListToMap(pl *datastore.PropertyList) map[string]interface{} {
 	}
 
 	return ret
+}
+
+func NumberToInt(n interface{}) int64 {
+	if n == nil {
+		return 0
+	}
+	return int64(n.(float64))
 }

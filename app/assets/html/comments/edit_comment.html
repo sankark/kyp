@@ -2,12 +2,12 @@
     <header class="comment__header">
     <gravatar-image data-gravatar-email="sankareds@gmail.com" data-gravatar-size="120" data-gravatar-rating="pg" data-gravatar-default="identicon" data-gravatar-secure="true" data-gravatar-css-class="comment__avatar"></gravatar-image>
         <div class="comment__author">
-            <strong>{{ca.name}}</strong>
-            <span>2 days ago</span>
+            <strong>Ananymous</strong>
+            <span>{% c.Time %}</span>
         </div>
     </header>
     <div class="comment__text">
-        <textarea ng-model="ca.text"></textarea>
+        <textarea ng-model="c.text"></textarea>
     </div>
     <nav class="comment__actions">
         <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">

@@ -116,3 +116,14 @@ func Contains(c *gin.Context, key string) bool {
 	}
 	return false
 }
+
+func TestLogin(c *gin.Context) {
+	user := &User{
+		Email: "test",
+		Name:  "test",
+	}
+	if !IsAuthenticated(c) {
+		CreateSession(c, user)
+	}
+	Redirect(c)
+}

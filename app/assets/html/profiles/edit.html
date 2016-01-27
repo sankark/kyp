@@ -40,10 +40,10 @@
         </ul>
     </div>
     <div class=" mdl-card mdl-cell--8-col mdl-cell--4-col-desktop mdl-cell">
-        <div ng-click="loadProfile(p)" class="kyp_img mdl-card__media mdl-color-text--grey-50" style="background-image: url('/assets/images/logo.png')">
-            <h3></h3>
+        <div style="background-image:url('http://www.sagayamias.com/wp-content/uploads/2015/09/download.jpg')" class="mdl-card__media mdl-color-text--grey-50">
+           <div ng-repeat="image in uploader.queue" ng-show="uploader.isHTML5" ng-thumb="{ file: image._file, height: 100}"></div>
         </div>
-        <input type="file" value="" class="mdl-button mdl-js-ripple-effect mdl-js-button mdl-button--fab mdl-color--accent">
+        <input input type="file" nv-file-select="" uploader="uploader" class="mdl-button mdl-js-ripple-effect mdl-js-button mdl-button--fab mdl-color--accent">
         <i class="material-icons mdl-color-text--white" role="presentation">add</i>
         <span class="visuallyhidden">add</span>
     </div>

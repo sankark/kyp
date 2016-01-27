@@ -1,9 +1,9 @@
-<div name="comment" class="comment mdl-color-text--grey-700" ng-repeat="(key, c) in comments">
+<div name="comment" class="comment mdl-color-text--grey-700" ng-repeat="(key, c) in p.comments">
     <header class="comment__header">
     <gravatar-image data-gravatar-email="sankareds@gmail.com" data-gravatar-size="120" data-gravatar-rating="pg" data-gravatar-default="identicon" data-gravatar-secure="true" data-gravatar-css-class="comment__avatar"></gravatar-image>
         <div class="comment__author">
-            <strong>{{ca.name}}</strong>
-            <span>2 days ago</span>
+            <strong>Ananymous</strong>
+            <span>{% c.Time %}</span>
         </div>
     </header>
     <div class="comment__text">
@@ -21,7 +21,7 @@
         </button>
     </nav>
     <ul>
-        <li class="comment__answers" ng-repeat="ca in c.comment" ng-include="'/assets/html/comments/edit_comment.html'">
+        <li class="comment__answers" ng-repeat="c in c.comment" ng-include="'/assets/html/comments/edit_comment.html'">
         </li>
     </ul>
 </div>

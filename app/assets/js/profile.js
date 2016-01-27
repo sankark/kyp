@@ -86,3 +86,4 @@ angular.module('profile', [])
         }
     }); // Note the full endpoint address
 })
+
