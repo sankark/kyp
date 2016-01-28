@@ -11,6 +11,20 @@ import (
 	"google.golang.org/appengine/blobstore"
 )
 
+func UploadUrl(c *gin.Context){
+	r := c.Request
+	ctx := appengine.NewContext(r)
+	uploadURL, err := blobstore.UploadURL(ctx, "/upload", nil)
+	var err_msg string
+	
+	if err != nil {
+		log.Errorf(ctx, err.Error())
+		err_msg = err.Error()
+        }
+        
+        c.JSON(http.StatusOK, gin.H{"err": err_msg, "uploadURL": UploadURL})
+	
+}
 func Serve(c *gin.Context) {
 	r := c.Request
 	w := c.Writer
