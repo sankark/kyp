@@ -49,6 +49,7 @@ func init() {
 	r.GET("/TestLogin", auth.TestLogin)
 
 	r.POST("/admin/upload", store.Upload)
+	r.Get("/admin/bloburl", store.UploadURL)
 	r.GET("/serve", store.Serve)
 	http.Handle("/", r)
 	//appengine.Main()
