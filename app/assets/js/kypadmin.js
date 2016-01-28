@@ -52,6 +52,7 @@ function ProfileController($rootScope, $scope, $location, profile, translit, $ro
 
         $scope.profile = createProfileFromScope($scope);
 
+        $scope.uploader.queue[0].upload();
         profile.createProfile($scope).then(function(data) {
 
         });

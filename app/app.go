@@ -22,8 +22,8 @@ func init() {
 	r.Use(log.Logger())
 	r.Use(gin.Recovery())
 
-	store := sessions.NewCookieStore([]byte("secret"))
-	r.Use(sessions.Sessions("mysession", store))
+	s_store := sessions.NewCookieStore([]byte("secret"))
+	r.Use(sessions.Sessions("mysession", s_store))
 
 	r.LoadHTMLGlob("templates/*")
 	r.Static("/assets", "./assets")
@@ -48,6 +48,8 @@ func init() {
 	r.GET("/FBLogin", social.FBLogin)
 	r.GET("/TestLogin", auth.TestLogin)
 
+	r.POST("/admin/upload", store.Upload)
+	r.GET("/serve", store.Serve)
 	http.Handle("/", r)
 	//appengine.Main()
 	/*

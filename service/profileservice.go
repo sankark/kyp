@@ -81,6 +81,7 @@ func PutProfile(c *gin.Context) {
 	c.BindJSON(prof_out)
 
 	var resp store.Response
+	keys := make(map[string]int64)
 
 	if auth.IsAuthorized(c, prof_out.Consti) {
 		det_id := NumberToInt(prof_out.Details["id"])
@@ -98,6 +99,9 @@ func PutProfile(c *gin.Context) {
 		prof_in.Comments = prof_out.Comments
 		prof_in.Consti = prof_out.Consti
 		resp = conn.Add(prof_in)
+
+		keys["prof_id"] = resp.Data.(*datastore.Key).IntID()
+		keys["det_id"] = det_key.IntID()
 		log.Debugf(conn.Context, fmt.Sprintf("%#v", prof_in))
 
 	} else {
@@ -105,7 +109,7 @@ func PutProfile(c *gin.Context) {
 	}
 
 	auth.SessionSave(c)
-	c.JSON(status, resp)
+	c.JSON(status, keys)
 
 }
 
