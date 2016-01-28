@@ -36,11 +36,17 @@ type Comment struct {
 	Unlike  int64
 }
 
+type Meta struct{
+	MValue string `json:"value" datastore:"value"`
+	MKey string `json:"key" datastore:"key"`
+}
+
 type Profile struct {
 	Id       int64          `datastore:"-" goon:"id"`
 	Parent   *datastore.Key `datastore:"-" goon:"parent"`
 	Consti   string         `json:"consti" datastore:"consti"`
 	Comments []Comment      `json:"comments" datastore:"comments"`
+	Meta []Meta	`json:"meta" datastore:"meta"`
 }
 
 type ProfileOut struct {
@@ -48,7 +54,9 @@ type ProfileOut struct {
 	Details  map[string]interface{} `json:"details" binding:"required"`
 	Consti   string                 `json:"consti" datastore:"consti"`
 	Comments []Comment              `json:"comments"`
+	Meta []Meta	`json:"meta" datastore:"meta"`
 }
+
 
 func GetProfile(c *gin.Context) {
 	conn := store.New(c)
@@ -68,6 +76,7 @@ func GetProfile(c *gin.Context) {
 	pout_t.Comments = prof_in.Comments
 	pout_t.Consti = prof_in.Consti
 	pout_t.Id = prof_in.Id
+	pout_t.Meta = prof_in.Meta
 
 	c.JSON(http.StatusOK, pout_t)
 }
@@ -98,6 +107,7 @@ func PutProfile(c *gin.Context) {
 		prof_in.Parent = det_key
 		prof_in.Comments = prof_out.Comments
 		prof_in.Consti = prof_out.Consti
+		prof_in.Meta = prof_out.Meta
 		resp = conn.Add(prof_in)
 
 		keys["prof_id"] = resp.Data.(*datastore.Key).IntID()
@@ -188,6 +198,7 @@ func FilterProfile(c *gin.Context) {
 			pout_t.Comments = prof.Comments
 			pout_t.Consti = prof.Consti
 			pout_t.Id = prof.Id
+			pout_t.Meta = prof.Meta
 			out_list = append(out_list, pout_t)
 		}
 
@@ -214,6 +225,8 @@ func ListProfile(c *gin.Context) {
 			pout_t.Comments = prof.Comments
 			pout_t.Consti = prof.Consti
 			pout_t.Id = prof.Id
+			pout_t.Meta = prof.Meta
+			
 			out_list = append(out_list, pout_t)
 		}
 
