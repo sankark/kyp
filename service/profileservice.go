@@ -96,7 +96,36 @@ func AddLikes(c *gin.Context){
 }
 
 func RevertLikes(c *gin.Context){
-	
+	status := http.StatusOK
+	unlikes := -1
+	authenticated := "false"
+	if auth.IsAuthenticated(c) {
+		conn := store.New(c)
+		prof_id, _ := strconv.ParseInt(c.Param("prof_id"), 10, 64)
+		det_id, _ := strconv.ParseInt(c.Param("det_id"), 10, 64)
+		det_key := conn.DatastoreKeyWithKind("ProfileDetails", det_id)
+		prof_in := &Profile{Id: prof_id, Parent: det_key}
+		
+		conn.Get(prof_in)
+		
+		like_type:= c.Query("like_type")
+		if like_type == "profile"{
+			prof_in.UnLikes-=1
+			unlikes = prof_in.UnLikes
+		}
+		if like_type == "comments"{
+			comment_id := c.Query("comment_id")
+			for _,c := range prof_in.Comments{
+				c.UnLikes+=1
+				unlikes = c.UnLikes
+			}
+		}
+		conn.Add(prof_in)
+		authenticated = "true"
+		status = http.StatusOK
+		
+	}
+	c.JSON(status, gin.H{"authenticated":authenticated, "likes":likes})
 }
 
 
