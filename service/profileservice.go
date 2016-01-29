@@ -32,8 +32,8 @@ type Comment struct {
 	Id      string
 	Text    string `json:"text"`
 	Time    string
-	Like    int64
-	Unlike  int64
+	Likes    int64
+	Unlikes  int64
 }
 
 type Meta struct{
@@ -47,6 +47,8 @@ type Profile struct {
 	Consti   string         `json:"consti" datastore:"consti"`
 	Comments []Comment      `json:"comments" datastore:"comments"`
 	Meta []Meta	`json:"meta" datastore:"meta"`
+	Likes    int64 `json:"likes" datastore:"likes"`
+	UnLikes    int64 `json:"unlikes" datastore:"unlikes"`
 }
 
 type ProfileOut struct {
@@ -55,6 +57,46 @@ type ProfileOut struct {
 	Consti   string                 `json:"consti" datastore:"consti"`
 	Comments []Comment              `json:"comments"`
 	Meta []Meta	`json:"meta" datastore:"meta"`
+	Likes    int64 `json:"likes" datastore:"likes"`
+	UnLikes    int64 `json:"unlikes" datastore:"unlikes"`
+}
+
+func AddLikes(c *gin.Context){
+	status := http.StatusOK
+	likes := -1
+	authenticated := "false"
+	if auth.IsAuthenticated(c) {
+		conn := store.New(c)
+		prof_id, _ := strconv.ParseInt(c.Param("prof_id"), 10, 64)
+		det_id, _ := strconv.ParseInt(c.Param("det_id"), 10, 64)
+		det_key := conn.DatastoreKeyWithKind("ProfileDetails", det_id)
+		prof_in := &Profile{Id: prof_id, Parent: det_key}
+		
+		conn.Get(prof_in)
+		
+		like_type:= c.Query("like_type")
+		if like_type == "profile"{
+			prof_in.Likes+=1
+			likes = prof_in.Likes
+		}
+		if like_type == "comments"{
+			comment_id := c.Query("comment_id")
+			for _,c := range prof_in.Comments{
+				c.Likes+=1
+				likes = c.Likes
+			}
+		}
+		conn.Add(prof_in)
+		authenticated = "true"
+		status = http.StatusOK
+		
+	}
+	c.JSON(status, gin.H{"authenticated":authenticated, "likes":likes})
+	
+}
+
+func RevertLikes(c *gin.Context){
+	
 }
 
 
