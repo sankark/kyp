@@ -50,12 +50,23 @@ function ProfileController($rootScope, $scope, $location, profile, translit, $ro
         $scope.prof_id = $routeParams.prof_id;
         $scope.det_id = $routeParams.det_id;
 
-        $scope.profile = createProfileFromScope($scope);
+        storage.getBlobUrl($scope).then(function(r){
+            $scope.uploader.url =  r.uploadURL;
+            $scope.uploader.queue[0].url = r.uploadURL;
+            $scope.uploader.queue[0].upload();
+        })
+        $scope.uploader.onSuccessItem = function(fileItem, response, status, headers) {
+            $scope.blobKey = response.blobKey;
+            updateMeta($scope.profile_meta,'prof_img',$scope.blobKey);
+            storage.getServeUrl($scope).then(function(resp){
+                updateMeta($scope.profile_meta,'prof_img_url',resp.blobKey)
+                $scope.profile = createProfileFromScope($scope);
+                profile.createProfile($scope).then(function(data) {
+                    
+                });
+            });
 
-        $scope.uploader.queue[0].upload();
-        profile.createProfile($scope).then(function(data) {
-
-        });
+        };
     }
 
 
@@ -65,9 +76,17 @@ function ProfileController($rootScope, $scope, $location, profile, translit, $ro
 
         profile.getProfile($scope).then(function(data) {
             createProfileFromResponse($scope,data);
+            $scope.prof_img_key = getKeyFromMeta($scope.profile_meta, 'prof_img');
+            $scope.prof_img_url = $scope.getImageServeURL($scope.prof_img_key);
         });
     }
 
+    $scope.getImageServeURL = function(blobKey){
+        $scope.blobKey = blobKey;
+        storage.getServeUrl($scope).then(function(resp){
+                $scope.prof_img_url = resp.blobKey;
+        });
+    }
 
     $scope.listProfile = function() {
         profile.listProfile($scope).then(function(data) {
@@ -120,6 +139,7 @@ app.config(function($routeProvider, $locationProvider) {
 function createProfileFromScope(scope) {
     var profile = {
         consti: scope.myconsti,
+        meta : scope.profile_meta,
         details: {
             party: scope.party.text,
             expert: scope.expert.text,
@@ -144,6 +164,34 @@ function createProfileFromResponse (scope,resp) {
     scope.expert.text = resp.details.expert;
     scope.party.text = resp.details.party;
     scope.htmlContent = resp.details.htmlContent;
+    scope.profile_meta = resp.meta;
+    if(scope.profile_meta == null || scope.profile_meta == "")
+            scope.profile_meta = [];
     scope.id = resp.id;
     scope.p = resp;
+}
+
+function getKeyFromMeta(profile_meta, key){
+    var val = "";
+    angular.forEach(profile_meta, function(m) {
+        if(m['key']== key){
+            val = m['value'];
+            return;
+        }
+    })
+    return val;
+}
+
+function updateMeta(profile_meta, key, value){
+    var meta = {key:key,value:value};
+    angular.forEach(profile_meta, function(m) {
+        if(m['key']==key){
+            m['key']= key;
+            m['value']=value;
+            meta = null;
+            return;
+        }
+    });
+    if(meta != null)
+    profile_meta.push(meta)
 }

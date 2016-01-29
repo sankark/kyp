@@ -11,7 +11,7 @@
         <div class="demo-blog__posts mdl-grid">
             <div class="demo-blog__posts mdl-grid">
                 <div class="mdl-card  mdl-cell mdl-cell--12-col" ng-repeat="(key, p) in profiles">
-                    <div ng-click="loadProfile(p)" class="kyp_img mdl-card__media mdl-color-text--grey-50" style="background-image: url({{p.img}})">
+                    <div ng-click="loadProfile(p)" class="kyp_img mdl-card__media mdl-color-text--grey-50" style="background-image: url({%p.prof_img_url%})">
                         <h3>{% p.details.name %}</h3>
                     </div>
                     <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">

@@ -55,7 +55,11 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams) {
         startProgress($scope);
         $scope.consti = $routeParams.consti;
         profile.listConsti($scope).then(function(resp){
-            $scope.profiles = resp;
+            $scope.profiles = [];
+            angular.forEach(resp, function(p){
+                p.prof_img_url = getKeyFromMeta(p.meta, 'prof_img_url');
+                $scope.profiles.push(p);
+            });
             endProgress($scope)
         });
     }
@@ -101,6 +105,7 @@ function ProfileController($rootScope, $scope, $location,profile, $routeParams) 
         $scope.det_id = $routeParams.det_id;
         profile.getProfile($scope).then(function(resp){
             $scope.p = resp;
+            $scope.p.prof_img_url = getKeyFromMeta($scope.p.meta, 'prof_img_url');
             endProgress($scope)
         });
     }
@@ -226,3 +231,13 @@ app.factory('ConstiService', function($rootScope, $resource, $q) {
   }
 })
 */
+function getKeyFromMeta(profile_meta, key){
+    var val = "";
+    angular.forEach(profile_meta, function(m) {
+        if(m['key']== key){
+            val = m['value'];
+            return;
+        }
+    })
+    return val;
+}

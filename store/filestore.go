@@ -9,21 +9,22 @@ import (
 
 	"google.golang.org/appengine"
 	"google.golang.org/appengine/blobstore"
+	"google.golang.org/appengine/image"
 )
 
-func UploadUrl(c *gin.Context){
+func UploadUrl(c *gin.Context) {
 	r := c.Request
 	ctx := appengine.NewContext(r)
-	uploadURL, err := blobstore.UploadURL(ctx, "/upload", nil)
+	uploadURL, err := blobstore.UploadURL(ctx, "/admin/upload", nil)
 	var err_msg string
-	
+
 	if err != nil {
 		log.Errorf(ctx, err.Error())
 		err_msg = err.Error()
-        }
-        
-        c.JSON(http.StatusOK, gin.H{"err": err_msg, "uploadURL": UploadURL})
-	
+	}
+
+	c.JSON(http.StatusOK, gin.H{"err": err_msg, "uploadURL": uploadURL.Path})
+
 }
 func Serve(c *gin.Context) {
 	r := c.Request
@@ -63,4 +64,16 @@ func Delete(c *gin.Context, blobKey appengine.BlobKey) {
 func ToBlobKey(c *gin.Context, key string) appengine.BlobKey {
 	bk, _ := blobstore.BlobKeyForFile(c, key)
 	return bk
+}
+
+func GetServingUrl(c *gin.Context) {
+	r := c.Request
+	ctx := appengine.NewContext(r)
+	blobKey := appengine.BlobKey(c.Param("blobKey"))
+	var err_msg string
+	url, err := image.ServingURL(ctx, blobKey, nil)
+	if err != nil {
+		err_msg = "failed"
+	}
+	c.JSON(http.StatusOK, gin.H{"err": err_msg, "blobKey": url.Path})
 }
