@@ -23,7 +23,7 @@ func UploadUrl(c *gin.Context) {
 		err_msg = err.Error()
 	}
 
-	c.JSON(http.StatusOK, gin.H{"err": err_msg, "uploadURL": uploadURL.Path})
+	c.JSON(http.StatusOK, gin.H{"err": err_msg, "uploadOPT": uploadURL, "uploadURL": uploadURL.String()})
 
 }
 func Serve(c *gin.Context) {
@@ -75,5 +75,5 @@ func GetServingUrl(c *gin.Context) {
 	if err != nil {
 		err_msg = "failed"
 	}
-	c.JSON(http.StatusOK, gin.H{"err": err_msg, "blobKey": url.Path})
+	c.JSON(http.StatusOK, gin.H{"err": err_msg, "url": url, "blobKey": url.String()})
 }
