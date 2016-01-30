@@ -15,17 +15,17 @@
                         <h3>{% p.details.name %}</h3>
                     </div>
                     <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
-                        <span class="material-icons mdl-badge" data-badge="12367">
+                        <span ng-click="toggleLike(p)" class="material-icons mdl-badge" data-badge="{% p.likes %}">
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
         <i class="material-icons" role="presentation">thumb_up</i><span class="visuallyhidden">like comment</span>
                         </button>
                         </span>
-                        <span class="material-icons mdl-badge" data-badge="12367">
+                        <span ng-click="toggleUnlike(p)" class="material-icons mdl-badge" data-badge="{% p.unlikes %}">
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
         <i class="material-icons" role="presentation">thumb_down</i><span class="visuallyhidden">dislike comment</span>
                         </button>
                         </span>
-                        <span ng-click="loadProfile(p)" class="material-icons mdl-badge" data-badge="12367">
+                        <span ng-click="loadProfile(p)" class="material-icons mdl-badge" data-badge="{% p.comments.length %}">
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
         <i  class="material-icons" role="presentation">comment</i><span class="visuallyhidden">dislike comment</span>
                         </button>

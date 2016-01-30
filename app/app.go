@@ -51,6 +51,10 @@ func init() {
 	r.POST("/admin/upload", store.Upload)
 	r.GET("/admin/bloburl", store.UploadUrl)
 	r.GET("/serve/:blobKey", store.GetServingUrl)
+
+	r.GET("/likes/:prof_id/:det_id", service.AddLikes)
+	r.GET("/unlikes/:prof_id/:det_id", service.AddUnLikes)
+
 	http.Handle("/", r)
 	//appengine.Main()
 	/*

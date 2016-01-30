@@ -163,3 +163,13 @@ body > .mdl-layout__container {
     background-size: 190px 190px;
     background-repeat: no-repeat;
 }
+
+
+
+.mdl-button--icon{
+    background: -webkit-gradient(linear,left top,left bottom,color-stop(0,#EAEFF7),color-stop(1,#ADB0B5));
+}
+
+.liked{
+        color: #325da7;
+}

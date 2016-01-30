@@ -11,9 +11,9 @@
 <div id="recap_new_comment" class="mdl-cell--8-col mdl-cell--4-col-desktop  mdl-cell"></div>
 <div name="comment" class="comment mdl-color-text--grey-700" ng-repeat="(key, c) in p.comments">
     <header class="comment__header">
-            <gravatar-image data-gravatar-email="'test@gmail.com'" data-gravatar-size="25" data-gravatar-rating="pg" data-gravatar-default="identicon" data-gravatar-secure="true" data-gravatar-css-class="comment__avatar"></gravatar-image>
+            <gravatar-image data-gravatar-email="'{% c.author %}'" data-gravatar-size="25" data-gravatar-rating="pg" data-gravatar-default="identicon" data-gravatar-secure="true" data-gravatar-css-class="comment__avatar"></gravatar-image>
         <div class="comment__author">
-            <strong>Ananymous</strong>
+            <strong>{% c.author %}</strong>
             <span>{% c.Time %}</span>
         </div>
     </header>
@@ -21,12 +21,16 @@
         {% c.text %}
     </div>
     <nav class="comment__actions">
-        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <span ng-click="toggleLike(c,true)" class="material-icons mdl-badge" data-badge="{% c.likes %}">
+        <button  class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
             <i class="material-icons" role="presentation">thumb_up</i><span class="visuallyhidden">like comment</span>
         </button>
+        </span>
+         <span ng-click="toggleUnlike(c,true)" class="material-icons mdl-badge" data-badge="{% c.unlikes %}">
         <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
             <i class="material-icons" role="presentation">thumb_down</i><span class="visuallyhidden">dislike comment</span>
         </button>
+        </span>
         <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
             <i class="material-icons" role="presentation">share</i><span class="visuallyhidden">share comment</span>
         </button>

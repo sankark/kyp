@@ -62,7 +62,7 @@ function ProfileController($rootScope, $scope, $location, profile, translit, $ro
                 updateMeta($scope.profile_meta,'prof_img_url',resp.blobKey)
                 $scope.profile = createProfileFromScope($scope);
                 profile.createProfile($scope).then(function(data) {
-                    
+
                 });
             });
 
@@ -145,7 +145,9 @@ function createProfileFromScope(scope) {
             expert: scope.expert.text,
             name: scope.name.text,
             htmlContent: scope.htmlContent
-        }
+        },
+        comments : scope.p.comments
+
     }
 
     if (scope.prof_id != null) {
@@ -165,6 +167,7 @@ function createProfileFromResponse (scope,resp) {
     scope.party.text = resp.details.party;
     scope.htmlContent = resp.details.htmlContent;
     scope.profile_meta = resp.meta;
+    scope.p = {comments:resp.comments}
     if(scope.profile_meta == null || scope.profile_meta == "")
             scope.profile_meta = [];
     scope.id = resp.id;

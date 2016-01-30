@@ -64,6 +64,42 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams) {
         });
     }
 
+    $scope.toggleLike = function(p, comment){
+        var id = p.id;
+        $scope.like_type = "profile";
+        if(comment == true){
+            $scope.like_type = "comments";
+            $scope.prof_id = p.prof_id;
+            $scope.det_id = p.det_id;
+        }else{
+            $scope.prof_id = p.id;
+            $scope.det_id = p.details.id;
+        }
+        $scope.like_id = id;
+        profile.toggleLikes($scope).then(function(resp){
+            p.likes = resp.likes;
+        });
+
+    }
+
+    $scope.toggleUnlike = function(p, comment){
+         var id = p.id;
+        $scope.like_type = "profile";
+        if(comment == true){
+            $scope.like_type = "comments";
+            $scope.prof_id = p.prof_id;
+            $scope.det_id = p.det_id;
+        }else{
+            $scope.prof_id = p.id;
+            $scope.det_id = p.details.id;
+        }
+        $scope.like_id = id;
+        profile.toggleUnlikes($scope).then(function(resp){
+            p.unlikes = resp.unlikes;
+        });
+
+    }
+
     $scope.previous = function(){
         $location.path('/');
     }
@@ -122,6 +158,42 @@ function ProfileController($rootScope, $scope, $location,profile, $routeParams) 
 
     $scope.previous = function(){
         $location.path('/consti/'+$scope.p.consti);
+    }
+
+        $scope.toggleLike = function(p, comment){
+        var id = p.id;
+        $scope.like_type = "profile";
+        if(comment == true){
+            $scope.like_type = "comments";
+            $scope.prof_id = p.prof_id;
+            $scope.det_id = p.det_id;
+        }else{
+            $scope.prof_id = p.id;
+            $scope.det_id = p.details.id;
+        }
+        $scope.like_id = id;
+        profile.toggleLikes($scope).then(function(resp){
+            p.likes = resp.likes;
+        });
+
+    }
+
+    $scope.toggleUnlike = function(p, comment){
+         var id = p.id;
+        $scope.like_type = "profile";
+        if(comment == true){
+            $scope.like_type = "comments";
+            $scope.prof_id = p.prof_id;
+            $scope.det_id = p.det_id;
+        }else{
+            $scope.prof_id = p.id;
+            $scope.det_id = p.details.id;
+        }
+        $scope.like_id = id;
+        profile.toggleUnlikes($scope).then(function(resp){
+            p.unlikes = resp.unlikes;
+        });
+
     }
 
     $scope.getProfile();

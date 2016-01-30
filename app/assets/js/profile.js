@@ -1,6 +1,6 @@
 angular.module('profile', [])
 
-.factory('profile', ['$q', 'Profiles','Consti','Comments', function($q, Profiles, Consti,Comments) {
+.factory('profile', ['$q', 'Profiles','Consti','Comments','Likes','Unlikes', function($q, Profiles, Consti,Comments,Likes, Unlikes) {
     return {
         createProfile: function(scope) {
             var deferred = $q.defer();
@@ -65,6 +65,26 @@ angular.module('profile', [])
             return deferred.promise;
         }, 
 
+        toggleLikes : function(scope){
+            var deferred = $q.defer();
+            var req = {prof_id:scope.prof_id,det_id:scope.det_id, type:scope.like_type, like_id: scope.like_id};
+            Likes.query(req, function(resp, headers) {
+                deferred.resolve(resp);
+            });
+
+            return deferred.promise;
+        },
+
+        toggleUnlikes: function(scope){
+            var deferred = $q.defer();
+            var req = {prof_id:scope.prof_id,det_id:scope.det_id, type:scope.like_type, like_id: scope.like_id};
+            Unlikes.query(req, function(resp, headers) {
+                deferred.resolve(resp);
+            });
+
+            return deferred.promise;
+        }
+
 
     };
 }])
@@ -83,6 +103,22 @@ angular.module('profile', [])
         'save': {
             method: 'POST',
             isArray: true
+        }
+    }); // Note the full endpoint address
+})
+
+.factory('Likes', function($resource) {
+    return $resource('/likes/:prof_id/:det_id',{},{
+        'query' : {
+            isArray: false
+        }
+    });
+})
+
+.factory('Unlikes', function($resource) {
+    return $resource('/unlikes/:prof_id/:det_id',{},{
+        'query' : {
+            isArray: false
         }
     }); // Note the full endpoint address
 })

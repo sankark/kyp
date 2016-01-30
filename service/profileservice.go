@@ -3,6 +3,7 @@ package service
 import (
 	"fmt"
 	"net/http"
+	"sort"
 	"strconv"
 
 	"github.com/kyp/auth"
@@ -29,16 +30,17 @@ type Label struct {
 type Comment struct {
 	Prof_Id string `json:"prof_id"`
 	Det_Id  string `json:"det_id"`
-	Id      string
+	Id      string `json:"id"`
 	Text    string `json:"text"`
 	Time    string
-	Likes    int64
-	Unlikes  int64
+	Likes   int64  `json:"likes" datastore:"likes"`
+	Author  string `json:"author" datastore:"author"`
+	UnLikes int64  `json:"unlikes" datastore:"unlikes"`
 }
 
-type Meta struct{
+type Meta struct {
 	MValue string `json:"value" datastore:"value"`
-	MKey string `json:"key" datastore:"key"`
+	MKey   string `json:"key" datastore:"key"`
 }
 
 type Profile struct {
@@ -46,9 +48,9 @@ type Profile struct {
 	Parent   *datastore.Key `datastore:"-" goon:"parent"`
 	Consti   string         `json:"consti" datastore:"consti"`
 	Comments []Comment      `json:"comments" datastore:"comments"`
-	Meta []Meta	`json:"meta" datastore:"meta"`
-	Likes    int64 `json:"likes" datastore:"likes"`
-	UnLikes    int64 `json:"unlikes" datastore:"unlikes"`
+	Meta     []Meta         `json:"meta" datastore:"meta"`
+	Likes    int64          `json:"likes" datastore:"likes"`
+	UnLikes  int64          `json:"unlikes" datastore:"unlikes"`
 }
 
 type ProfileOut struct {
@@ -56,14 +58,14 @@ type ProfileOut struct {
 	Details  map[string]interface{} `json:"details" binding:"required"`
 	Consti   string                 `json:"consti" datastore:"consti"`
 	Comments []Comment              `json:"comments"`
-	Meta []Meta	`json:"meta" datastore:"meta"`
-	Likes    int64 `json:"likes" datastore:"likes"`
-	UnLikes    int64 `json:"unlikes" datastore:"unlikes"`
+	Meta     []Meta                 `json:"meta" datastore:"meta"`
+	Likes    int64                  `json:"likes" datastore:"likes"`
+	UnLikes  int64                  `json:"unlikes" datastore:"unlikes"`
 }
 
-func AddLikes(c *gin.Context){
+func AddLikes(c *gin.Context) {
 	status := http.StatusOK
-	likes := -1
+	var likes int64
 	authenticated := "false"
 	if auth.IsAuthenticated(c) {
 		conn := store.New(c)
@@ -71,33 +73,48 @@ func AddLikes(c *gin.Context){
 		det_id, _ := strconv.ParseInt(c.Param("det_id"), 10, 64)
 		det_key := conn.DatastoreKeyWithKind("ProfileDetails", det_id)
 		prof_in := &Profile{Id: prof_id, Parent: det_key}
-		
+
 		conn.Get(prof_in)
-		
-		like_type:= c.Query("like_type")
-		if like_type == "profile"{
-			prof_in.Likes+=1
+
+		user := auth.GetUser(c)
+		like_type := c.Query("type")
+		like_id := c.Query("like_id")
+		var incr = 1
+
+		if auth.IsLiked(c, like_id) {
+			incr = -1
+			sort.Strings(user.Likes)
+			i := sort.SearchStrings(user.Likes, like_id)
+			user.Likes = append(user.Likes[:i], user.Likes[i+1:]...)
+		} else {
+			user.Likes = append(user.Likes, like_id)
+		}
+
+		if like_type == "profile" {
+			prof_in.Likes += int64(incr)
 			likes = prof_in.Likes
 		}
-		if like_type == "comments"{
-			comment_id := c.Query("comment_id")
-			for _,c := range prof_in.Comments{
-				c.Likes+=1
-				likes = c.Likes
+		if like_type == "comments" {
+			for i, comm := range prof_in.Comments {
+				if comm.Id == like_id {
+					prof_in.Comments[i].Likes += int64(incr)
+					likes = prof_in.Comments[i].Likes
+				}
 			}
 		}
 		conn.Add(prof_in)
+		conn.Add(&user)
 		authenticated = "true"
 		status = http.StatusOK
-		
+
 	}
-	c.JSON(status, gin.H{"authenticated":authenticated, "likes":likes})
-	
+	c.JSON(status, gin.H{"authenticated": authenticated, "likes": likes})
+
 }
 
-func RevertLikes(c *gin.Context){
+func AddUnLikes(c *gin.Context) {
 	status := http.StatusOK
-	unlikes := -1
+	var unlikes int64
 	authenticated := "false"
 	if auth.IsAuthenticated(c) {
 		conn := store.New(c)
@@ -105,29 +122,43 @@ func RevertLikes(c *gin.Context){
 		det_id, _ := strconv.ParseInt(c.Param("det_id"), 10, 64)
 		det_key := conn.DatastoreKeyWithKind("ProfileDetails", det_id)
 		prof_in := &Profile{Id: prof_id, Parent: det_key}
-		
+
 		conn.Get(prof_in)
-		
-		like_type:= c.Query("like_type")
-		if like_type == "profile"{
-			prof_in.UnLikes-=1
+
+		user := auth.GetUser(c)
+		like_type := c.Query("type")
+		like_id := c.Query("like_id")
+		var incr = 1
+
+		if auth.IsUnLiked(c, like_id) {
+			incr = -1
+			sort.Strings(user.Unlikes)
+			i := sort.SearchStrings(user.Unlikes, like_id)
+			user.Unlikes = append(user.Unlikes[:i], user.Unlikes[i+1:]...)
+		} else {
+			user.Unlikes = append(user.Unlikes, like_id)
+		}
+
+		if like_type == "profile" {
+			prof_in.UnLikes += int64(incr)
 			unlikes = prof_in.UnLikes
 		}
-		if like_type == "comments"{
-			comment_id := c.Query("comment_id")
-			for _,c := range prof_in.Comments{
-				c.UnLikes+=1
-				unlikes = c.UnLikes
+		if like_type == "comments" {
+			for i, comm := range prof_in.Comments {
+				if comm.Id == like_id {
+					prof_in.Comments[i].UnLikes += int64(incr)
+					unlikes = prof_in.Comments[i].UnLikes
+				}
 			}
 		}
 		conn.Add(prof_in)
+		conn.Add(&user)
 		authenticated = "true"
 		status = http.StatusOK
-		
-	}
-	c.JSON(status, gin.H{"authenticated":authenticated, "likes":likes})
-}
 
+	}
+	c.JSON(status, gin.H{"authenticated": authenticated, "unlikes": unlikes})
+}
 
 func GetProfile(c *gin.Context) {
 	conn := store.New(c)
@@ -177,6 +208,9 @@ func PutProfile(c *gin.Context) {
 		conn.Get(prof_in)
 		prof_in.Parent = det_key
 		prof_in.Comments = prof_out.Comments
+		if prof_in.Comments == nil {
+			prof_in.Comments = make([]Comment, 0)
+		}
 		prof_in.Consti = prof_out.Consti
 		prof_in.Meta = prof_out.Meta
 		resp = conn.Add(prof_in)
@@ -237,6 +271,7 @@ func AddComment(c *gin.Context) {
 
 		comment.Id = uuid.NewV4().String()
 		comment.Time = time.Now().Format("2006-01-02 15-04-05")
+		comment.Author = auth.GetUser(c).Name
 		prof_in.Comments = append(prof_in.Comments, comment)
 		conn.Add(prof_in)
 
@@ -297,7 +332,7 @@ func ListProfile(c *gin.Context) {
 			pout_t.Consti = prof.Consti
 			pout_t.Id = prof.Id
 			pout_t.Meta = prof.Meta
-			
+
 			out_list = append(out_list, pout_t)
 		}
 

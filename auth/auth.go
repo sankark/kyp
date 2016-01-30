@@ -71,6 +71,16 @@ func IsAuthorized(c *gin.Context, consti string) bool {
 	}
 }
 
+func IsLiked(c *gin.Context, id string) bool {
+	user := GetUser(c)
+	return ArrContains(user.Likes, id)
+}
+
+func IsUnLiked(c *gin.Context, id string) bool {
+	user := GetUser(c)
+	return ArrContains(user.Unlikes, id)
+}
+
 func GetUserId(c *gin.Context) string {
 	return SessionGet(c, gin.AuthUserKey).(string)
 }
@@ -93,6 +103,8 @@ func AddUser(c *gin.Context, user *User) {
 	if resp.Err_msg != "" {
 		user.Active = "false"
 		user.Role = "support"
+		user.Likes = make([]string, 0)
+		user.Unlikes = make([]string, 0)
 		conn.Add(user)
 	}
 
@@ -109,7 +121,11 @@ func Contains(c *gin.Context, key string) bool {
 	if user.Role == "admin" {
 		return true
 	}
-	for _, value := range user.Consti {
+	return ArrContains(user.Consti, key)
+}
+
+func ArrContains(arr []string, key string) bool {
+	for _, value := range arr {
 		if value == key {
 			return true
 		}
