@@ -6,6 +6,8 @@ import (
 	"sort"
 	"strconv"
 
+	"github.com/mjibson/goon"
+
 	"github.com/kyp/auth"
 
 	"github.com/kyp/store"
@@ -68,6 +70,7 @@ func AddLikes(c *gin.Context) {
 	var likes int64
 	authenticated := "false"
 	if auth.IsAuthenticated(c) {
+		authenticated = "true"
 		conn := store.New(c)
 		prof_id, _ := strconv.ParseInt(c.Param("prof_id"), 10, 64)
 		det_id, _ := strconv.ParseInt(c.Param("det_id"), 10, 64)
@@ -89,7 +92,10 @@ func AddLikes(c *gin.Context) {
 		} else {
 			user.Likes = append(user.Likes, like_id)
 		}
-
+		conn.Goon.RunInTransaction(func(Goon *goon.Goon) error {
+			Goon.Put(&user)
+			return nil
+		}, nil)
 		if like_type == "profile" {
 			prof_in.Likes += int64(incr)
 			likes = prof_in.Likes
@@ -103,7 +109,6 @@ func AddLikes(c *gin.Context) {
 			}
 		}
 		conn.Add(prof_in)
-		conn.Add(&user)
 		authenticated = "true"
 		status = http.StatusOK
 
@@ -117,6 +122,7 @@ func AddUnLikes(c *gin.Context) {
 	var unlikes int64
 	authenticated := "false"
 	if auth.IsAuthenticated(c) {
+		authenticated = "true"
 		conn := store.New(c)
 		prof_id, _ := strconv.ParseInt(c.Param("prof_id"), 10, 64)
 		det_id, _ := strconv.ParseInt(c.Param("det_id"), 10, 64)
@@ -138,6 +144,10 @@ func AddUnLikes(c *gin.Context) {
 		} else {
 			user.Unlikes = append(user.Unlikes, like_id)
 		}
+		conn.Goon.RunInTransaction(func(Goon *goon.Goon) error {
+			Goon.Put(&user)
+			return nil
+		}, nil)
 
 		if like_type == "profile" {
 			prof_in.UnLikes += int64(incr)
@@ -152,7 +162,6 @@ func AddUnLikes(c *gin.Context) {
 			}
 		}
 		conn.Add(prof_in)
-		conn.Add(&user)
 		authenticated = "true"
 		status = http.StatusOK
 
@@ -179,6 +188,8 @@ func GetProfile(c *gin.Context) {
 	pout_t.Consti = prof_in.Consti
 	pout_t.Id = prof_in.Id
 	pout_t.Meta = prof_in.Meta
+	pout_t.Likes = prof_in.Likes
+	pout_t.UnLikes = prof_in.UnLikes
 
 	c.JSON(http.StatusOK, pout_t)
 }
@@ -305,6 +316,8 @@ func FilterProfile(c *gin.Context) {
 			pout_t.Consti = prof.Consti
 			pout_t.Id = prof.Id
 			pout_t.Meta = prof.Meta
+			pout_t.Likes = prof.Likes
+			pout_t.UnLikes = prof.UnLikes
 			out_list = append(out_list, pout_t)
 		}
 
@@ -332,7 +345,8 @@ func ListProfile(c *gin.Context) {
 			pout_t.Consti = prof.Consti
 			pout_t.Id = prof.Id
 			pout_t.Meta = prof.Meta
-
+			pout_t.Likes = prof.Likes
+			pout_t.UnLikes = prof.UnLikes
 			out_list = append(out_list, pout_t)
 		}
 

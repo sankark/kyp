@@ -10,19 +10,19 @@
                 </a>
             </nav>
         <div class="demo-blog__posts mdl-grid">
-            <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
+            <div class="view_profile mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col">
                 <div class="view_img mdl-card__media mdl-color-text--grey-50" style="background-image:url('http://www.sagayamias.com/wp-content/uploads/2015/09/download.jpg')">
                  <div class="prof_img" style="background-image:url('{% p.prof_img_url %}')"></div>
                     <h3>{% p.details.name %}</h3>
                 </div>
                     <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
                         <span ng-click="toggleLike(p)" class="material-icons mdl-badge" data-badge="{% p.likes %}">
-      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon {% p.like_cls %}">
         <i class="material-icons" role="presentation">thumb_up</i><span class="visuallyhidden">like comment</span>
                         </button>
                         </span>
                         <span ng-click="toggleUnlike(p)" class="material-icons mdl-badge" data-badge="{% p.unlikes %}">
-      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon {% p.unlike_cls %}">
         <i class="material-icons" role="presentation">thumb_down</i><span class="visuallyhidden">dislike comment</span>
                         </button>
                         </span>
@@ -32,10 +32,12 @@
                         </button>
                         </span>
                     </div>
+                    <div class="gradient-border"></div>  
                 <div id="recap_like" class="mdl-cell--8-col mdl-cell--4-col-desktop  mdl-cell"></div>
                 <div class="html-content" ng-bind-html="p.details.htmlContent">
                    
                 </div>
+                <div class="gradient-border"></div>  
                 <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments" ng-include="'/assets/html/comments/list.html'">
                 </div>
             </div>

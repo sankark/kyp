@@ -1,6 +1,6 @@
 angular.module('profile', [])
 
-.factory('profile', ['$q', 'Profiles','Consti','Comments','Likes','Unlikes', function($q, Profiles, Consti,Comments,Likes, Unlikes) {
+.factory('profile', ['$q', 'Profiles','Consti','Comments','Likes','Unlikes','User', function($q, Profiles, Consti,Comments,Likes, Unlikes,User) {
     return {
         createProfile: function(scope) {
             var deferred = $q.defer();
@@ -83,12 +83,25 @@ angular.module('profile', [])
             });
 
             return deferred.promise;
+        },
+
+        getUser: function(scope) {
+            var deferred = $q.defer();
+
+            User.get({},function(resp, headers) {
+                deferred.resolve(resp);
+            });
+
+            return deferred.promise;
         }
 
 
     };
 }])
 
+.factory('User', function($resource) {
+    return $resource('/me'); // Note the full endpoint address
+})
 
 .factory('Profiles', function($resource) {
     return $resource('/profile/:prof_id/:det_id'); // Note the full endpoint address

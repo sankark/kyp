@@ -52,10 +52,17 @@ angular.module('translit',[])
 .directive('ngEnter', function() {
     return function(scope, element, attrs) {
         element.bind("keydown keypress", function(event) {
+            if(scope.alpha!="A"){
             if (event.which === 8 && scope.data.text.length > 0) {
                 scope.key = 8;
+                if(scope.$parent){
+                    scope.$parent.key = 8;
+                }
             } else {
                 scope.key = null;
+                if(scope.$parent){
+                    scope.$parent.key = null;
+                }
             }
             if (event.which === 13) {
                 scope.$apply(function() {
@@ -65,6 +72,7 @@ angular.module('translit',[])
 
                 event.preventDefault();
             }
+        }
         });
     };
 });

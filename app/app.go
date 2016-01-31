@@ -55,6 +55,8 @@ func init() {
 	r.GET("/likes/:prof_id/:det_id", service.AddLikes)
 	r.GET("/unlikes/:prof_id/:det_id", service.AddUnLikes)
 
+	r.GET("/me", GetUser)
+
 	http.Handle("/", r)
 	//appengine.Main()
 	/*
@@ -64,6 +66,12 @@ func init() {
 	   {
 	      authorized.POST("/login", loginEndpoint)
 	   }*/
+
+}
+
+func GetUser(c *gin.Context) {
+	user := auth.GetUser(c)
+	c.JSON(http.StatusOK, gin.H{"user": user})
 
 }
 

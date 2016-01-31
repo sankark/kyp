@@ -1,6 +1,7 @@
 <form novalidate name="comment_form" id="comment_form" class="new-comment mdl-cell--8-col mdl-cell" style="display: flex; margin-bottom: 16px;">
+<button ng-click="toggleLang()" class="mdl-button mdl-js-button">{%alpha%}</button>
     <div ng-init="" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label new-comment">
-        <textarea rows=1 class="mdl-textfield__input" ng-model="p.new_comment"></textarea>
+        <textarea rows=1 class="mdl-textfield__input" ng-model="p.t_comment.text" ng-enter="select(0,p.t_comment)" ng-change="input(p.t_comment)"></textarea>
         <label for="comment" class="mdl-textfield__label">Join the discussion</label>
     </div>
     <button ng-click="addComment()" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
@@ -8,10 +9,13 @@
     </button>
         <br>
 </form>
+<ul ng-show="alpha!='A'" class="iem-container">
+        <li ng-repeat="word in words" ng-click="select($index,p.t_comment)">{% word %}</li>
+</ul>
 <div id="recap_new_comment" class="mdl-cell--8-col mdl-cell--4-col-desktop  mdl-cell"></div>
-<div name="comment" class="comment mdl-color-text--grey-700" ng-repeat="(key, c) in p.comments">
+<div name="comment" ng-show="$first" class="comment mdl-color-text--grey-700" ng-repeat="c in p.comments | orderBy:'-likes'">
     <header class="comment__header">
-            <gravatar-image data-gravatar-email="'{% c.author %}'" data-gravatar-size="25" data-gravatar-rating="pg" data-gravatar-default="identicon" data-gravatar-secure="true" data-gravatar-css-class="comment__avatar"></gravatar-image>
+            <gravatar-image data-gravatar-email="'{% c.author %}@kyp.com'" data-gravatar-size="25" data-gravatar-rating="pg" data-gravatar-default="identicon" data-gravatar-secure="true" data-gravatar-css-class="comment__avatar"></gravatar-image>
         <div class="comment__author">
             <strong>{% c.author %}</strong>
             <span>{% c.Time %}</span>
@@ -22,12 +26,12 @@
     </div>
     <nav class="comment__actions">
         <span ng-click="toggleLike(c,true)" class="material-icons mdl-badge" data-badge="{% c.likes %}">
-        <button  class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <button  class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon {% c.like_cls %}">
             <i class="material-icons" role="presentation">thumb_up</i><span class="visuallyhidden">like comment</span>
         </button>
         </span>
          <span ng-click="toggleUnlike(c,true)" class="material-icons mdl-badge" data-badge="{% c.unlikes %}">
-        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
+        <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon {% c.unlike_cls %}">
             <i class="material-icons" role="presentation">thumb_down</i><span class="visuallyhidden">dislike comment</span>
         </button>
         </span>

@@ -171,5 +171,28 @@ body > .mdl-layout__container {
 }
 
 .liked{
-        color: #325da7;
+        color: #325da7 !important;
+}
+
+.consti .new-comment{
+    display : none !important;
+}
+
+.gradient-border{
+
+    height: 10px;
+    background: -webkit-gradient(linear,left top,left bottom,color-stop(0,rgb(255, 255, 255)),color-stop(1,rgba(32, 138, 138, 0.58)));
+}
+
+
+.comment__actions{
+    background: -webkit-gradient(linear,left top,left bottom,color-stop(0,rgb(255, 255, 255)),color-stop(1,rgba(32, 138, 138, 0.58)));
+}
+
+.view_profile .comment.ng-hide{
+    display: block !important;
+}
+
+.demo-blog--blogpost .comments .comment > .comment__text {
+    overflow-wrap: break-word;
 }

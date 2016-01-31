@@ -1,11 +1,25 @@
-var app = angular.module('Kyp', ['ngRoute', 'ngResource', 'angularjs-gravatardirective', 'autocomplete','geolocation','profile','ngSanitize']);
+var app = angular.module('Kyp', ['ngRoute', 'ngResource', 'angularjs-gravatardirective', 'autocomplete','geolocation','profile','ngSanitize','LocalStorageModule','translit']);
+var LocalStorage = false;
 app.config(function($interpolateProvider){
     $interpolateProvider.startSymbol('{%').endSymbol('%}');
 });
 
-function MainController($rootScope, $scope, $location,ConstiService,geolocation) {
+function MainController($rootScope, $scope, $location,ConstiService,geolocation,localStorageService) {
 
     $scope.consti = ["Alandur", "Alangudi", "Alangulam", "Ambasamudram", "Ambattur", "Ambur", "Anaikattu", "Andipatti", "Anna Nagar", "Anthiyur", "Arakkonam", "Arani", "Aranthangi", "Aravakurichi", "Arcot", "Ariyalur", "Aruppukkottai", "Athoor", "Attur", "Avadi", "Avanashi (SC)", "Bargur", "Bhavani", "Bhavanisagar", "Bhuvanagiri", "Bodinayakanur", "Chengalpattu", "Chengam", "Chepauk-Thiruvallikeni", "Cheyyar", "Cheyyur", "Chidambaram", "Coimbatore (North)", "Coimbatore (South)", "Colachel", "Coonoor", "Cuddalore", "Cumbum", "Dharapuram (SC)", "Dharmapuri", "Dindigul", "Dr.Radhakrishnan Nagar", "Edappadi", "Egmore", "Erode (East)", "Erode (West)", "Gandharvakottai", "Gangavalli", "Gingee", "Gobichettipalayam", "Gudalur", "Gudiyattam", "Gummidipoondi", "Harbour", "Harur", "Hosur", "Jayankondam", "Jolarpet", "Kadayanallur", "Kalasapakkam", "Kallakurichi", "Kancheepuram", "Kangayam", "Kanniyakumari", "Karaikudi", "Karur", "Katpadi", "Kattumannarkoil(SC)", "Kavundampalayam", "Killiyoor", "Kilpennathur", "Kilvaithinankuppam", "Kilvelur", "Kinathukadavu", "Kolathur", "Kovilpatti", "Krishnagiri", "Krishnarayapuram", "Kulithalai", "Kumarapalayam", "Kumbakonam", "Kunnam", "Kurinjipadi", "Lalgudi", "Madathukulam", "Madavaram", "Madurai Central", "Madurai East", "Madurai North", "Madurai South", "Madurai West", "Madurantakam", "Maduravoyal", "Mailam", "Manachanallur", "Manamadurai", "Manapparai", "Mannargudi", "Mayiladuthurai", "Melur", "Mettuppalayam", "Mettur", "Modakkurichi", "Mudhukulathur", "Musiri", "Mylapore", "Nagapattinam", "Nagercoil", "Namakkal", "Nanguneri", "Nannilam", "Natham", "Neyveli", "Nilakkottai", "Oddanchatram", "Omalur", "Orathanadu", "Ottapidaram", "Padmanabhapuram", "Palacode", "Palani", "Palayamkottai", "Palladam", "Pallavaram", "Panruti", "Papanasam", "Pappireddippatti", "Paramakudi", "Paramathi-Velur", "Pattukkottai", "Pennagaram", "Perambalur", "Perambur", "Peravurani", "Periyakulam", "Perundurai", "Pollachi", "Polur", "Ponneri", "Poompuhar", "Poonamallee", "Pudukkottai", "Radhapuram", "Rajapalayam", "Ramanathapuram", "Ranipet", "Rasipuram", "Rishivandiyam", "Royapuram", "Saidapet", "Salem (North)", "Salem (South)", "Salem (West)", "Sankarankovil", "Sankarapuram", "Sankari", "Sattur", "Senthamangalam", "Sholavandan", "Sholingur", "Shozhinganallur", "Singanallur", "Sirkazhi", "Sivaganga", "Sivakasi", "Sriperumbudur", "Srirangam", "Srivaikuntam", "Srivilliputhur", "Sulur", "Tambaram", "Tenkasi", "Thalli", "Thanjavur", "Thiru-Vi-Ka-Nagar", "Thirumangalam", "Thirumayam", "Thiruparankundram", "Thiruporur", "Thiruthuraipoondi", "Thiruvaiyaru", "Thiruvallur", "Thiruvarur", "Thiruverumbur", "Thiruvidaimarudur", "Thiruvottiyur", "Thiyagarayanagar", "Thondamuthur", "Thoothukkudi", "Thousand Lights", "Thuraiyur", "Tindivanam", "Tiruchendur", "Tiruchengodu", "Tiruchirappalli (East)", "Tiruchirappalli (West)", "Tiruchuli", "Tirukkoyilur", "Tirunelveli", "Tirupattur", "Tiruppattur", "Tiruppur (North)", "Tiruppur (South)", "Tiruttani", "Tiruvadanai", "Tiruvannamalai", "Tittakudi (SC)", "Udhagamandalam", "Udumalaipettai", "Ulundurpettai", "Usilampatti", "Uthangarai", "Uthiramerur", "Valparai", "Vandavasi", "Vaniyambadi", "Vanur", "Vasudevanallur", "Vedaranyam", "Vedasandur", "Veerapandi", "Velachery", "Vellore", "Veppanahalli", "Vikravandi", "Vilathikulam", "Vilavancode", "Villivakkam", "Villupuram", "Viralimalai", "Virudhunagar", "Virugampakkam", "Vridhachalam", "Yercaud"];
+
+      if(localStorageService.isSupported) {
+        LocalStorage = true;
+        }
+
+    $scope.recall= function(){
+        var lop = localStorageService.get("lastOper");
+            if(lop!= null && lop.path != null){
+                 $location.path(lop.path);
+            }else{
+                $scope.init();
+            }
+    }
 
     $scope.listConsti = function(consti){
         $location.path('/consti/'+consti);
@@ -30,25 +44,51 @@ function MainController($rootScope, $scope, $location,ConstiService,geolocation)
             endProgress($scope);
         })
     }
-    geolocation.getLocation().then(function(data) {
-
+    $scope.init= function(){
+        geolocation.getLocation().then(function(data) {
         startProgress($scope);
         $scope.point = {
             Lat: 13.0336,
             Lng: 80.2687
         }
         $scope.getConst();
-    })
-
+        })
+    }
+    $scope.recall();
 }
 
-function ConstiController($rootScope, $scope, $location,profile, $routeParams) {
+function ConstiController($rootScope, $scope, $location,profile, $routeParams, localStorageService, $window) {
     console.log($scope.sel_consti);
+
+    if(localStorageService.isSupported) {
+        LocalStorage = true;
+    }
 
     $scope.loadProfile = function(p, hash) {
         if (hash != null)
             $location.hash(hash);
         $location.path('/profile/'+p.id+"/"+p.details.id);
+    }
+
+    $scope.updateUserLikes = function(user,obj){
+        if(user != null){
+            var id = String(obj.id);
+             obj.like_cls = "";
+             obj.unlike_cls ="";
+            if(user.like_ids != null && contains(user.like_ids,id)){
+                obj.like_cls = "liked";
+            }
+            if(user.unlike_ids != null && contains(user.unlike_ids,id)){
+                obj.unlike_cls = "liked";
+            }
+        }
+    }
+
+    $scope.updateObjects = function(objs){
+        var user = localStorageService.get('user');
+        angular.forEach(objs, function(obj){
+            $scope.updateUserLikes(user,obj);
+        });
     }
 
     $scope.listConsti = function(){
@@ -58,9 +98,34 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams) {
             $scope.profiles = [];
             angular.forEach(resp, function(p){
                 p.prof_img_url = getKeyFromMeta(p.meta, 'prof_img_url');
+                $scope.updateObjects([p]);
+                $scope.updateObjects(p.comments);
                 $scope.profiles.push(p);
             });
             endProgress($scope)
+        });
+    }
+
+    $scope.recall= function(){
+        var lop = localStorageService.get("lastOper");
+            if(lop!= null && lop.lastMethod == "toggleLike"){
+                localStorageService.set("recall",true);
+                $scope.toggleLike(lop.args[0], lop.args[1]);
+                localStorageService.set("lastOper",null);
+            }else if(lop!= null && lop.lastMethod == "toggleUnLike"){
+                localStorageService.set("recall",true);
+                $scope.toggleUnlike(lop.args[0], lop.args[1]);
+                localStorageService.set("lastOper",null);
+            }
+    }
+
+    $scope.setUser = function(callback){
+        profile.getUser().then(function(resp){
+            localStorageService.set("user", resp.user);
+            if(callback != null){
+                callback();
+            }
+
         });
     }
 
@@ -77,6 +142,22 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams) {
         }
         $scope.like_id = id;
         profile.toggleLikes($scope).then(function(resp){
+            if(resp.authenticated == "false"){
+                if(LocalStorage){
+                    var lastOper = {lastMethod:"toggleLike", args:[p,comment], path:$location.path()};
+                    localStorageService.set("lastOper", lastOper);
+                }
+                if(localStorageService.get('recall') == null)
+                    $window.location.href = "login"
+                else{
+                    localStorageService.set("recall",null);  
+                }
+            }else{
+                $scope.setUser(function(){
+                    $scope.updateObjects([p]);
+                });
+                
+            }
             p.likes = resp.likes;
         });
 
@@ -95,6 +176,22 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams) {
         }
         $scope.like_id = id;
         profile.toggleUnlikes($scope).then(function(resp){
+             if(resp.authenticated == "false"){
+                if(LocalStorage){
+                    var lastOper = {lastMethod:"toggleUnLike", args:[p,comment], path:$location.path()};
+                    localStorageService.set("lastOper", lastOper);
+                }
+
+                if(localStorageService.get('recall') == null)
+                    $window.location.href = "login"
+                else{
+                    localStorageService.set("recall",null);  
+                }
+            }else{
+                $scope.setUser(function(){
+                    $scope.updateObjects([p]);
+                });
+            }
             p.unlikes = resp.unlikes;
         });
 
@@ -104,13 +201,18 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams) {
         $location.path('/');
     }
 
+    $scope.setUser();
     $scope.listConsti();
+    $scope.recall();
 
 }
 
 
-function ProfileController($rootScope, $scope, $location,profile, $routeParams) {
+function ProfileController($rootScope, $scope, $location,profile, $routeParams,$controller,translit) {
     console.log($scope.sel_consti);
+    $scope.alpha = "A";
+
+    angular.extend(this, $controller(ConstiController, {$scope: $scope}));
 
     $scope.recaptchaResp = function(resp){
         $scope.recaptchaDone=true;
@@ -125,6 +227,13 @@ function ProfileController($rootScope, $scope, $location,profile, $routeParams) 
 
     //recaptcha('recap_new_comment')
 
+$scope.toggleLang = function(){
+    if($scope.alpha == "A"){
+        $scope.alpha = "ஆ";
+    }else{
+        $scope.alpha = "A";
+    }
+}
     $scope.recaptcha = function(id, action) {
         if($scope.recaptchaDone == null){
         $scope.recap_widget = grecaptcha.render(id, {
@@ -141,6 +250,9 @@ function ProfileController($rootScope, $scope, $location,profile, $routeParams) 
         $scope.det_id = $routeParams.det_id;
         profile.getProfile($scope).then(function(resp){
             $scope.p = resp;
+            $scope.updateObjects([$scope.p]);
+            $scope.updateObjects($scope.p.comments);
+            $scope.p.t_comment = {};
             $scope.p.prof_img_url = getKeyFromMeta($scope.p.meta, 'prof_img_url');
             endProgress($scope)
         });
@@ -150,6 +262,7 @@ function ProfileController($rootScope, $scope, $location,profile, $routeParams) 
         startProgress($scope);
         $scope.prof_id = $routeParams.prof_id;
         $scope.det_id = $routeParams.det_id;
+        $scope.p.new_comment = $scope.p.t_comment.text;
         profile.addComment($scope).then(function(resp){
             $scope.p.comments = resp;
             endProgress($scope)
@@ -160,43 +273,23 @@ function ProfileController($rootScope, $scope, $location,profile, $routeParams) 
         $location.path('/consti/'+$scope.p.consti);
     }
 
-        $scope.toggleLike = function(p, comment){
-        var id = p.id;
-        $scope.like_type = "profile";
-        if(comment == true){
-            $scope.like_type = "comments";
-            $scope.prof_id = p.prof_id;
-            $scope.det_id = p.det_id;
-        }else{
-            $scope.prof_id = p.id;
-            $scope.det_id = p.details.id;
-        }
-        $scope.like_id = id;
-        profile.toggleLikes($scope).then(function(resp){
-            p.likes = resp.likes;
+    $scope.input = function(d) {
+        if($scope.alpha != "A"){
+        $scope.data = d;
+        translit.input($scope).then(function(data) {
+            $scope.words = data;
         });
-
+    }
     }
 
-    $scope.toggleUnlike = function(p, comment){
-         var id = p.id;
-        $scope.like_type = "profile";
-        if(comment == true){
-            $scope.like_type = "comments";
-            $scope.prof_id = p.prof_id;
-            $scope.det_id = p.det_id;
-        }else{
-            $scope.prof_id = p.id;
-            $scope.det_id = p.details.id;
-        }
-        $scope.like_id = id;
-        profile.toggleUnlikes($scope).then(function(resp){
-            p.unlikes = resp.unlikes;
-        });
-
+    $scope.select = function(index, data) {
+        if($scope.alpha != "A"){
+        translit.select($scope, index, data);
+    }
     }
 
     $scope.getProfile();
+
 
 }
 
@@ -312,4 +405,19 @@ function getKeyFromMeta(profile_meta, key){
         }
     })
     return val;
+}
+
+app.config(function (localStorageServiceProvider) {
+  localStorageServiceProvider
+    .setPrefix('kyp')
+});
+
+function contains(a, obj) {
+    var i = a.length;
+    while (i--) {
+       if (a[i] === obj) {
+           return true;
+       }
+    }
+    return false;
 }
