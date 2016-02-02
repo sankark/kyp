@@ -19,6 +19,7 @@ type GoogleUser struct {
 	Id       string `form:"id" json:"id" binding:"required"`
 	Email    string `form:"email" json:"email" binding:"required"`
 	Username string `form:"name" json:"name" binding:"required"`
+	PictureUrl string `form:"picture" json:"picture" binding:"required"`
 }
 
 func Bind(res *http.Response, obj interface{}) error {
@@ -69,7 +70,7 @@ func  GoogleLogin(c *gin.Context) {
 	}
 
 	client := urlfetch.Client(aecontext)
-	response, err := client.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
+	response, err := client.Get("https://www.googleapis.com/userinfo/v2/me?access_token=" + token.AccessToken)
 	log.Debugf(aecontext, fmt.Sprintf("token.AccessToken %#v", token.AccessToken))
 
 	// handle err. You need to change this into something more robust
@@ -85,6 +86,7 @@ func  GoogleLogin(c *gin.Context) {
 	user := &auth.User{
 		Email: goog_user.Email,
 		Name:  goog_user.Username,
+		Picture: goog_user.PictureUrl,
 	}
 	log.Debugf(aecontext, fmt.Sprintf("user %#v", user))
 	if !auth.IsAuthenticated(c) {
