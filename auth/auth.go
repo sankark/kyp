@@ -20,6 +20,7 @@ type User struct {
 	Unlikes  []string `json:"unlike_ids"`
 	Role     string
 	Active   string
+	Picture string `json:"picture"`
 }
 
 var RedirectURL = "RedirectURL"
