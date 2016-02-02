@@ -210,6 +210,7 @@ header {
 
 .android-drawer {
     position: fixed;
+    width: inherit;
 }
 
 .android-navigation-container .mdl-navigation__link {
