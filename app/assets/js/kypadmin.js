@@ -36,14 +36,18 @@ $scope.toggleLang = function(){
 }
 
     $scope.input = function(d) {
+        if($scope.alpha != "A"){
         $scope.data = d;
         translit.input($scope).then(function(data) {
             $scope.words = data;
         });
     }
+    }
 
     $scope.select = function(index, data) {
+        if($scope.alpha != "A"){
         translit.select($scope, index, data);
+    }
     }
 
     $scope.recaptcha = function() {
