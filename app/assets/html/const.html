@@ -1,5 +1,6 @@
 <div ng-include="'/assets/html/progress.html'"></div>
 <div class="consti demo-blog mdl-layout mdl-js-layout has-drawer is-upgraded {% progress %}" {% show %}>
+<div ng-include="'/assets/html/header.html'"></div>
     <main class="mdl-layout__content">
             <nav class="demo-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
                 <a ng-click="previous()"  href="" class="demo-nav__button">
@@ -11,9 +12,11 @@
         <div class="demo-blog__posts mdl-grid">
             <div class="demo-blog__posts mdl-grid">
                 <div class="mdl-card  mdl-cell mdl-cell--12-col" ng-repeat="(key, p) in profiles">
-                    <div ng-click="loadProfile(p)" class="kyp_img mdl-card__media mdl-color-text--grey-50" style="background-image: url({%p.prof_img_url%})">
-                        <h3>{% p.details.name %}</h3>
-                    </div>
+                    <div ng-click="loadProfile(p)" class="kyp_img mdl-card__media mdl-color-text--grey-50" style="background-image:url('http://www.sagayamias.com/wp-content/uploads/2015/09/download.jpg')">
+                <div class="prof_img" style="background-image:url('{% p.prof_img_url %}')"></div>
+                    <h3>{% p.details.name %}</h3>
+                </div>
+
                     <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
                         <span ng-click="toggleLike(p)" class="material-icons mdl-badge" data-badge="{% p.likes %}">
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon {% p.like_cls %}">
@@ -53,10 +56,10 @@
                     <div class="gradient-border"></div>                
                     <div class="demo-blog--blogpost profile-comments">
                         <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments" ng-include="'/assets/html/comments/list.html'"></div>
-                        <div class="more">
+                        <div class="more-comments">
                             <a ng-click="loadProfile(p,'comment')" class="demo-nav__button">
                                 <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
-                                    <i class="material-icons">arrow_forward</i>
+                                    <i class="material-icons">more</i>
                                 </button>
                             </a>
                         </div>
@@ -74,4 +77,5 @@
         </div>
         <div ng-include="'/assets/html/footer.html'"></div>
     </main>
+    <div ng-click="toggleDrawer()" class="mdl-layout__obfuscator {% obfus %}"></div>
 </div>

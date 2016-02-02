@@ -1,0 +1,14 @@
+.adm_prf_list .mdl-cell{
+    margin-top: 0px !important;
+    margin-right: auto !important;
+}
+
+.adm_prf_list a{
+	color: grey;
+}
+
+.adm_prf_edit-btn-grp button{
+	margin-left:20px;
+	margin-right:20px;
+	color: white;
+}

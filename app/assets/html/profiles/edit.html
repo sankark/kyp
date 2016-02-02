@@ -1,17 +1,23 @@
-<div class="mdl-grid" style="">
-    <span class="mdl-cell  mdl-cell--4-col">
-            <button ng-click="createProfile()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
-                    <i class="material-icons">add</i>
+<div class="mdl-grid adm_prf_edit-btn-grp" style="">
+    <span>
+            <button ng-click="createProfile()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    <i class="material-icons">save</i>
             </button>
             </span>
-    <span class="mdl-cell  mdl-cell--4-col">
-            <button ng-click="removeProfile()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
-                    <i class="material-icons">add</i>
+    <span>
+            <button ng-click="removeProfile()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    <i class="material-icons">delete</i>
             </button>
             </span>
 </div>
 
-<div class="demo-blog__posts mdl-grid " ng-init="getProfile()" >
+<div class="mdl-grid adm_prf_edit-btn-grp" style="">
+            <span>
+                <button ng-click="toggleLang()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">{%alpha%}</button>
+            </span>
+</div>
+
+<div class="demo-blog__posts mdl-grid adm_prf_edit" ng-init="getProfile()" >
     <div class="basic_info mdl-card  mdl-cell mdl-cell--8-col" style="padding-bottom: 25px;">
         <div class="mdl-color-text--grey-600 item input">
             <span><h5>{% label.name %}</h5></span>
@@ -49,7 +55,7 @@
     </div>
     <div class="mdl-card  mdl-cell mdl-cell--12-col">
         <br>
-        <div class="container lighter" style="width: inherit;">
+        <div class="html-container lighter" style="width: inherit;">
             <div text-angular ng-model="htmlContent" name="demo-editor" ta-text-editor-class="border-around container" ta-html-editor-class="border-around"></div>
             <div class="mdl-color-text--grey-600 item dummyarea">
                 <span><h5>{% label.trans_area %}</h5></span>
@@ -63,16 +69,15 @@
     </div>
     <div class="mdl-color-text--primary-contrast mdl-card__supporting-text comments" ng-include="'/assets/html/comments/edit_comments.html'">
     </div>
-
-<div class="mdl-grid" style="">
-    <span class="mdl-cell  mdl-cell--4-col">
-            <button ng-click="editProfile()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
-                    <i class="material-icons">add</i>
+<div class="mdl-grid adm_prf_edit-btn-grp" style="">
+    <span>
+            <button ng-click="createProfile()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    <i class="material-icons">save</i>
             </button>
             </span>
-    <span class="mdl-cell  mdl-cell--4-col">
-            <button ng-click="editProfile()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
-                    <i class="material-icons">add</i>
+    <span>
+            <button ng-click="removeProfile()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    <i class="material-icons">delete</i>
             </button>
             </span>
 </div>

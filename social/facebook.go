@@ -37,7 +37,7 @@ func FBConfig() *oauth2.Config {
 
 		ClientID:     "1515896578706527", // change this to yours
 		ClientSecret: "c34e40892330c13bb047809a163ff1b2",
-		RedirectURL:  "https://cloud-certification-l300.appspot.com/FBLogin", // change this to your webserver adddress
+		RedirectURL:  "http://test.enthoguthi.com/FBLogin", // change this to your webserver adddress
 		Scopes:       []string{"email", "user_birthday", "user_location", "user_about_me"},
 		Endpoint: oauth2.Endpoint{
 			AuthURL:  "https://www.facebook.com/dialog/oauth",

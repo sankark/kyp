@@ -64,6 +64,15 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams, l
         LocalStorage = true;
     }
 
+    $scope.toggleDrawer = function(){
+        if($scope.drawer == null){
+            $scope.drawer = 'is-visible';
+            $scope.obfus = 'is-visible';
+        }else{
+            $scope.drawer = null;
+            $scope.obfus = null;
+        }
+    }
     $scope.loadProfile = function(p, hash) {
         if (hash != null)
             $location.hash(hash);

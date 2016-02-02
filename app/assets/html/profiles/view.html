@@ -1,6 +1,7 @@
 <div ng-include="'/assets/html/progress.html'"></div>
 
 <div class="demo-blog demo-blog--blogpost mdl-layout mdl-js-layout has-drawer is-upgraded {% progress %}" {% show %}>
+<div ng-include="'/assets/html/header.html'"></div>
     <main class="mdl-layout__content">
             <nav class="demo-nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
                 <a ng-click="previous()"  href="" class="demo-nav__button">
@@ -32,6 +33,21 @@
                         </button>
                         </span>
                     </div>
+                    <div class="gradient-border"></div>
+                    <div class="prf-view-det">
+                    <div class="meta mdl-color-text--grey-600">
+                        <div class="mdl-color-text--grey-600 item">
+                            <span><h5>{% p.consti %}</h5></span>
+                            <span>Constituency</span>
+                        </div>
+                    </div>
+                     <div class="grey-bordor meta mdl-color-text--grey-600">
+                        <div class="mdl-color-text--grey-600 item">
+                            <span><h5>{% p.details.party %}</h5></span>
+                            <span>Party</span>
+                        </div>
+                    </div> 
+                    </div>  
                     <div class="gradient-border"></div>  
                 <div id="recap_like" class="mdl-cell--8-col mdl-cell--4-col-desktop  mdl-cell"></div>
                 <div class="html-content" ng-bind-html="p.details.htmlContent">
@@ -54,4 +70,5 @@
          <div ng-include="'/assets/html/footer.html'"></div>
 
         </main>
+            <div ng-click="toggleDrawer()" class="mdl-layout__obfuscator {% obfus %}"></div>
 </div>

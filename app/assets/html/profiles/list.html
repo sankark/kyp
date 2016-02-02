@@ -2,13 +2,13 @@
     <div class="mdl-card  mdl-cell mdl-cell--12-col" style="padding-bottom: 25px;">
         <div class="mdl-grid" style="">
             <span class="mdl-cell">
-            <button ng-click="editProfile()" class="mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect">
-                    <i class="material-icons">add</i>
+            <button ng-click="editProfile()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    <i class="material-icons">create</i>
             </button>
             </span>
         </div>
 
-        <div class="mdl-grid" ng-repeat="profile in profiles" style="">
+        <div class="adm_prf_list mdl-grid" ng-repeat="profile in profiles" style="">
             <span class="mdl-cell"><a ng-click="editProfile(profile.id,profile.details.id)">{% profile.details.name %}</a></span>
         </div>
     </div>
