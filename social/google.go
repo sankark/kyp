@@ -11,11 +11,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/kyp/log"
-	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
 	"google.golang.org/appengine/urlfetch"
 )
 
-type FB_User struct {
+type GoogleUser struct {
 	Id       string `form:"id" json:"id" binding:"required"`
 	Email    string `form:"email" json:"email" binding:"required"`
 	Username string `form:"name" json:"name" binding:"required"`
@@ -29,57 +29,47 @@ func Bind(res *http.Response, obj interface{}) error {
 	return nil
 }
 
-func FBConfig() *oauth2.Config {
+func GoogleConfig() *oauth2.Config {
 	// generate loginURL
-	fbConfig := &oauth2.Config{
-		// ClientId: FBAppID(string), ClientSecret : FBSecret(string)
-		// Example - ClientId: "1234567890", ClientSecret: "red2drdff6e2321e51aedcc94e19c76ee"
-
-		ClientID:     "1515896578706527", // change this to yours
-		ClientSecret: "c34e40892330c13bb047809a163ff1b2",
-		RedirectURL:  "http://test.enthoguthi.com/FBLogin", // change this to your webserver adddress
-		Scopes:       []string{"email", "user_birthday", "user_location", "user_about_me"},
-		Endpoint: oauth2.Endpoint{
-			AuthURL:  "https://www.facebook.com/dialog/oauth",
-			TokenURL: "https://graph.facebook.com/oauth/access_token",
-		},
-	}
-
-	return fbConfig
+googleconf = &oauth2.Config{
+        ClientID:     "your-client-id",
+        ClientSecret: "youe-secred",
+        RedirectURL:  "http://localhost:300/googlelogin",
+        Scopes: []string{
+            "https://www.googleapis.com/auth/userinfo.profile",
+            "https://www.googleapis.com/auth/userinfo.email",
+        },
+        Endpoint: google.Endpoint,
+    }
+	return googleconf
 }
-func Home(c *gin.Context) {
+func GoogleLoginUrl(c *gin.Context) {
 
 	// generate loginURL
-	fbConfig := FBConfig()
+	googleconf := GoogleConfig()
 
-	url := fbConfig.AuthCodeURL("")
+	url := googleconf.AuthCodeURL("state")
 
-	// Home page will display a button for login to Facebook
-	c.HTML(http.StatusOK, "login.html", gin.H{
-		"facebook_login": url,
-		"google_login":   url,
-		"twitter_login":  url,
-	})
-	//w.Write([]byte("<html><title>Golang Login Facebook Example</title> <body> <a href='" + facebook_login + "'><button>Login with Facebook!</button> </a> </body></html>"))
+	return url
 }
 
-func FBLogin(c *gin.Context) {
+func  GoogleLogin(c *gin.Context) {
 	// grab the code fragment
 
 	aecontext := appengine.NewContext(c.Request)
 
 	code := c.Query("code")
 
-	fbConfig := FBConfig()
+	googleconf := GoogleConfig()
 
-	token, err := fbConfig.Exchange(aecontext, code)
+	token, err := googleconf.Exchange(aecontext, code)
 
 	if err != nil {
 		log.Errorf(aecontext, err.Error())
 	}
 
 	client := urlfetch.Client(aecontext)
-	response, err := client.Get("https://graph.facebook.com/v2.5/me?fields=id,name,email&access_token=" + token.AccessToken)
+	response, err := client.Get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + token.AccessToken)
 	log.Debugf(aecontext, fmt.Sprintf("token.AccessToken %#v", token.AccessToken))
 
 	// handle err. You need to change this into something more robust
@@ -88,13 +78,13 @@ func FBLogin(c *gin.Context) {
 		c.String(http.StatusOK, "Error")
 	}
 
-	var fb_user FB_User
+	var goog_user GoogleUser
 	log.Debugf(aecontext, fmt.Sprintf("fb_response %#v", response))
-	Bind(response, &fb_user)
-	log.Debugf(aecontext, fmt.Sprintf("fb_response %#v", fb_user))
+	Bind(response, &goog_user)
+	log.Debugf(aecontext, fmt.Sprintf("fb_response %#v", goog_user))
 	user := &auth.User{
-		Email: fb_user.Email,
-		Name:  fb_user.Username,
+		Email: goog_user.Email,
+		Name:  goog_user.Username,
 	}
 	log.Debugf(aecontext, fmt.Sprintf("user %#v", user))
 	if !auth.IsAuthenticated(c) {
