@@ -9,11 +9,11 @@ func SendRequest(c *gin.Context){
     SendEmail(c, user)
 }
 
-func ProcessVolunteerRequest(c *gin.Context){
+func ProcessRequest(c *gin.Context){
     
 }
 
-func ApproveVolunteerRequest(c *gin.Context, user auth.User){
+func ApproveRequest(c *gin.Context, user auth.User){
     
 }
 
