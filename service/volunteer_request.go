@@ -1,6 +1,6 @@
 
 
-func SendVolunteerRequest(c *gin.Context){
+func SendRequest(c *gin.Context){
     user := auth.User
     c.JSON(&user)
     user.vol_req_id := uuid.NewV4().String()
