@@ -34,6 +34,8 @@ func Login(c *gin.Context) {
 }
 
 func Logout(c *gin.Context) {
+	session := sessions.Default(c)
+	session.Delete("internal")
 	session.Delete(gin.AuthUserKey)
 	SessionSave(c)
 	c.Redirect(http.StatusTemporaryRedirect, "/")
