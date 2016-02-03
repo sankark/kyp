@@ -62,7 +62,6 @@ body > .mdl-layout__container {
     list-style-type: none;
     display: inline-block;
     min-width: 28px;
-    color: #757575 !important;
 }
 
 .iem-container li {
@@ -131,6 +130,10 @@ body > .mdl-layout__container {
 
 .html-content {
     margin-left: 2%;
+}
+
+.html-content a{
+    color: #325da7 !important;
 }
 
 canvas {
