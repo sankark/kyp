@@ -47,6 +47,7 @@ func init() {
 	r.GET("/login", social.Home)
 	r.GET("/FBLogin", social.FBLogin)
 	r.GET("/TestLogin", auth.TestLogin)
+	r.GET("/Logout", auth.Logout)
 
 	r.POST("/admin/upload", store.Upload)
 	r.GET("/admin/bloburl", store.UploadUrl)
