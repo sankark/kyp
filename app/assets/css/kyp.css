@@ -100,7 +100,9 @@ body > .mdl-layout__container {
 .comment__author {
     margin-left: 1%;
 }
-
+.comment__header{
+    margin-top: 1%; 
+}
 .mdl-spinner {
     position: fixed;
     left: 50%;
