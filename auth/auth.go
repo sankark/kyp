@@ -19,7 +19,9 @@ type User struct {
 	Likes    []string `json:"like_ids"`
 	Unlikes  []string `json:"unlike_ids"`
 	Role     string
-	Active   string
+	Active   string 
+	Ref_Email string `json:"ref_email"`
+	Temp_Req_Id string
 	Picture string `json:"picture"`
 }
 
