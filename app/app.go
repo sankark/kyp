@@ -58,6 +58,9 @@ func init() {
 
 	r.GET("/me", GetUser)
 
+	r.POST("/volunteer/sendreq/", service.SendVolunteerRequest)
+	r.GET("/volunteer/ack/:req_id", service.ProcessVolunteerRequest)
+
 	http.Handle("/", r)
 	//appengine.Main()
 	/*

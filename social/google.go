@@ -1,6 +1,6 @@
 package social
 
-import (
+/*import (
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -94,3 +94,4 @@ func  GoogleLogin(c *gin.Context) {
 	}
 	auth.Redirect(c)
 }
+*/

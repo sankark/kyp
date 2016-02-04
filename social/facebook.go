@@ -96,6 +96,9 @@ func FBLogin(c *gin.Context) {
 		Email: fb_user.Email,
 		Name:  fb_user.Username,
 	}
+
+	//service.VerifyVolunteerRequest(c, user)
+
 	log.Debugf(aecontext, fmt.Sprintf("user %#v", user))
 	if !auth.IsAuthenticated(c) {
 		auth.CreateSession(c, user)

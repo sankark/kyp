@@ -12,17 +12,17 @@ import (
 )
 
 type User struct {
-	Name     string   `json:"name"`
-	Email    string   `json:"id" binding:"required" datastore:"-" goon:"id"`
-	Consti   []string `json:"consti_ids"`
-	Comments []string `json:"comment_ids"`
-	Likes    []string `json:"like_ids"`
-	Unlikes  []string `json:"unlike_ids"`
-	Role     string
-	Active   string 
-	Ref_Email string `json:"ref_email"`
+	Name        string   `json:"name"`
+	Email       string   `json:"id" binding:"required" datastore:"-" goon:"id"`
+	Consti      []string `json:"consti_ids"`
+	Comments    []string `json:"comment_ids"`
+	Likes       []string `json:"like_ids"`
+	Unlikes     []string `json:"unlike_ids"`
+	Role        string
+	Active      string
+	Ref_Email   string `json:"ref_email"`
 	Temp_Req_Id string
-	Picture string `json:"picture"`
+	Picture     string `json:"picture"`
 }
 
 var RedirectURL = "RedirectURL"
@@ -49,6 +49,11 @@ func SessionSet(c *gin.Context, key interface{}, value interface{}) {
 func SessionGet(c *gin.Context, key interface{}) interface{} {
 	session := sessions.Default(c)
 	return session.Get(key)
+}
+
+func GetSession(c *gin.Context) sessions.Session {
+	session := sessions.Default(c)
+	return session
 }
 
 func SessionSave(c *gin.Context) {
@@ -113,7 +118,9 @@ func AddUser(c *gin.Context, user *User) {
 	resp := conn.Get(user)
 	if resp.Err_msg != "" {
 		user.Active = "false"
-		user.Role = "support"
+		if user.Role == "" {
+			user.Role = "support"
+		}
 		user.Likes = make([]string, 0)
 		user.Unlikes = make([]string, 0)
 		conn.Add(user)
