@@ -9,6 +9,7 @@ import (
 	"github.com/kyp/service"
 	"github.com/kyp/sessions"
 	"github.com/kyp/social"
+	"github.com/kyp/social/login"
 	"github.com/kyp/store"
 
 	//"google.golang.org/appengine"
@@ -44,8 +45,9 @@ func init() {
 
 	r.GET("/", Home)
 	r.GET("/admin", Admin)
-	r.GET("/login", social.Home)
+	r.GET("/login", login.Login)
 	r.GET("/FBLogin", social.FBLogin)
+	r.GET("/GoogleLogin", social.GoogleLogin)
 	r.GET("/TestLogin", auth.TestLogin)
 	r.GET("/Logout", auth.Logout)
 

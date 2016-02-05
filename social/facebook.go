@@ -38,7 +38,7 @@ func FBConfig() *oauth2.Config {
 		// Example - ClientId: "1234567890", ClientSecret: "red2drdff6e2321e51aedcc94e19c76ee"
 
 		ClientID:     "1515896578706527", // change this to yours
-		ClientSecret: "c34e40892330c13bb047809a163ff1b2",
+		ClientSecret: "",
 		RedirectURL:  "http://test.enthoguthi.com/FBLogin", // change this to your webserver adddress
 		Scopes:       []string{"email", "user_birthday", "user_location", "user_about_me"},
 		Endpoint: oauth2.Endpoint{
@@ -49,20 +49,14 @@ func FBConfig() *oauth2.Config {
 
 	return fbConfig
 }
-func Home(c *gin.Context) {
+func GetFacebookURL(c *gin.Context) string {
 
 	// generate loginURL
 	fbConfig := FBConfig()
 
 	url := fbConfig.AuthCodeURL("")
 
-	// Home page will display a button for login to Facebook
-	c.HTML(http.StatusOK, "login.html", gin.H{
-		"facebook_login": url,
-		"google_login":   url,
-		"twitter_login":  url,
-	})
-	//w.Write([]byte("<html><title>Golang Login Facebook Example</title> <body> <a href='" + facebook_login + "'><button>Login with Facebook!</button> </a> </body></html>"))
+	return url
 }
 
 func FBLogin(c *gin.Context) {

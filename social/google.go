@@ -1,7 +1,6 @@
 package social
 
-/*import (
-	"encoding/json"
+import (
 	"fmt"
 	"net/http"
 
@@ -11,40 +10,33 @@ package social
 
 	"github.com/gin-gonic/gin"
 	"github.com/kyp/log"
+	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 	"google.golang.org/appengine/urlfetch"
 )
 
 type GoogleUser struct {
-	Id       string `form:"id" json:"id" binding:"required"`
-	Email    string `form:"email" json:"email" binding:"required"`
-	Username string `form:"name" json:"name" binding:"required"`
+	Id         string `form:"id" json:"id" binding:"required"`
+	Email      string `form:"email" json:"email" binding:"required"`
+	Username   string `form:"name" json:"name" binding:"required"`
 	PictureUrl string `form:"picture" json:"picture" binding:"required"`
-}
-
-func Bind(res *http.Response, obj interface{}) error {
-	decoder := json.NewDecoder(res.Body)
-	if err := decoder.Decode(obj); err != nil {
-		return err
-	}
-	return nil
 }
 
 func GoogleConfig() *oauth2.Config {
 	// generate loginURL
-googleconf = &oauth2.Config{
-        ClientID:     "your-client-id",
-        ClientSecret: "youe-secred",
-        RedirectURL:  "http://localhost:300/googlelogin",
-        Scopes: []string{
-            "https://www.googleapis.com/auth/userinfo.profile",
-            "https://www.googleapis.com/auth/userinfo.email",
-        },
-        Endpoint: google.Endpoint,
-    }
+	googleconf := &oauth2.Config{
+		ClientID:     "436958032230-96kbjs7e1eg3g4dp7tnqsigce0rq85to.apps.googleusercontent.com",
+		ClientSecret: "",
+		RedirectURL:  "http://test.enthoguthi.com/GoogleLogin",
+		Scopes: []string{
+			"https://www.googleapis.com/auth/userinfo.profile",
+			"https://www.googleapis.com/auth/userinfo.email",
+		},
+		Endpoint: google.Endpoint,
+	}
 	return googleconf
 }
-func GoogleLoginUrl(c *gin.Context) {
+func GoogleLoginUrl(c *gin.Context) string {
 
 	// generate loginURL
 	googleconf := GoogleConfig()
@@ -54,7 +46,7 @@ func GoogleLoginUrl(c *gin.Context) {
 	return url
 }
 
-func  GoogleLogin(c *gin.Context) {
+func GoogleLogin(c *gin.Context) {
 	// grab the code fragment
 
 	aecontext := appengine.NewContext(c.Request)
@@ -84,8 +76,8 @@ func  GoogleLogin(c *gin.Context) {
 	Bind(response, &goog_user)
 	log.Debugf(aecontext, fmt.Sprintf("fb_response %#v", goog_user))
 	user := &auth.User{
-		Email: goog_user.Email,
-		Name:  goog_user.Username,
+		Email:   goog_user.Email,
+		Name:    goog_user.Username,
 		Picture: goog_user.PictureUrl,
 	}
 	log.Debugf(aecontext, fmt.Sprintf("user %#v", user))
@@ -94,4 +86,3 @@ func  GoogleLogin(c *gin.Context) {
 	}
 	auth.Redirect(c)
 }
-*/
