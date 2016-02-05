@@ -43,22 +43,29 @@ func ProcessVolunteerRequest(c *gin.Context) {
 	c.Redirect(http.StatusTemporaryRedirect, "/login")
 }
 
-func VerifyVolunteerRequest(c *gin.Context, user *auth.User) {
+func VerifyVolunteerRequest(c *gin.Context, user *auth.User) bool {
+	r := c.Request
+	conn := store.New(c)
+	conn.Get(user)
+	ctx := appengine.NewContext(r)
 	session := auth.GetSession(c)
-	log.Debugf(c, fmt.Sprintf("details %#v", session))
+	log.Debugf(ctx, fmt.Sprintf("details %#v", session))
 	req_id := session.Get("vol_req_id")
-	log.Debugf(c, fmt.Sprintf("Vol_Req_id %#v", req_id))
-	log.Debugf(c, "Vol_Req_id %v", req_id)
+	log.Debugf(ctx, fmt.Sprintf("Vol_Req_id %#v", req_id))
+	log.Debugf(ctx, "Vol_Req_id %v", req_id)
 	if req_id != nil {
 		session.Delete("vol_req_id")
 		session.Save()
 		if req_id == user.Temp_Req_Id {
 			user.Role = "volunteer"
+			conn.Add(user)
+			return true
 		}
 	} else {
-		log.Debugf(c, "Vol_Req_id notfound")
+		log.Debugf(ctx, "Vol_Req_id notfound")
+		return false
 	}
-
+	return false
 }
 
 func SendEmailVolunteer(c *gin.Context, user *auth.User) {

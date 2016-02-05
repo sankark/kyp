@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/kyp/service"
+
 	"github.com/kyp/auth"
 
 	"google.golang.org/appengine"
@@ -97,11 +99,18 @@ func FBLogin(c *gin.Context) {
 		Name:  fb_user.Username,
 	}
 
-	//service.VerifyVolunteerRequest(c, user)
+	var redir_url = ""
+	if service.VerifyVolunteerRequest(c, user) {
+		redir_url = "/volsuccess"
+	}
 
 	log.Debugf(aecontext, fmt.Sprintf("user %#v", user))
 	if !auth.IsAuthenticated(c) {
 		auth.CreateSession(c, user)
 	}
-	auth.Redirect(c)
+	if redir_url == "" {
+		auth.Redirect(c, redir_url)
+	} else {
+		auth.Redirect(c)
+	}
 }

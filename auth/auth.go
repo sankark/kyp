@@ -128,7 +128,10 @@ func AddUser(c *gin.Context, user *User) {
 
 }
 
-func Redirect(c *gin.Context) {
+func Redirect(c *gin.Context, url ...string) {
+	if len(url) > 0 {
+		c.Redirect(http.StatusTemporaryRedirect, url[0])
+	}
 	if SessionGet(c, RedirectURL) != nil {
 		c.Redirect(http.StatusTemporaryRedirect, SessionGet(c, RedirectURL).(string))
 	} else {
