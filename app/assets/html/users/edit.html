@@ -1,0 +1,32 @@
+<div class="mdl-grid adm_prf_edit-btn-grp" style="">
+    <span>
+            <button ng-click="putUser()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">
+                    <i class="material-icons">save</i>
+            </button>
+            </span>
+</div>
+
+<div class="demo-blog__posts mdl-grid adm_prf_edit" ng-init="getUser()" >
+    <div class="basic_info mdl-card  mdl-cell mdl-cell--8-col" style="padding-bottom: 25px;">
+        <div class="mdl-color-text--grey-600 item input">
+            <span><h5>Name</h5></span>
+            <span><input type="text" ng-model="user.name"/></span>
+        </div>
+        <div class="mdl-color-text--grey-600 item input">
+            <span><h5>Email</h5></span>
+            <span><input type="text" ng-model="user.id"/></span>
+        </div>
+        <div class="mdl-color-text--grey-600 item input">
+            <span><h5>Consti</h5></span>
+            <span><input type="text" ng-model="user.consti_ids"/></span>
+        </div>
+        <div class="mdl-color-text--grey-600 item input">
+            <span><h5>Role</h5></span>
+            <span><input type="text" ng-model="user.role"/></span>
+        </div>
+        <div class="mdl-color-text--grey-600 item input">
+            <span><h5>Active</h5></span>
+            <span><input type="text" ng-model="user.active"/></span>
+        </div>
+    </div>   
+</div>

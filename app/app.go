@@ -5,7 +5,6 @@ import (
 	"github.com/kyp/auth"
 	"github.com/kyp/geo"
 	"github.com/kyp/log"
-	"github.com/kyp/models"
 	"github.com/kyp/service"
 	"github.com/kyp/sessions"
 	"github.com/kyp/social"
@@ -29,8 +28,6 @@ func init() {
 	r.LoadHTMLGlob("templates/*")
 	r.Static("/assets", "./assets")
 
-	r.POST("/user", AddUserOld)
-	r.GET("/user", ListUser)
 	r.GET("/load", LoadConst)
 	r.POST("/point", Point)
 
@@ -49,7 +46,7 @@ func init() {
 	r.GET("/FBLogin", social.FBLogin)
 	r.GET("/GoogleLogin", social.GoogleLogin)
 	r.GET("/TestLogin", auth.TestLogin)
-	r.GET("/Logout", auth.Logout)
+	r.GET("/logout", auth.Logout)
 
 	r.POST("/admin/upload", store.Upload)
 	r.GET("/admin/bloburl", store.UploadUrl)
@@ -60,8 +57,12 @@ func init() {
 
 	r.GET("/me", GetUser)
 
-	r.POST("/volunteer/sendreq/", service.SendVolunteerRequest)
-	r.GET("/volunteer/ack/:req_id", service.ProcessVolunteerRequest)
+	r.POST("/volunteer", service.SendVolunteerRequest)
+	r.GET("/volunteer/:req_id", service.ProcessVolunteerRequest)
+
+	r.GET("/user", service.ListUser)
+	r.GET("/user/:user_id", service.GetUser)
+	r.POST("/user", service.UpdateUser)
 
 	http.Handle("/", r)
 	//appengine.Main()
@@ -121,7 +122,7 @@ func getStore(c *gin.Context) *store.Connection {
 	return store.New(c)
 }
 
-func AddUserOld(c *gin.Context) {
+/*func AddUserOld(c *gin.Context) {
 	rec := &models.Record{}
 	c.BindJSON(rec)
 	DAO := getStore(c)
@@ -134,7 +135,7 @@ func ListUser(c *gin.Context) {
 	DAO := getStore(c)
 	resp := DAO.List(rec)
 	c.JSON(http.StatusOK, resp)
-}
+}*/
 
 func LoadConst(c *gin.Context) {
 	geo.LoadPolygonFromFile(c, getStore(c))

@@ -260,3 +260,8 @@ header {
 .prf-view-det .item{
 -webkit-align-items: initial;
 }
+
+.vol .mdl-card__supporting-text{
+        border-top: none !important;
+            width: 38%;
+}

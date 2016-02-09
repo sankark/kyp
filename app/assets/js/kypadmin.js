@@ -137,6 +137,35 @@ $scope.toggleLang = function(){
 
 }
 
+function UserController($rootScope, $scope, $location, profile, $routeParams) {
+
+    $scope.listUser = function() {
+        profile.listAdmUser().then(function(resp) {
+            $scope.users = resp;
+        });
+    }
+
+    $scope.getUser = function() {
+        $scope.user_id = $routeParams.user_id;
+        profile.getAdmUser($scope).then(function(resp) {
+            $scope.user = resp.user;
+            if($scope.user.consti_ids != null)
+            $scope.user.consti_ids = $scope.user.consti_ids.toString();
+        });
+    }
+
+    $scope.putUser = function() {
+        if($scope.user.consti_ids != null)
+        $scope.user.consti_ids = $scope.user.consti_ids.split(",");
+        profile.updateAdmUser($scope).then(function(resp) {
+            $scope.user = resp.user;
+        });
+    }
+
+    
+
+}
+
 
 app.config(function($routeProvider, $locationProvider) {
     $routeProvider.
@@ -147,6 +176,14 @@ app.config(function($routeProvider, $locationProvider) {
     when('/edit/:prof_id/:det_id', {
         templateUrl: '/assets/html/profiles/edit.html',
         controller: ProfileController
+    }).
+    when('/user', {
+        templateUrl: '/assets/html/users/list.html',
+        controller: UserController
+    }).
+    when('/user/:user_id', {
+        templateUrl: '/assets/html/users/edit.html',
+        controller: UserController
     }).
     otherwise({
         redirectTo: '/'

@@ -18,9 +18,9 @@ type User struct {
 	Comments    []string `json:"comment_ids"`
 	Likes       []string `json:"like_ids"`
 	Unlikes     []string `json:"unlike_ids"`
-	Role        string
-	Active      string
-	Ref_Email   string `json:"ref_email"`
+	Role        string   `json:"role"`
+	Active      string   `json:"active"`
+	Ref_Email   string   `json:"ref_email"`
 	Temp_Req_Id string
 	Picture     string `json:"picture"`
 }
@@ -137,6 +137,13 @@ func Redirect(c *gin.Context, url ...string) {
 	} else {
 		c.Redirect(http.StatusTemporaryRedirect, "/")
 	}
+}
+func IsAdmin(c *gin.Context) bool {
+	user := GetUser(c)
+	if user.Role == "admin" {
+		return true
+	}
+	return false
 }
 
 func Contains(c *gin.Context, key string) bool {

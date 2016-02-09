@@ -1,6 +1,6 @@
 <form novalidate name="comment_form" id="comment_form" class="new-comment mdl-cell--8-col mdl-cell" style="display: flex; margin-bottom: 16px;">
 <button ng-click="toggleLang()" class="mdl-button mdl-js-button">{%alpha%}</button>
-    <div ng-init="" class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label new-comment">
+    <div ng-init="" mdl-upgrade class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label new-comment">
         <textarea rows=1 class="mdl-textfield__input" ng-model="p.t_comment.text" ng-enter="select(0,p.t_comment)" ng-change="input(p.t_comment)"></textarea>
         <label for="comment" class="mdl-textfield__label">Join the discussion</label>
     </div>

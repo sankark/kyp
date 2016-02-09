@@ -1,6 +1,4 @@
-<div ng-include="'/assets/html/progress.html'"></div>
-
-<div class="demo-blog mdl-layout mdl-js-layout has-drawer is-upgraded {% progress %}" {% show %}>
+<div class="vol demo-blog mdl-layout mdl-js-layout has-drawer is-upgraded" {% show %}>
     <main class="mdl-layout__content">
         <div class="demo-blog__posts mdl-grid">
             <div class="demo-blog__posts mdl-grid">
@@ -8,9 +6,15 @@
                     <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
                         <autocomplete ng-model="myconsti" attr-inputclass="mdl-textfield__input" attr-class="mdl-textfield mdl-js-textfield" attr-placeholder="select your constituency" data="consti"></autocomplete>
                     </div>
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
+                        <input type="text" ng-model="vol_name" class="mdl-textfield__input ng-valid ng-valid-required ng-touched" placeholder="Your Name"/>
+                    </div>
+                     <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
+                        <input type="text" class="mdl-textfield__input ng-valid ng-valid-required ng-touched" ng-model="vol_email" placeholder="Your Email" />
+                    </div>
                     <div class="mdl-color-text--grey-700 mdl-card__supporting-text" style="border-top:rgba(0, 0, 0, 0)">
-                        <button mdl-upgrade class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" ng-click="getProfile(myconsti)">
-                            Candidates
+                        <button mdl-upgrade class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" ng-click="sendVolRequest()">
+                            Send
                         </button>
                     </div>
                 </div>

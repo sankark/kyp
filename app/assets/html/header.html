@@ -34,8 +34,9 @@
 
         </span>
         <nav class="mdl-navigation">
-          <a class="mdl-navigation__link" href="">Logout</a>
+          <a ng-show="isAuthenticated()" ng-click="clearLocalStore()" class="mdl-navigation__link" href="/logout">Logout</a>
+          <a ng-hide="isAuthenticated()" class="mdl-navigation__link" href="/login">Login</a>
           <div class="android-drawer-separator"></div>
-          <span class="mdl-navigation__link" href="">Volunteer</span>
+          <span ng-show="isAuthenticated()" ng-click="toggleDrawer();path('volunteer')" class="mdl-navigation__link" href="">Volunteer</span>
         </nav>
       </div>

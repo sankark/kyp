@@ -1,6 +1,7 @@
 angular.module('profile', [])
 
-.factory('profile', ['$q', 'Profiles','Consti','Comments','Likes','Unlikes','User', function($q, Profiles, Consti,Comments,Likes, Unlikes,User) {
+.factory('profile', ['$q', 'Profiles','Consti','Comments','Likes','Unlikes','User','Volunteer','AdmUser', 
+         function($q, Profiles, Consti,Comments,Likes, Unlikes,User,Volunteer,AdmUser) {
     return {
         createProfile: function(scope) {
             var deferred = $q.defer();
@@ -93,11 +94,58 @@ angular.module('profile', [])
             });
 
             return deferred.promise;
-        }
+        },
 
+
+        sendVolRequest:function(scope){
+            var deferred = $q.defer();
+            Volunteer.save({id:scope.vol_email, name:scope.vol_name, consti:scope.myconsti}, function(resp, headers) {
+                deferred.resolve(resp);
+            });
+
+            return deferred.promise;
+        },
+
+        listAdmUser: function(scope) {
+            var deferred = $q.defer();
+            AdmUser.query({}, function(resp, headers) {
+                deferred.resolve(resp);
+            });
+
+            return deferred.promise;
+        },
+
+        updateAdmUser: function(scope) {
+            var deferred = $q.defer();
+            AdmUser.save(scope.user, function(resp, headers) {
+                deferred.resolve(resp);
+            });
+
+            return deferred.promise;
+        }, 
+
+        getAdmUser: function(scope) {
+            var deferred = $q.defer();
+
+            AdmUser.get({user_id:scope.user_id},function(resp, headers) {
+                deferred.resolve(resp);
+            });
+
+            return deferred.promise;
+        },
 
     };
 }])
+
+
+.factory('AdmUser', function($resource) {
+    return $resource('/user/:user_id'); // Note the full endpoint address
+})
+
+
+.factory('Volunteer', function($resource) {
+    return $resource('/volunteer'); // Note the full endpoint address
+})
 
 .factory('User', function($resource) {
     return $resource('/me'); // Note the full endpoint address

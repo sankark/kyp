@@ -53,6 +53,7 @@ type Profile struct {
 	Meta     []Meta         `json:"meta" datastore:"meta"`
 	Likes    int64          `json:"likes" datastore:"likes"`
 	UnLikes  int64          `json:"unlikes" datastore:"unlikes"`
+	Status   string         `json:"status" datastore:"status"`
 }
 
 type ProfileOut struct {

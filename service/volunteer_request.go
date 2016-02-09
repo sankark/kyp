@@ -58,6 +58,7 @@ func VerifyVolunteerRequest(c *gin.Context, user *auth.User) bool {
 		session.Save()
 		if req_id == user.Temp_Req_Id {
 			user.Role = "volunteer"
+			user.Active = "false"
 			conn.Add(user)
 			return true
 		}
