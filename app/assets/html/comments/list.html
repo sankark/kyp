@@ -25,12 +25,12 @@
         {% c.text %}
     </div>
     <nav class="comment__actions">
-        <span ng-click="toggleLike(c,true)" class="material-icons mdl-badge" data-badge="{% c.likes %}">
+        <span ng-click="toggleLike(c,'comment')" class="material-icons mdl-badge" data-badge="{% c.likes %}">
         <button  class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon {% c.like_cls %}">
             <i class="material-icons" role="presentation">thumb_up</i><span class="visuallyhidden">like comment</span>
         </button>
         </span>
-         <span ng-click="toggleUnlike(c,true)" class="material-icons mdl-badge" data-badge="{% c.unlikes %}">
+         <span ng-click="toggleUnlike(c,'comment')" class="material-icons mdl-badge" data-badge="{% c.unlikes %}">
         <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon {% c.unlike_cls %}">
             <i class="material-icons" role="presentation">thumb_down</i><span class="visuallyhidden">dislike comment</span>
         </button>
