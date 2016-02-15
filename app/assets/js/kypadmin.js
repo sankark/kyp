@@ -132,14 +132,28 @@ $scope.toggleLang = function(){
             $scope.profiles = resp;
         });
     }
-
+    
+     $scope.range = function(min, max, step){
+        step = step || 1;
+        var input = [];
+        for (var i = min; i <= max; i += step) input.push(i);
+        return input;
+     };
+      
     $scope.updateServeysInputs = function(){
-        
-        if($scope.serveys == null){
-            $scope.serveys = {};
-            serveys.total = 
-            
-        }
+
+         if($scope.num_of_q < $scope.survey_count ){
+             for(var i=$scope.num_of_q-1; i<$scope.survey_count; i++){
+                 var survey = {};
+                 $scope.surveys[i] = survey
+             }
+             $scope.num_of_q = $scope.survey_count;
+         }
+         
+        if($scope.num_of_q > $scope.survey_count ){
+             $scope.surveys.splice($scope.survey_count-1,arr.length)
+             $scope.num_of_q = $scope.survey_count;             
+         }
     }
     
     storage.initImageUploader($scope);
