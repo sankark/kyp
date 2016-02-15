@@ -133,6 +133,15 @@ $scope.toggleLang = function(){
         });
     }
 
+    $scope.updateServeysInputs = function(){
+        
+        if($scope.serveys == null){
+            $scope.serveys = {};
+            serveys.total = 
+            
+        }
+    }
+    
     storage.initImageUploader($scope);
 
 }
@@ -161,6 +170,7 @@ function UserController($rootScope, $scope, $location, profile, $routeParams) {
             $scope.user = resp.user;
         });
     }
+
 
     
 
@@ -200,7 +210,9 @@ function createProfileFromScope(scope) {
             name: scope.name.text,
             htmlContent: scope.htmlContent
         },
-        comments: scope.p.comments
+        comments: scope.p.comments,
+        surveys: scope.surveys,
+        scope.survey_count = resp.survey_count
 
     }
 
@@ -221,11 +233,17 @@ function createProfileFromResponse(scope, resp) {
     scope.party.text = resp.details.party;
     scope.htmlContent = resp.details.htmlContent;
     scope.profile_meta = resp.meta;
+    scope.surveys = resp.surveys;
+    scope.survey_count = resp.survey_count
     scope.p = {
         comments: resp.comments
     }
     if (scope.profile_meta == null || scope.profile_meta == "")
         scope.profile_meta = [];
+    if (scope.surveys == null){
+        scope.surveys = [];
+        scope.survey_count = 0;
+    }
     scope.id = resp.id;
     scope.p = resp;
 }
