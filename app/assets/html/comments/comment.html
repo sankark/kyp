@@ -10,10 +10,10 @@
         {{ca.text}}
     </div>
     <nav class="comment__actions">
-        <button ng-click="toggleLike(ca,true)" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon {% ca.like_cls %}">
+        <button ng-click="toggleLike(ca,'comment')" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon {% ca.like_cls %}">
             <i class="material-icons" role="presentation">thumb_up</i><span class="visuallyhidden">like comment</span>
         </button>
-        <button ng-click="toggleUnlike(ca,true)" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon {% ca.unlike_cls %}">
+        <button ng-click="toggleUnlike(ca,'comment')" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon {% ca.unlike_cls %}">
             <i class="material-icons" role="presentation">thumb_down</i><span class="visuallyhidden">dislike comment</span>
         </button>
         <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
