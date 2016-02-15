@@ -143,7 +143,7 @@ $scope.toggleLang = function(){
     $scope.updateServeysInputs = function(){
 
          if($scope.num_of_q < $scope.survey_count ){
-             for(var i=$scope.num_of_q-1; i<$scope.survey_count; i++){
+             for(var i=$scope.num_of_q; i<$scope.survey_count; i++){
                  var survey = {};
                  $scope.surveys[i] = survey
              }
@@ -151,7 +151,7 @@ $scope.toggleLang = function(){
          }
          
         if($scope.num_of_q > $scope.survey_count ){
-             $scope.surveys.splice($scope.survey_count-1,arr.length)
+             $scope.surveys.splice($scope.survey_count,arr.length)
              $scope.num_of_q = $scope.survey_count;             
          }
     }
