@@ -18,12 +18,12 @@
                 </div>
 
                     <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
-                        <span ng-click="toggleLike(p)" class="material-icons mdl-badge" data-badge="{% p.likes %}">
+                        <span ng-click="toggleLike(p,'profile')" class="material-icons mdl-badge" data-badge="{% p.likes %}">
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon {% p.like_cls %}">
         <i class="material-icons" role="presentation">thumb_up</i><span class="visuallyhidden">like comment</span>
                         </button>
                         </span>
-                        <span ng-click="toggleUnlike(p)" class="material-icons mdl-badge" data-badge="{% p.unlikes %}">
+                        <span ng-click="toggleUnlike(p,'profile')" class="material-icons mdl-badge" data-badge="{% p.unlikes %}">
       <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon {% p.unlike_cls %}">
         <i class="material-icons" role="presentation">thumb_down</i><span class="visuallyhidden">dislike comment</span>
                         </button>
