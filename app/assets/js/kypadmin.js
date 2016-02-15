@@ -248,7 +248,8 @@ function createProfileFromResponse(scope, resp) {
     scope.htmlContent = resp.details.htmlContent;
     scope.profile_meta = resp.meta;
     scope.surveys = resp.surveys;
-    scope.survey_count = resp.survey_count
+    scope.survey_count = resp.survey_count;
+    $scope.num_of_q = resp.survey_count;
     scope.p = {
         comments: resp.comments
     }
@@ -257,6 +258,7 @@ function createProfileFromResponse(scope, resp) {
     if (scope.surveys == null){
         scope.surveys = [];
         scope.survey_count = 0;
+        resp.num_of_q = 0;
     }
     scope.id = resp.id;
     scope.p = resp;
