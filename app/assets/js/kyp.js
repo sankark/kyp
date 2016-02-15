@@ -152,14 +152,18 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams, l
 
     $scope.toggleLike = function(p, comment){
         var id = p.id;
-        $scope.like_type = "profile";
-        if(comment == true){
+        if(like_type == "comment"){
             $scope.like_type = "comments";
             $scope.prof_id = p.prof_id;
             $scope.det_id = p.det_id;
-        }else{
+        }else if(like_type == "profile"){
+            $scope.like_type = "profile";
             $scope.prof_id = p.id;
             $scope.det_id = p.details.id;
+        }else if(like_type == "survey"){
+            $scope.like_type = "survey";
+            $scope.prof_id = p.prof_id;
+            $scope.det_id = p.det_id;
         }
         $scope.like_id = id;
         profile.toggleLikes($scope).then(function(resp){
@@ -184,16 +188,20 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams, l
 
     }
 
-    $scope.toggleUnlike = function(p, comment){
+    $scope.toggleUnlike = function(p, like_type){
          var id = p.id;
-        $scope.like_type = "profile";
-        if(comment == true){
+        if(like_type == "comment"){
             $scope.like_type = "comments";
             $scope.prof_id = p.prof_id;
             $scope.det_id = p.det_id;
-        }else{
+        }else if(like_type == "profile"){
+            $scope.like_type = "profile";
             $scope.prof_id = p.id;
             $scope.det_id = p.details.id;
+        }else if(like_type == "survey"){
+            $scope.like_type = "survey";
+            $scope.prof_id = p.prof_id;
+            $scope.det_id = p.det_id;
         }
         $scope.like_id = id;
         profile.toggleUnlikes($scope).then(function(resp){
