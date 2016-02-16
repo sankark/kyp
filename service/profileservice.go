@@ -40,6 +40,17 @@ type Comment struct {
 	UnLikes int64  `json:"unlikes" datastore:"unlikes"`
 }
 
+type Survey struct {
+	Prof_Id string `json:"prof_id"`
+	Det_Id  string `json:"det_id"`
+	Id      string `json:"id"`
+	Text    string `json:"text"`
+	Time    string
+	Likes   int64  `json:"likes" datastore:"likes"`
+	Author  string `json:"author" datastore:"author"`
+	UnLikes int64  `json:"unlikes" datastore:"unlikes"`
+}
+
 type Meta struct {
 	MValue string `json:"value" datastore:"value"`
 	MKey   string `json:"key" datastore:"key"`
@@ -50,6 +61,7 @@ type Profile struct {
 	Parent   *datastore.Key `datastore:"-" goon:"parent"`
 	Consti   string         `json:"consti" datastore:"consti"`
 	Comments []Comment      `json:"comments" datastore:"comments"`
+	Surveys  []Survey       `json:"surveys" datastore:"surveys"`
 	Meta     []Meta         `json:"meta" datastore:"meta"`
 	Likes    int64          `json:"likes" datastore:"likes"`
 	UnLikes  int64          `json:"unlikes" datastore:"unlikes"`
@@ -61,6 +73,7 @@ type ProfileOut struct {
 	Details  map[string]interface{} `json:"details" binding:"required"`
 	Consti   string                 `json:"consti" datastore:"consti"`
 	Comments []Comment              `json:"comments"`
+	Surveys  []Survey               `json:"surveys"`
 	Meta     []Meta                 `json:"meta" datastore:"meta"`
 	Likes    int64                  `json:"likes" datastore:"likes"`
 	UnLikes  int64                  `json:"unlikes" datastore:"unlikes"`
@@ -101,11 +114,19 @@ func AddLikes(c *gin.Context) {
 			prof_in.Likes += int64(incr)
 			likes = prof_in.Likes
 		}
-		if like_type == "comments" {
+		if like_type == "comment" {
 			for i, comm := range prof_in.Comments {
 				if comm.Id == like_id {
 					prof_in.Comments[i].Likes += int64(incr)
 					likes = prof_in.Comments[i].Likes
+				}
+			}
+		}
+		if like_type == "survey" {
+			for i, surv := range prof_in.Surveys {
+				if surv.Id == like_id {
+					prof_in.Surveys[i].Likes += int64(incr)
+					likes = prof_in.Surveys[i].Likes
 				}
 			}
 		}
@@ -154,7 +175,7 @@ func AddUnLikes(c *gin.Context) {
 			prof_in.UnLikes += int64(incr)
 			unlikes = prof_in.UnLikes
 		}
-		if like_type == "comments" {
+		if like_type == "comment" {
 			for i, comm := range prof_in.Comments {
 				if comm.Id == like_id {
 					prof_in.Comments[i].UnLikes += int64(incr)
@@ -162,6 +183,16 @@ func AddUnLikes(c *gin.Context) {
 				}
 			}
 		}
+
+		if like_type == "survey" {
+			for i, surv := range prof_in.Surveys {
+				if surv.Id == like_id {
+					prof_in.Surveys[i].UnLikes += int64(incr)
+					unlikes = prof_in.Surveys[i].UnLikes
+				}
+			}
+		}
+
 		conn.Add(prof_in)
 		authenticated = "true"
 		status = http.StatusOK
@@ -186,6 +217,7 @@ func GetProfile(c *gin.Context) {
 	pout_t.Details = PropertyListToMap(det_list)
 	pout_t.Details["id"] = prof_in.Parent.IntID()
 	pout_t.Comments = prof_in.Comments
+	pout_t.Surveys = prof_in.Surveys
 	pout_t.Consti = prof_in.Consti
 	pout_t.Id = prof_in.Id
 	pout_t.Meta = prof_in.Meta
@@ -220,8 +252,18 @@ func PutProfile(c *gin.Context) {
 		conn.Get(prof_in)
 		prof_in.Parent = det_key
 		prof_in.Comments = prof_out.Comments
+		prof_in.Surveys = prof_out.Surveys
 		if prof_in.Comments == nil {
 			prof_in.Comments = make([]Comment, 0)
+		}
+		if prof_in.Surveys == nil {
+			prof_in.Surveys = make([]Survey, 0)
+		} else {
+			for i, surv := range prof_in.Surveys {
+				if surv.Id == "" {
+					prof_in.Surveys[i].Id = uuid.NewV4().String()
+				}
+			}
 		}
 		prof_in.Consti = prof_out.Consti
 		prof_in.Meta = prof_out.Meta
@@ -229,6 +271,16 @@ func PutProfile(c *gin.Context) {
 
 		keys["prof_id"] = resp.Data.(*datastore.Key).IntID()
 		keys["det_id"] = det_key.IntID()
+
+			for i, surv := range prof_in.Surveys {
+				if surv.Prof_Id == "" {
+						t_p_id := strconv.FormatInt(keys["prof_id"], 10)
+						t_det_id := strconv.FormatInt(keys["det_id"], 10)
+						prof_in.Surveys[i].Prof_Id = t_p_id
+						prof_in.Surveys[i].Det_Id = t_det_id
+				}
+			}
+conn.Add(prof_in)
 		log.Debugf(conn.Context, fmt.Sprintf("%#v", prof_in))
 
 	} else {
@@ -314,6 +366,7 @@ func FilterProfile(c *gin.Context) {
 			pout_t.Details = PropertyListToMap(det_list)
 			pout_t.Details["id"] = prof.Parent.IntID()
 			pout_t.Comments = prof.Comments
+			pout_t.Surveys = prof.Surveys
 			pout_t.Consti = prof.Consti
 			pout_t.Id = prof.Id
 			pout_t.Meta = prof.Meta
@@ -343,6 +396,7 @@ func ListProfile(c *gin.Context) {
 			pout_t.Details = PropertyListToMap(det_list)
 			pout_t.Details["id"] = prof.Parent.IntID()
 			pout_t.Comments = prof.Comments
+			pout_t.Surveys = prof.Surveys
 			pout_t.Consti = prof.Consti
 			pout_t.Id = prof.Id
 			pout_t.Meta = prof.Meta

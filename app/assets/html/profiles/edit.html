@@ -42,23 +42,12 @@
             <li ng-repeat="word in words" ng-click="select($index,expert)">{% word %}</li>
         </ul>
         
-        <div class="mdl-color-text--grey-600 item">
-            <span><h5>Total Number Of Questions</h5></span>
-            <span><input type="text" ng-model="survey_count" ng-change="updateServeysInputs()"/></span>
-        </div>
-        <!-- Questionere Start -->
-        <div ng-repeat="q_num in range(1, num_of_q)">
-        <div class="mdl-color-text--grey-600 item">
-            <span><h5>Question {% q_num %}</h5></span>
-            <span><input ng-focus="focus='q_{% q_num %}'" type="text" ng-model="surveys[q_num].text" ng-enter="select(0,surveys[q_num])" ng-change="input(surveys[q_num])"/></span>
-        </div>
-        <ul ng-show="focus=='q_{% q_num %}'" class="iem-container">
-            <li ng-repeat="word in words" ng-click="select($index,surveys[q_num])">{% word %}</li>
-        </ul>
-        </div>
+
+
 
         
     </div>
+
     <div class=" mdl-card mdl-cell--8-col mdl-cell--4-col-desktop mdl-cell">
         <div style="background-image:url('{% prof_img_url %}')" class="mdl-card__media mdl-color-text--grey-50">
            <div ng-repeat="image in uploader.queue" ng-show="uploader.isHTML5" ng-thumb="{ file: image._file, height: 100}"></div>
@@ -67,6 +56,28 @@
         <i class="material-icons mdl-color-text--white" role="presentation">add</i>
         <span class="visuallyhidden">add</span>
     </div>
+
+        <div class="mdl-card  mdl-cell mdl-cell--12-col">
+
+        <div class="mdl-color-text--grey-600 item">
+            <span><h5>Total Number Of Questions</h5></span>
+            <span><input type="text" ng-model="survey_count"/><button ng-click="updateServeysInputs()" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect">update</button></span>
+        </div>
+
+        <!-- Questionere Start -->
+        <div ng-repeat="q_num in range(0, num_of_q)">
+        <div class="mdl-color-text--grey-600 item">
+            <span><h5>Question {% q_num %}</h5></span>
+            <span><textarea ng-focus="surveys[q_num].focus = true" ng-blur="surveys[q_num].focus = false" type="text" ng-model="surveys[q_num].text" ng-enter="select(0,surveys[q_num])" ng-change="input(surveys[q_num])"></textarea></span>
+        </div>
+        <ul ng-show="surveys[q_num].focus" class="iem-container">
+            <li ng-repeat="word in words" ng-click="select($index,surveys[q_num])">{% word %}</li>
+        </ul>
+        </div>
+
+
+    </div>
+
     <div class="mdl-card  mdl-cell mdl-cell--12-col">
         <br>
         <div class="html-container lighter" style="width: inherit;">

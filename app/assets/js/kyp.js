@@ -150,7 +150,7 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams, l
         return false;
     }
 
-    $scope.toggleLike = function(p, comment){
+    $scope.toggleLike = function(p, like_type){
         var id = p.id;
         if(like_type == "comment"){
             $scope.like_type = "comments";

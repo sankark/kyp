@@ -48,7 +48,34 @@
                         </div>
                     </div> 
                     </div>  
-                    <div class="gradient-border"></div>  
+                    <div class="gradient-border"></div> 
+
+                   <div class="prf-view-det">
+                    <div class="meta mdl-color-text--grey-600" ng-repeat="surv in p.surveys">
+                        <div class="mdl-color-text--grey-600 item">
+                            <span><h5>{% surv.text %}</h5></span>
+                            <span>
+                                
+                        <span ng-click="toggleLike(surv,'survey')" class="material-icons mdl-badge" data-badge="{% surv.likes %}">
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon {% surv.like_cls %}">
+        <i class="material-icons" role="presentation">thumb_up</i><span class="visuallyhidden">like comment</span>
+                        </button>
+                        </span>
+
+                        <span ng-click="toggleUnlike(surv,'survey')" class="material-icons mdl-badge" data-badge="{% surv.unlikes %}">
+      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon {% surv.unlike_cls %}">
+        <i class="material-icons" role="presentation">thumb_down</i><span class="visuallyhidden">dislike comment</span>
+                        </button>
+                        </span>
+
+
+                            </span>
+                        </div>
+                    </div>
+                    </div>                  
+
+
+                    <div class="gradient-border"></div>
                 <div id="recap_like" class="mdl-cell--8-col mdl-cell--4-col-desktop  mdl-cell"></div>
                 <div class="html-content" ng-bind-html="p.details.htmlContent">
                    

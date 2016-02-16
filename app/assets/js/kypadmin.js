@@ -136,7 +136,7 @@ $scope.toggleLang = function(){
      $scope.range = function(min, max, step){
         step = step || 1;
         var input = [];
-        for (var i = min; i <= max; i += step) input.push(i);
+        for (var i = min; i < max; i += step) input.push(i);
         return input;
      };
       
@@ -144,14 +144,14 @@ $scope.toggleLang = function(){
 
          if($scope.num_of_q < $scope.survey_count ){
              for(var i=$scope.num_of_q; i<$scope.survey_count; i++){
-                 var survey = {};
-                 $scope.surveys[i] = survey
+                 var survey = {text:"",id:""};
+                 $scope.surveys[i] = survey;
              }
              $scope.num_of_q = $scope.survey_count;
          }
          
-        if($scope.num_of_q > $scope.survey_count ){
-             $scope.surveys.splice($scope.survey_count,arr.length)
+        if($scope.num_of_q > $scope.survey_count){
+             $scope.surveys.splice($scope.survey_count,$scope.surveys.length)
              $scope.num_of_q = $scope.survey_count;             
          }
     }
@@ -225,8 +225,7 @@ function createProfileFromScope(scope) {
             htmlContent: scope.htmlContent
         },
         comments: scope.p.comments,
-        surveys: scope.surveys,
-        scope.survey_count = resp.survey_count
+        surveys: scope.surveys
 
     }
 
@@ -248,8 +247,7 @@ function createProfileFromResponse(scope, resp) {
     scope.htmlContent = resp.details.htmlContent;
     scope.profile_meta = resp.meta;
     scope.surveys = resp.surveys;
-    scope.survey_count = resp.survey_count;
-    $scope.num_of_q = resp.survey_count;
+
     scope.p = {
         comments: resp.comments
     }
@@ -257,11 +255,12 @@ function createProfileFromResponse(scope, resp) {
         scope.profile_meta = [];
     if (scope.surveys == null){
         scope.surveys = [];
-        scope.survey_count = 0;
-        resp.num_of_q = 0;
     }
+    scope.survey_count = scope.surveys.length;
+    scope.num_of_q = scope.surveys.length;
     scope.id = resp.id;
     scope.p = resp;
+
 }
 
 function getKeyFromMeta(profile_meta, key) {
