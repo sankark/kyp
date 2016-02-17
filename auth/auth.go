@@ -4,11 +4,15 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/kyp/log"
+	"google.golang.org/appengine"
+
 	"github.com/kyp/sessions"
 
 	"github.com/kyp/store"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/oauth2"
 )
 
 type User struct {
@@ -22,6 +26,8 @@ type User struct {
 	Active      string   `json:"active"`
 	Ref_Email   string   `json:"ref_email"`
 	Temp_Req_Id string
+	Token       oauth2.Token
+	LoginType   string
 	Picture     string `json:"picture"`
 }
 
@@ -63,11 +69,18 @@ func SessionSave(c *gin.Context) {
 }
 
 func IsAuthenticated(c *gin.Context) bool {
+	aecontext := appengine.NewContext(c.Request)
+	log.Debugf(aecontext, "inside auth")
 	email := SessionGet(c, gin.AuthUserKey)
-	if email != nil {
-		SessionSet(c, "timestamp", time.Now().Format("2006-01-02 15-04-05"))
-		GetUser(c)
-		return true
+	log.Debugf(aecontext, "email %#v", email)
+	ts := SessionGet(c, "timestamp")
+	log.Debugf(aecontext, "ts %#v", ts)
+	if email != nil && ts != nil {
+		if t, err := time.Parse("2006-01-02 15-04-05", ts.(string)); err == nil && time.Since(t).Minutes() < 60 && email != nil {
+			SessionSet(c, "timestamp", time.Now().Format("2006-01-02 15-04-05"))
+			GetUser(c)
+			return true
+		}
 	}
 	return false
 }
@@ -114,6 +127,7 @@ func GetUser(c *gin.Context) User {
 }
 
 func AddUser(c *gin.Context, user *User) {
+	aecontext := appengine.NewContext(c.Request)
 	conn := store.New(c)
 	resp := conn.Get(user)
 	if resp.Err_msg != "" {
@@ -123,8 +137,20 @@ func AddUser(c *gin.Context, user *User) {
 		}
 		user.Likes = make([]string, 0)
 		user.Unlikes = make([]string, 0)
-		conn.Add(user)
+		resp := conn.Add(user)
+		if resp.Err_msg != "" {
+			log.Debugf(aecontext, "user not stored due to %s", resp.Err_msg)
+		}
 	}
+
+}
+
+func UpdateUser(c *gin.Context, user *User) {
+	conn := store.New(c)
+	e_user := &User{Email: user.Email}
+	conn.Get(e_user)
+	e_user.Token = user.Token
+	conn.Add(e_user)
 
 }
 

@@ -20,3 +20,10 @@ func Login(c *gin.Context) {
 	})
 
 }
+
+func RefreshTokens() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		social.RefreshFacebookTokens(c)
+	}
+
+}

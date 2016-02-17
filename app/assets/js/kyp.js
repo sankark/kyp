@@ -110,6 +110,7 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams, l
                 p.prof_img_url = getKeyFromMeta(p.meta, 'prof_img_url');
                 $scope.updateObjects([p]);
                 $scope.updateObjects(p.comments);
+                $scope.updateObjects(p.surveys);
                 $scope.profiles.push(p);
             });
             endProgress($scope)
@@ -169,7 +170,7 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams, l
         profile.toggleLikes($scope).then(function(resp){
             if(resp.authenticated == "false"){
                 if(LocalStorage){
-                    var lastOper = {lastMethod:"toggleLike", args:[p,comment], path:$location.path()};
+                    var lastOper = {lastMethod:"toggleLike", args:[p,like_type], path:$location.path()};
                     localStorageService.set("lastOper", lastOper);
                 }
                 if(localStorageService.get('recall') == null)
@@ -207,7 +208,7 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams, l
         profile.toggleUnlikes($scope).then(function(resp){
              if(resp.authenticated == "false"){
                 if(LocalStorage){
-                    var lastOper = {lastMethod:"toggleUnLike", args:[p,comment], path:$location.path()};
+                    var lastOper = {lastMethod:"toggleUnLike", args:[p,like_type], path:$location.path()};
                     localStorageService.set("lastOper", lastOper);
                 }
 
@@ -285,6 +286,7 @@ $scope.toggleLang = function(){
             $scope.p = resp;
             $scope.updateObjects([$scope.p]);
             $scope.updateObjects($scope.p.comments);
+            $scope.updateObjects($scope.p.surveys);
             $scope.p.t_comment = {};
             $scope.p.prof_img_url = getKeyFromMeta($scope.p.meta, 'prof_img_url');
             endProgress($scope)

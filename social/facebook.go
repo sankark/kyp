@@ -38,7 +38,7 @@ func FBConfig() *oauth2.Config {
 		// Example - ClientId: "1234567890", ClientSecret: "red2drdff6e2321e51aedcc94e19c76ee"
 
 		ClientID:     "1515896578706527", // change this to yours
-		ClientSecret: "c313bb047809a163ff1b2",
+		ClientSecret: "c34e40892330c13bb047809a163ff1b2",
 		RedirectURL:  "http://test.enthoguthi.com/FBLogin", // change this to your webserver adddress
 		Scopes:       []string{"email", "user_birthday", "user_location", "user_about_me"},
 		Endpoint: oauth2.Endpoint{
@@ -87,10 +87,12 @@ func FBLogin(c *gin.Context) {
 	var fb_user FB_User
 	log.Debugf(aecontext, fmt.Sprintf("fb_response %#v", response))
 	Bind(response, &fb_user)
-	log.Debugf(aecontext, fmt.Sprintf("fb_response %#v", fb_user))
+	log.Debugf(aecontext, fmt.Sprintf("token %#v", token))
 	user := &auth.User{
-		Email: fb_user.Email,
-		Name:  fb_user.Username,
+		Email:     fb_user.Email,
+		Name:      fb_user.Username,
+		Token:     *token,
+		LoginType: "facebook",
 	}
 
 	var redir_url = ""
@@ -106,5 +108,23 @@ func FBLogin(c *gin.Context) {
 		auth.Redirect(c, redir_url)
 	} else {
 		auth.Redirect(c)
+	}
+}
+
+func RefreshFacebookTokens(c *gin.Context) {
+	if auth.IsAuthenticated(c) {
+		user := auth.GetUser(c)
+		if user.LoginType == "facebook" {
+			aecontext := appengine.NewContext(c.Request)
+			conf := FBConfig()
+			toksource := conf.TokenSource(aecontext, &user.Token)
+			sourceToken := oauth2.ReuseTokenSource(&user.Token, toksource)
+			client := oauth2.NewClient(aecontext, sourceToken)
+			client.Get("...")
+			t, _ := sourceToken.Token()
+			user.Token = *t
+			auth.UpdateUser(c, &user)
+			log.Debugf(aecontext, fmt.Sprintf("refresh tokens %#v", t))
+		}
 	}
 }
