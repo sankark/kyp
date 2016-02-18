@@ -73,14 +73,10 @@ func IsAuthenticated(c *gin.Context) bool {
 	log.Debugf(aecontext, "inside auth")
 	email := SessionGet(c, gin.AuthUserKey)
 	log.Debugf(aecontext, "email %#v", email)
-	ts := SessionGet(c, "timestamp")
-	log.Debugf(aecontext, "ts %#v", ts)
-	if email != nil && ts != nil {
-		if t, err := time.Parse("2006-01-02 15-04-05", ts.(string)); err == nil && time.Since(t).Minutes() < 60 && email != nil {
-			SessionSet(c, "timestamp", time.Now().Format("2006-01-02 15-04-05"))
-			GetUser(c)
-			return true
-		}
+	if email != nil {
+		SessionSet(c, "timestamp", time.Now().Format("2006-01-02 15-04-05"))
+		GetUser(c)
+		return true
 	}
 	return false
 }

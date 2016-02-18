@@ -56,10 +56,15 @@ $scope.toggleLang = function(){
         });
     }
 
-    $scope.createProfile = function() {
+    $scope.createProfile = function(is_copy) {
 
+        if(is_copy){
+            $scope.prof_id = "0";
+            $scope.det_id = "0";
+        }else{
         $scope.prof_id = $routeParams.prof_id;
         $scope.det_id = $routeParams.det_id;
+        }
 
         if ($scope.uploader.queue[0] != null) {
             storage.getBlobUrl($scope).then(function(r) {
@@ -74,7 +79,7 @@ $scope.toggleLang = function(){
                     updateMeta($scope.profile_meta, 'prof_img_url', resp.blobKey)
                     $scope.profile = createProfileFromScope($scope);
                     profile.createProfile($scope).then(function(data) {
-
+                        $scope.editProfile(data.prof_id, data.det_id);
                     });
                 });
 
@@ -82,7 +87,7 @@ $scope.toggleLang = function(){
         } else {
             $scope.profile = createProfileFromScope($scope);
             profile.createProfile($scope).then(function(data) {
-
+                    $scope.editProfile(data.prof_id, data.det_id);
             });
         }
     }
