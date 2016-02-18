@@ -23,7 +23,6 @@ func init() {
 	r.Use(gin.Recovery())
 	s_store := sessions.NewCookieStore([]byte("secret"))
 	r.Use(sessions.Sessions("mysession", s_store))
-	r.Use(login.RefreshTokens())
 
 	r.LoadHTMLGlob("templates/*")
 	r.Static("/assets", "./assets")

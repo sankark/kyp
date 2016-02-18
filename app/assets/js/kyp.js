@@ -1,4 +1,4 @@
-var app = angular.module('Kyp', ['ngRoute', 'ngResource', 'angularjs-gravatardirective', 'autocomplete','geolocation','profile','ngSanitize','LocalStorageModule','translit']);
+var app = angular.module('Kyp', ['720kb.socialshare','ngRoute', 'ngResource', 'angularjs-gravatardirective', 'autocomplete','geolocation','profile','ngSanitize','LocalStorageModule','translit']);
 var LocalStorage = false;
 var CONSTI = ["Alandur", "Alangudi", "Alangulam", "Ambasamudram", "Ambattur", "Ambur", "Anaikattu", "Andipatti", "Anna Nagar", "Anthiyur", "Arakkonam", "Arani", "Aranthangi", "Aravakurichi", "Arcot", "Ariyalur", "Aruppukkottai", "Athoor", "Attur", "Avadi", "Avanashi (SC)", "Bargur", "Bhavani", "Bhavanisagar", "Bhuvanagiri", "Bodinayakanur", "Chengalpattu", "Chengam", "Chepauk-Thiruvallikeni", "Cheyyar", "Cheyyur", "Chidambaram", "Coimbatore (North)", "Coimbatore (South)", "Colachel", "Coonoor", "Cuddalore", "Cumbum", "Dharapuram (SC)", "Dharmapuri", "Dindigul", "Dr.Radhakrishnan Nagar", "Edappadi", "Egmore", "Erode (East)", "Erode (West)", "Gandharvakottai", "Gangavalli", "Gingee", "Gobichettipalayam", "Gudalur", "Gudiyattam", "Gummidipoondi", "Harbour", "Harur", "Hosur", "Jayankondam", "Jolarpet", "Kadayanallur", "Kalasapakkam", "Kallakurichi", "Kancheepuram", "Kangayam", "Kanniyakumari", "Karaikudi", "Karur", "Katpadi", "Kattumannarkoil(SC)", "Kavundampalayam", "Killiyoor", "Kilpennathur", "Kilvaithinankuppam", "Kilvelur", "Kinathukadavu", "Kolathur", "Kovilpatti", "Krishnagiri", "Krishnarayapuram", "Kulithalai", "Kumarapalayam", "Kumbakonam", "Kunnam", "Kurinjipadi", "Lalgudi", "Madathukulam", "Madavaram", "Madurai Central", "Madurai East", "Madurai North", "Madurai South", "Madurai West", "Madurantakam", "Maduravoyal", "Mailam", "Manachanallur", "Manamadurai", "Manapparai", "Mannargudi", "Mayiladuthurai", "Melur", "Mettuppalayam", "Mettur", "Modakkurichi", "Mudhukulathur", "Musiri", "Mylapore", "Nagapattinam", "Nagercoil", "Namakkal", "Nanguneri", "Nannilam", "Natham", "Neyveli", "Nilakkottai", "Oddanchatram", "Omalur", "Orathanadu", "Ottapidaram", "Padmanabhapuram", "Palacode", "Palani", "Palayamkottai", "Palladam", "Pallavaram", "Panruti", "Papanasam", "Pappireddippatti", "Paramakudi", "Paramathi-Velur", "Pattukkottai", "Pennagaram", "Perambalur", "Perambur", "Peravurani", "Periyakulam", "Perundurai", "Pollachi", "Polur", "Ponneri", "Poompuhar", "Poonamallee", "Pudukkottai", "Radhapuram", "Rajapalayam", "Ramanathapuram", "Ranipet", "Rasipuram", "Rishivandiyam", "Royapuram", "Saidapet", "Salem (North)", "Salem (South)", "Salem (West)", "Sankarankovil", "Sankarapuram", "Sankari", "Sattur", "Senthamangalam", "Sholavandan", "Sholingur", "Shozhinganallur", "Singanallur", "Sirkazhi", "Sivaganga", "Sivakasi", "Sriperumbudur", "Srirangam", "Srivaikuntam", "Srivilliputhur", "Sulur", "Tambaram", "Tenkasi", "Thalli", "Thanjavur", "Thiru-Vi-Ka-Nagar", "Thirumangalam", "Thirumayam", "Thiruparankundram", "Thiruporur", "Thiruthuraipoondi", "Thiruvaiyaru", "Thiruvallur", "Thiruvarur", "Thiruverumbur", "Thiruvidaimarudur", "Thiruvottiyur", "Thiyagarayanagar", "Thondamuthur", "Thoothukkudi", "Thousand Lights", "Thuraiyur", "Tindivanam", "Tiruchendur", "Tiruchengodu", "Tiruchirappalli (East)", "Tiruchirappalli (West)", "Tiruchuli", "Tirukkoyilur", "Tirunelveli", "Tirupattur", "Tiruppattur", "Tiruppur (North)", "Tiruppur (South)", "Tiruttani", "Tiruvadanai", "Tiruvannamalai", "Tittakudi (SC)", "Udhagamandalam", "Udumalaipettai", "Ulundurpettai", "Usilampatti", "Uthangarai", "Uthiramerur", "Valparai", "Vandavasi", "Vaniyambadi", "Vanur", "Vasudevanallur", "Vedaranyam", "Vedasandur", "Veerapandi", "Velachery", "Vellore", "Veppanahalli", "Vikravandi", "Vilathikulam", "Vilavancode", "Villivakkam", "Villupuram", "Viralimalai", "Virudhunagar", "Virugampakkam", "Vridhachalam", "Yercaud"];
 app.config(function($interpolateProvider){
@@ -60,6 +60,9 @@ function MainController($rootScope, $scope, $location,ConstiService,geolocation,
 
 function ConstiController($rootScope, $scope, $location,profile, $routeParams, localStorageService, $window) {
     console.log($scope.sel_consti);
+
+    $scope.current_url = $location.absUrl();
+    $scope.candidate_name = "";
 
     if(localStorageService.isSupported) {
         LocalStorage = true;
@@ -154,7 +157,7 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams, l
     $scope.toggleLike = function(p, like_type){
         var id = p.id;
         if(like_type == "comment"){
-            $scope.like_type = "comments";
+            $scope.like_type = "comment";
             $scope.prof_id = p.prof_id;
             $scope.det_id = p.det_id;
         }else if(like_type == "profile"){
@@ -192,7 +195,7 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams, l
     $scope.toggleUnlike = function(p, like_type){
          var id = p.id;
         if(like_type == "comment"){
-            $scope.like_type = "comments";
+            $scope.like_type = "comment";
             $scope.prof_id = p.prof_id;
             $scope.det_id = p.det_id;
         }else if(like_type == "profile"){
@@ -246,6 +249,9 @@ function ProfileController($rootScope, $scope, $location,profile, $routeParams,$
     console.log($scope.sel_consti);
     $scope.alpha = "A";
 
+    $scope.current_url = $location.absUrl();
+
+
     angular.extend(this, $controller(ConstiController, {$scope: $scope}));
 
     $scope.recaptchaResp = function(resp){
@@ -289,6 +295,8 @@ $scope.toggleLang = function(){
             $scope.updateObjects($scope.p.surveys);
             $scope.p.t_comment = {};
             $scope.p.prof_img_url = getKeyFromMeta($scope.p.meta, 'prof_img_url');
+            $scope.consti = $scope.p.consti;
+            $scope.candidate_name = $scope.p.details.name;
             endProgress($scope)
         });
     }
@@ -472,3 +480,5 @@ function contains(a, obj) {
     }
     return false;
 }
+
+

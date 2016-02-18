@@ -38,7 +38,7 @@ func FBConfig() *oauth2.Config {
 		// Example - ClientId: "1234567890", ClientSecret: "red2drdff6e2321e51aedcc94e19c76ee"
 
 		ClientID:     "1515896578706527", // change this to yours
-		ClientSecret: "c34e40892330c1347809a163ff1b2",
+		ClientSecret: "c34e40892330c13bb047809a163ff1b2",
 		RedirectURL:  "http://test.enthoguthi.com/FBLogin", // change this to your webserver adddress
 		Scopes:       []string{"email", "user_birthday", "user_location", "user_about_me"},
 		Endpoint: oauth2.Endpoint{

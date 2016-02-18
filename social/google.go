@@ -26,7 +26,7 @@ func GoogleConfig() *oauth2.Config {
 	// generate loginURL
 	googleconf := &oauth2.Config{
 		ClientID:     "436958032230-96kbjs7e1eg3g4dp7tnqsigce0rq85to.apps.googleusercontent.com",
-		ClientSecret: "Y1YuStgCuJsXUsVr_Fa",
+		ClientSecret: "Y1YuStgHw2DuCuJsXUsVr_Fa",
 		RedirectURL:  "http://test.enthoguthi.com/GoogleLogin",
 		Scopes: []string{
 			"https://www.googleapis.com/auth/userinfo.profile",
