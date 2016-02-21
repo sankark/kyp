@@ -34,6 +34,9 @@ angular.module('geolocation')
                 $rootScope.$apply(function() {
                   deferred.reject(geolocation_msgs['errors.location.timeout']);
                 });
+              default:
+                $rootScope.$broadcast('error',geolocation_msgs['errors.location.unsupportedBrowser']);
+                $rootScope.$apply(function(){deferred.reject(geolocation_msgs['errors.location.unsupportedBrowser']);});
                 break;
             }
           }, opts);

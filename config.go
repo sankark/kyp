@@ -11,6 +11,7 @@ var CONFIG Configuration
 type Configuration struct {
 	Profile string
 	Envs    map[string]map[string]string
+	Constis []string
 }
 
 func init() {
@@ -29,4 +30,8 @@ func GetProp(key string) string {
 
 func GetProfile(key string) string {
 	return CONFIG.Profile
+}
+
+func GetConstis() []string {
+	return CONFIG.Constis
 }

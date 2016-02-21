@@ -34,7 +34,7 @@ func init() {
 	r.POST("/profile", PutProfile)
 	r.DELETE("/profile/:prof_id/:det_id", DeleteProfile)
 	r.GET("/profile", ListProfile)
-
+	r.GET("/load/sampleprofile/:prof_id/:det_id", service.PutSampleProfile)
 	r.POST("/comments", PutComments)
 
 	r.GET("/consti/:id", FilterConstiProfile)

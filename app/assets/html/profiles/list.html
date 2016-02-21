@@ -8,8 +8,8 @@
             </span>
         </div>
 
-        <div class="adm_prf_list mdl-grid" ng-repeat="profile in profiles" style="">
-            <span class="mdl-cell"><a ng-click="editProfile(profile.id,profile.details.id)">{% profile.details.name %}</a></span>
+        <div class="adm_prf_list mdl-grid mdl-cell--12-col" ng-repeat="profile in profiles | orderBy:'-consti'" style="">
+            <span class="mdl-cell--6-col"><a ng-click="editProfile(profile.id,profile.details.id)">{% profile.consti %}</a></span> <span class="mdl-cell--6-col"><a ng-click="editProfile(profile.id,profile.details.id)">{% profile.details.name %}</a></span>
         </div>
     </div>
 </div>

@@ -22,6 +22,11 @@ function MainController($rootScope, $scope, $location,ConstiService,geolocation,
             }
     }
 
+    $scope.clearLocalStore = function(){
+        localStorageService.set("user", null);
+        localStorageService.set("lastOper", null);
+    }
+
     $scope.listConsti = function(consti){
         $location.path('/consti/'+consti);
     }
@@ -38,7 +43,11 @@ function MainController($rootScope, $scope, $location,ConstiService,geolocation,
     $scope.getConst = function() {
         
         ConstiService.getConst($scope.point).then(function(r) {
+            if(r.Data == null){
+                $scope.consti_not_found = "No constituency found. Search your constituency in the above textbox";
+            }else{
             $scope.myconsti = r.Data.Assemb_Const;
+            }
             $rootScope.active_cls = '';
             $rootScope.progress = 'none';
             $scope.ena_suggest = 'none';
@@ -49,10 +58,13 @@ function MainController($rootScope, $scope, $location,ConstiService,geolocation,
         geolocation.getLocation().then(function(data) {
         startProgress($scope);
         $scope.point = {
-            Lat: 13.0336,
-            Lng: 80.2687
+            Lat: data.coords.latitude,
+            Lng: data.coords.longitude
         }
         $scope.getConst();
+        },function(error){
+            endProgress($scope);
+            $scope.consti_not_found = "Enable location service / Manually select your constituency";
         })
     }
     $scope.recall();
@@ -145,6 +157,7 @@ function ConstiController($rootScope, $scope, $location,profile, $routeParams, l
 
     $scope.clearLocalStore = function(){
         localStorageService.set("user", null);
+        localStorageService.set("lastOper", null);
     }
 
     $scope.isAuthenticated = function(){
@@ -293,6 +306,10 @@ $scope.toggleLang = function(){
             $scope.updateObjects([$scope.p]);
             $scope.updateObjects($scope.p.comments);
             $scope.updateObjects($scope.p.surveys);
+            angular.forEach($scope.p.surveys,function(r){
+                r.prof_id = $scope.prof_id;
+                r.det_id = $scope.det_id;
+            });
             $scope.p.t_comment = {};
             $scope.p.prof_img_url = getKeyFromMeta($scope.p.meta, 'prof_img_url');
             $scope.consti = $scope.p.consti;

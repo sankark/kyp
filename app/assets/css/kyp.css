@@ -265,3 +265,7 @@ header {
         border-top: none !important;
             width: 38%;
 }
+
+.candis .mdl-card{
+        margin-bottom: 10%;
+}

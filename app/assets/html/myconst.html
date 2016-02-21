@@ -8,6 +8,10 @@
                     <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
                         <autocomplete ng-model="myconsti" attr-inputclass="mdl-textfield__input" attr-class="mdl-textfield mdl-js-textfield" attr-placeholder="select your constituency" data="consti"></autocomplete>
                     </div>
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
+                       <label style="color:orange;">{% consti_not_found %}</label>
+                    </div>
+                    
                     <div class="mdl-color-text--grey-700 mdl-card__supporting-text" style="border-top:rgba(0, 0, 0, 0)">
                         <button mdl-upgrade class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" ng-click="getProfile(myconsti)">
                             Candidates

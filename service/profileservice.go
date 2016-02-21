@@ -6,6 +6,8 @@ import (
 	"sort"
 	"strconv"
 
+	"github.com/kyp"
+
 	"github.com/mjibson/goon"
 
 	"github.com/kyp/auth"
@@ -272,15 +274,15 @@ func PutProfile(c *gin.Context) {
 		keys["prof_id"] = resp.Data.(*datastore.Key).IntID()
 		keys["det_id"] = det_key.IntID()
 
-			for i, surv := range prof_in.Surveys {
-				if surv.Prof_Id == "" {
-						t_p_id := strconv.FormatInt(keys["prof_id"], 10)
-						t_det_id := strconv.FormatInt(keys["det_id"], 10)
-						prof_in.Surveys[i].Prof_Id = t_p_id
-						prof_in.Surveys[i].Det_Id = t_det_id
-				}
+		for i, surv := range prof_in.Surveys {
+			if surv.Prof_Id == "" {
+				t_p_id := strconv.FormatInt(keys["prof_id"], 10)
+				t_det_id := strconv.FormatInt(keys["det_id"], 10)
+				prof_in.Surveys[i].Prof_Id = t_p_id
+				prof_in.Surveys[i].Det_Id = t_det_id
 			}
-conn.Add(prof_in)
+		}
+		conn.Add(prof_in)
 		log.Debugf(conn.Context, fmt.Sprintf("%#v", prof_in))
 
 	} else {
@@ -289,6 +291,51 @@ conn.Add(prof_in)
 
 	auth.SessionSave(c)
 	c.JSON(status, keys)
+
+}
+
+func PutSampleProfile(c *gin.Context) {
+
+	conn := store.New(c)
+	status := http.StatusOK
+
+	if auth.IsAuthorized(c, "admin") {
+		prof_id, _ := strconv.ParseInt(c.Param("prof_id"), 10, 64)
+		det_id, _ := strconv.ParseInt(c.Param("det_id"), 10, 64)
+		det_key := conn.DatastoreKeyWithKind("ProfileDetails", det_id)
+		det_list := &datastore.PropertyList{}
+		conn.PropListGet(det_list, det_key)
+		prof_in := &Profile{Id: prof_id, Parent: det_key}
+
+		conn.Get(prof_in)
+
+		for _, consti := range kyp.GetConstis() {
+			prof_in.Id = 0
+			prof_in.Consti = consti
+			prof_in.Comments = make([]Comment, 0)
+			prof_in.Likes = 0
+			prof_in.UnLikes = 0
+			prof_in.Status = "active"
+			s_det_key := conn.DatastoreKeyWithKind("ProfileDetails", 0)
+			det_key = conn.PropListPut(det_list, s_det_key)
+			prof_in.Parent = det_key
+			for i, _ := range prof_in.Surveys {
+				prof_in.Surveys[i].Id = uuid.NewV4().String()
+				prof_in.Surveys[i].Prof_Id = ""
+				prof_in.Surveys[i].Det_Id = ""
+				prof_in.Surveys[i].Likes = 0
+				prof_in.Surveys[i].UnLikes = 0
+			}
+			conn.Add(prof_in)
+
+		}
+
+	} else {
+		status = http.StatusUnauthorized
+	}
+
+	auth.SessionSave(c)
+	c.JSON(status, gin.H{"msg": "succesfully loaded"})
 
 }
 
