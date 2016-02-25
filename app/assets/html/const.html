@@ -9,12 +9,20 @@
                     </button>
                 </a>
             </nav>
+         <div class="demo-blog__posts mdl-grid">
+         <div class="mdl-card  mdl-cell mdl-cell--12-col">
+                <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
+                    <label style="color:red;font-size: initial;">Volunteers needed to update the candidates details on each constituency</label>
+                </div>
+         </div>
+         </div>
         <div class="demo-blog__posts mdl-grid">
             <div class="demo-blog__posts mdl-grid candis">
                 <div class="mdl-card  mdl-cell mdl-cell--12-col" ng-repeat="(key, p) in profiles">
                     <div ng-click="loadProfile(p)" class="kyp_img mdl-card__media mdl-color-text--grey-50" style="background-image:url('http://www.sagayamias.com/wp-content/uploads/2015/09/download.jpg')">
                 <div class="prof_img" style="background-image:url('{% p.prof_img_url %}')"></div>
                     <h3>{% p.details.name %}</h3>
+                    <span style="color: rgb(24,255,255);font-family: monospace;text-decoration: overline;background-color: darkblue">மேலும்>>></span>
                 </div>
 
                     <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">

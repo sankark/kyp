@@ -17,7 +17,7 @@ import (
 )
 
 func GetEnv() string {
-	return "test"
+	return "prod"
 }
 
 func SendVolunteerRequest(c *gin.Context) {
@@ -60,6 +60,7 @@ func VerifyVolunteerRequest(c *gin.Context, user *auth.User) bool {
 			user.Role = "volunteer"
 			user.Active = "false"
 			conn.Add(user)
+			NotifyAdmin(c, user)
 			return true
 		}
 	} else {
@@ -69,20 +70,36 @@ func VerifyVolunteerRequest(c *gin.Context, user *auth.User) bool {
 	return false
 }
 
+func NotifyAdmin(c *gin.Context, user *auth.User) {
+	r := c.Request
+	ctx := appengine.NewContext(r)
+	addr := "enthoguthi@gmail.com"
+	msg := &mail.Message{
+		Sender:  "enthoguthi@gmail.com",
+		To:      []string{addr},
+		Subject: fmt.Sprintf("User %s raised volunteer request", user.Email),
+		Body:    fmt.Sprintf("User Msg %s %s", user.Message),
+	}
+	log.Debugf(ctx, "Mail msg %v", msg)
+	if err := mail.Send(ctx, msg); err != nil {
+		log.Errorf(ctx, "Couldn't send email: %v", err)
+	}
+}
+
 func SendEmailVolunteer(c *gin.Context, user *auth.User) {
 	r := c.Request
 	ctx := appengine.NewContext(r)
 	addr := user.Email
 	url := createConfirmationURL(user)
 	msg := &mail.Message{
-		Sender:  "govtam@gmail.com",
+		Sender:  "enthoguthi@gmail.com",
 		To:      []string{addr},
 		Subject: "Confirm your volunteer request",
 		Body:    fmt.Sprintf(confirmMessage, url),
 	}
 	log.Debugf(ctx, "Mail msg %v", msg)
 	if err := mail.Send(ctx, msg); err != nil {
-		log.Errorf(c, "Couldn't send email: %v", err)
+		log.Errorf(ctx, "Couldn't send email: %v", err)
 	}
 }
 

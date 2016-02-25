@@ -359,7 +359,7 @@ $scope.consti = CONSTI;
 
     $scope.sendVolRequest = function() {
         profile.sendVolRequest($scope).then(function(resp){
-            
+            $scope.vol_submit_msg = "Volunteer request submitted succesfully. Check your inbox/spam and verify your email address.";
         });
     }
 

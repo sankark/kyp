@@ -99,7 +99,7 @@ angular.module('profile', [])
 
         sendVolRequest:function(scope){
             var deferred = $q.defer();
-            Volunteer.save({id:scope.vol_email, name:scope.vol_name, consti:scope.myconsti}, function(resp, headers) {
+            Volunteer.save({id:scope.vol_email, name:scope.vol_name, consti:scope.myconsti, message:scope.vol_message}, function(resp, headers) {
                 deferred.resolve(resp);
             });
 

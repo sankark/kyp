@@ -3,6 +3,9 @@
         <div class="demo-blog__posts mdl-grid">
             <div class="demo-blog__posts mdl-grid">
                 <div class="mdl-card mdl-shadow--4dp mdl-cell mdl-cell--12-col" style="min-height:0px">
+                                <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
+                    <label style="color:red;font-size: initial;">{% vol_submit_msg %}</label>
+                </div>
                     <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
                         <autocomplete ng-model="myconsti" attr-inputclass="mdl-textfield__input" attr-class="mdl-textfield mdl-js-textfield" attr-placeholder="select your constituency" data="consti"></autocomplete>
                     </div>
@@ -11,6 +14,13 @@
                     </div>
                      <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
                         <input type="text" class="mdl-textfield__input ng-valid ng-valid-required ng-touched" ng-model="vol_email" placeholder="Your Email" />
+                    </div>
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
+                       <label style="color:orange;">Email address that you have used in facebook/google+/twitter account.</label>
+                    </div>
+                    <div class="mdl-color-text--grey-700 mdl-card__supporting-text">
+                        <textarea class="mdl-textfield__input ng-valid ng-valid-required ng-touched" ng-model="vol_message" placeholder="Your Message">
+                        </textarea>
                     </div>
                     <div class="mdl-color-text--grey-700 mdl-card__supporting-text" style="border-top:rgba(0, 0, 0, 0)">
                         <button mdl-upgrade class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect" ng-click="sendVolRequest()">

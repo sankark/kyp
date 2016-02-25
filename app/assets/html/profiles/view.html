@@ -33,9 +33,9 @@
                         </button>
                         </span>
                     </div>
-                    <div class="gradient-border"></div>
-                    <div class="prf-view-det">
-                    <div class="meta mdl-color-text--grey-600">
+                    <div ng-show="p.consti != 'sample'" class="gradient-border"></div>
+                    <div ng-show="p.consti != 'sample'" class="prf-view-det">
+                    <div  class="meta mdl-color-text--grey-600">
                         <div class="mdl-color-text--grey-600 item">
                             <span><h5>{% p.consti %}</h5></span>
                             <span>Constituency</span>
@@ -48,7 +48,7 @@
                         </div>
                     </div> 
                     </div>  
-                    <div class="gradient-border"></div> 
+                    <div ng-show="p.consti != 'sample'" class="gradient-border"></div> 
 
                    <div class="prf-view-det">
                     <div class="meta mdl-color-text--grey-600" ng-repeat="surv in p.surveys">

@@ -63,6 +63,8 @@ func init() {
 	r.GET("/user/:user_id", service.GetUser)
 	r.POST("/user", service.UpdateUser)
 
+	r.GET("/about", About)
+
 	http.Handle("/", r)
 	//appengine.Main()
 	/*
@@ -106,6 +108,10 @@ func DeleteProfile(c *gin.Context) {
 
 func Home(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", gin.H{})
+}
+
+func About(c *gin.Context) {
+	c.HTML(http.StatusOK, "about.html", gin.H{})
 }
 
 func Admin(c *gin.Context) {

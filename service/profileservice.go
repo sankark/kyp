@@ -315,7 +315,7 @@ func PutSampleProfile(c *gin.Context) {
 			prof_in.Comments = make([]Comment, 0)
 			prof_in.Likes = 0
 			prof_in.UnLikes = 0
-			prof_in.Status = "active"
+			prof_in.Status = "sample"
 			s_det_key := conn.DatastoreKeyWithKind("ProfileDetails", 0)
 			det_key = conn.PropListPut(det_list, s_det_key)
 			prof_in.Parent = det_key

@@ -29,6 +29,7 @@ type User struct {
 	Token       oauth2.Token
 	LoginType   string
 	Picture     string `json:"picture"`
+	Message     string `json:"message"`
 }
 
 var RedirectURL = "RedirectURL"
