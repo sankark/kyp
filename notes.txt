@@ -1,0 +1,5 @@
+
+func CreateSessionStore(){
+  sessionStore := sessions.NewCookieStore([]byte(config.GetKey("sessionSecret")))
+  return sessionStore
+}
